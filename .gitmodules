@@ -1,0 +1,3 @@
+[submodule "shared"]
+	path = modules/shared
+	url = https://github.com/cp-luux/web-modules

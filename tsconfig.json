@@ -1,0 +1,48 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "useDefineForClassFields": true,
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": false,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "typeRoots": ["./node_modules/@types/"],
+    "strictNullChecks": false,
+    "baseUrl": ".",
+    "paths": {
+      "@queries": ["src/queries"],
+      "@queries/*": ["src/queries/*"],
+      "@config": ["src/config"],
+      "@config/*": ["src/config/*"],
+      "@redux": ["src/redux"],
+      "@redux/*": ["src/redux/*"],
+      "@layout": ["src/layout"],
+      "@layout/*": ["src/layout/*"],
+      "@containers": ["src/containers"],
+      "@containers/*": ["src/containers/*"],
+      "@components": ["src/components"],
+      "@components/*": ["src/components/*"],
+      "@modules": ["src/modules"],
+      "@modules/*": ["src/modules/*"],
+      "@providers": ["src/providers"],
+      "@providers/*": ["src/providers/*"],
+      "@assets": ["src/assets"],
+      "@assets/*": ["src/assets/*"]
+    }
+  },
+  "include": ["src", "src/**/*", ".eslintrc.cjs", "vite.config.ts"],
+  "references": [
+    {
+      "path": "./tsconfig.node.json"
+    }
+  ]
+}

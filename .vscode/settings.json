@@ -1,0 +1,53 @@
+{
+  "cSpell.words": [
+    "apisauce",
+    "APPT",
+    "Autosize",
+    "buildspec",
+    "checkin",
+    "Checkin",
+    "commitlint",
+    "datepicker",
+    "fontsource",
+    "formik",
+    "Formik",
+    "hookform",
+    "lightbox",
+    "lumisight",
+    "mui-datatables",
+    "notTrimmable",
+    "redux",
+    "signin",
+    "Signin",
+    "tanstack",
+    "toastify",
+    "Toastify",
+    "unmatch",
+    "Upsert",
+    "VITE",
+    "YESNO",
+    "NOTIF",
+    "LUUX",
+    "minh_luu"
+  ],
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "explicit",
+    "source.fixAll": "explicit"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
+}
