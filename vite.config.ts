@@ -19,8 +19,7 @@ export default defineConfig((_env: ConfigEnv) => {
     ],
     resolve: {
       alias: {
-        '@queries': pathResolve('src/queries'),
-        '@redux': pathResolve('src/redux'),
+        '@core': pathResolve('src/modules/shared'),
         '@config': pathResolve('src/config'),
         '@layout': pathResolve('src/layout'),
         '@containers': pathResolve('src/containers'),

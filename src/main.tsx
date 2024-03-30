@@ -1,10 +1,20 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App.tsx'
-import './index.css'
+import { ToastProvider } from '@core/common/providers';
+import { DayjsProvider, QueryProvider, ThemeProvider } from '@providers';
+import { StrictMode } from 'react';
+import ReactDOM from 'react-dom/client';
+
+import './styles.scss';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-)
+  <StrictMode>
+    <ToastProvider>
+      <ThemeProvider>
+        <DayjsProvider>
+          <QueryProvider>
+            <App />
+          </QueryProvider>
+        </DayjsProvider>
+      </ThemeProvider>
+    </ToastProvider>
+  </StrictMode>,
+);
