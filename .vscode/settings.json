@@ -28,7 +28,8 @@
     "YESNO",
     "NOTIF",
     "LUUX",
-    "minh_luu"
+    "minh_luu",
+    "mantine"
   ],
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
@@ -49,5 +50,12 @@
   },
   "[javascriptreact]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
-  }
+  },
+  "cssVariables.lookupFiles": [
+    "**/*.css",
+    "**/*.scss",
+    "**/*.sass",
+    "**/*.less",
+    "node_modules/@mantine/core/styles.css"
+  ]
 }

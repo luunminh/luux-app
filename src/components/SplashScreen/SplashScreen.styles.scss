@@ -1,0 +1,32 @@
+.cmp-splash-screen {
+  &__image {
+    height: 80px !important;
+    object-fit: contain;
+    animation: fadeIn 10s infinite;
+  }
+
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+
+    10% {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    50% {
+      opacity: 1;
+      transform: scale(2);
+    }
+
+    90% {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    100% {
+      opacity: 0;
+    }
+  }
+}
