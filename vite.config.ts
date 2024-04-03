@@ -27,6 +27,7 @@ export default defineConfig((_env: ConfigEnv) => {
         '@assets': pathResolve('src/assets'),
         '@components': pathResolve('src/components'),
         '@modules': pathResolve('src/modules'),
+        '@hooks': pathResolve('src/hooks'),
         src: pathResolve('src'),
         './runtimeConfig': './runtimeConfig.browser',
       },

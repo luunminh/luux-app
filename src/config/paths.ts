@@ -23,7 +23,12 @@ export const HIDE_NAV_PATHS: string[] = [
   PATHS.resetPassword,
 ];
 
-export const HIDE_SIDEBAR_PATHS: string[] = [];
+export const HIDE_SIDEBAR_PATHS: string[] = [
+  PATHS.login,
+  PATHS.signup,
+  PATHS.forgotPassword,
+  PATHS.resetPassword,
+];
 
 export const NOT_REQUIRED_AUTH_PATHS: string[] = [
   PATHS.login,

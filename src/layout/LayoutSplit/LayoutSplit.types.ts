@@ -1,3 +1,5 @@
+import { MantineBreakpoint } from '@mantine/core';
+
 export type LayoutSplitProps = {
   /**
    *  An optional additional CSS class to be applied to the content container class of the layout.
@@ -31,4 +33,9 @@ export type LayoutSplitProps = {
    * @default '50vw'
    */
   imageWidth?: string;
+
+  /**
+   * The breakpoint at which the layout will become responsive.
+   */
+  breakpoint?: MantineBreakpoint;
 };

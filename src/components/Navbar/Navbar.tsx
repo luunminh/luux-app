@@ -1,16 +1,21 @@
+import { Logo } from '@components';
+import { PATHS } from '@config/paths';
 import { Flex } from '@mantine/core';
-import { Logo, NavbarActions } from './components';
+import { useNavigate } from 'react-router-dom';
+import { NavbarActions } from './components';
 
 const Navbar = () => {
+  const navigate = useNavigate();
+  const handleMoveToHome = () => navigate(PATHS.root);
+
   return (
     <Flex align="center" justify="space-between" h="100%" p="md">
-      <Navbar.Logo />
+      <Logo onClick={handleMoveToHome} />
       <Navbar.Actions />
     </Flex>
   );
 };
 
-Navbar.Logo = Logo;
 Navbar.Actions = NavbarActions;
 
 export default Navbar;

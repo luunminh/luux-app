@@ -46,7 +46,6 @@ export const StyledLayoutSplit: StyledComponent<LayoutSplitProps> = styled.div<L
     &__img {
       background-image: url(${({ bgImage }) => bgImage});
       background-size: cover;
-      background-position: center;
       background-repeat: no-repeat;
 
       position: fixed;

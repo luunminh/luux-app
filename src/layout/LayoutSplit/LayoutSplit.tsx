@@ -1,4 +1,5 @@
 import { COLOR_CODE } from '@core/common';
+import { useResponsiveBreakpoint } from '@hooks';
 import { Box, Stack } from '@mantine/core';
 import cn from 'classnames';
 import { StyledLayoutSplit } from './LayoutSplit.styles';
@@ -16,7 +17,10 @@ const LayoutSplit = ({
   rtl = false,
   contentWidth = '50vw',
   imageWidth = '50vw',
+  breakpoint = 'md',
 }: LayoutSplitProps) => {
+  const { mediaQuery } = useResponsiveBreakpoint(breakpoint);
+
   return (
     <StyledLayoutSplit
       rtl={rtl}
@@ -25,7 +29,7 @@ const LayoutSplit = ({
       data-name="layout-split"
       imageWidth={imageWidth}
       contentWidth={contentWidth}
-      responsiveBreakpoint="@media (max-width: 992px)"
+      responsiveBreakpoint={mediaQuery}
     >
       <Stack
         className={cn('cmp-layout__split', {

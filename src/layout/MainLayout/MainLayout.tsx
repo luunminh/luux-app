@@ -1,9 +1,9 @@
 import { Navbar } from '@components';
 import appConfigs from '@config';
 import { LoadingGlobalContainer } from '@containers';
-import { ToastService } from '@core/common';
 import { CustomErrorBoundary } from '@core/components';
-import { AppShell, Button, Flex } from '@mantine/core';
+import { AppShell } from '@mantine/core';
+import { SignIn } from '@modules/uam/view/SignIn';
 import { PropsWithChildren } from 'react';
 import useLayoutProps from './useLayoutProps';
 
@@ -15,7 +15,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
   return (
     <CustomErrorBoundary showErrorMessage>
       <AppShell
-        padding="sm"
+        // padding="sm"
         header={{
           collapsed: isHideNav,
           height: appConfigs.NAVBAR_HEIGHT,
@@ -36,12 +36,9 @@ const MainLayout = ({ children }: MainLayoutProps) => {
 
         <AppShell.Main>
           {/* {children} */}
-          <Flex gap="sm">
-            <Button onClick={() => ToastService.success('Toast success')}>Toast success</Button>
-            <Button onClick={() => ToastService.error('Toast error')}>Toast error</Button>
-            <Button onClick={() => ToastService.warning('Toast warning')}>Toast warning</Button>
-            <Button onClick={() => ToastService.info('Toast info')}>Toast info</Button>
-          </Flex>
+
+          <SignIn />
+
           <LoadingGlobalContainer />
         </AppShell.Main>
       </AppShell>

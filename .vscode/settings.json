@@ -29,7 +29,8 @@
     "NOTIF",
     "LUUX",
     "minh_luu",
-    "mantine"
+    "mantine",
+    "signup"
   ],
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
