@@ -1,8 +1,16 @@
 import { FormCore } from '@components';
 import { PATHS } from '@config/paths';
-import { COLOR_CODE, deepKeysHookFormErrors, scrollToTopError } from '@core/common';
+import {
+  COLOR_CODE,
+  ErrorService,
+  ToastService,
+  TokenService,
+  deepKeysHookFormErrors,
+  scrollToTopError,
+} from '@core/common';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Grid, Stack, Text, Title } from '@mantine/core';
+import { useLogin } from '@modules/uam/queries';
 import { FieldErrors, useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import { UAMBody } from '../components';
@@ -13,8 +21,6 @@ import {
   signInFormSchema,
 } from './SignIn.helpers';
 
-type Props = {};
-
 const SignIn = () => {
   const { control, handleSubmit } = useForm<SignInFormValue>({
     defaultValues: initialSignInFormValue,
@@ -24,10 +30,24 @@ const SignIn = () => {
     resolver: yupResolver<any>(signInFormSchema),
   });
 
+  const { login, isSigning } = useLogin({
+    onSuccess(data) {
+      const response = data.data;
+
+      TokenService.setACToken(response.accessToken);
+      TokenService.setRFToken(response.refreshToken);
+
+      ToastService.success('Login success');
+    },
+    onError(error) {
+      ErrorService.handler(error);
+    },
+  });
+
   const onValidFormSubmit = (values: SignInFormValue) => {
     const { email, password } = values;
 
-    // login({ email, password });
+    login({ email, password });
   };
 
   const onInvalidFormSubmit = (formErrors: FieldErrors<SignInFormValue>) => {
@@ -73,7 +93,7 @@ const SignIn = () => {
             </Link>
           </Grid.Col>
           <Grid.Col span={12}>
-            <Button type="submit" variant="gradient" fullWidth size="md">
+            <Button type="submit" loading={isSigning} variant="gradient" fullWidth size="md">
               Sign in
             </Button>
           </Grid.Col>
