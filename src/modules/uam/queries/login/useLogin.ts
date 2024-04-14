@@ -1,11 +1,11 @@
 import { responseWrapper } from '@core/common/services/http';
 import { UseMutationOptions, useMutation } from '@tanstack/react-query';
-import { SignInPayload, UAMApi } from '..';
+import { ISignInPayload, UAMApi } from '..';
 
 // < return Data, Error, Payload Type, Context Types >
-export function useLogin(options?: UseMutationOptions<any, Error, SignInPayload>) {
-  const { mutate, isLoading } = useMutation<any, Error, SignInPayload>({
-    mutationFn: (payload: SignInPayload) => {
+export function useLogin(options?: UseMutationOptions<any, Error, ISignInPayload>) {
+  const { mutate, isLoading } = useMutation<any, Error, ISignInPayload>({
+    mutationFn: (payload: ISignInPayload) => {
       return responseWrapper(UAMApi.signIn, [payload]);
     },
     ...options,

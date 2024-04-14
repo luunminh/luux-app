@@ -2,6 +2,7 @@ import { FormCore } from '@components';
 import {
   COLOR_CODE,
   ErrorService,
+  ToastService,
   deepKeysHookFormErrors,
   isEmpty,
   scrollToTopError,
@@ -29,6 +30,7 @@ const SignUp = () => {
 
   const { signUp, isSigningUp } = useSignUp({
     onSuccess() {
+      ToastService.success('Sign up success! Please check your email to active your account.');
       handleOpenConfirmSignUpModal();
     },
     onError(error) {

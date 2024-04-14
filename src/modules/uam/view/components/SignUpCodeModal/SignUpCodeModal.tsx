@@ -33,7 +33,9 @@ const SignUpCodeModal = ({ email }: Props) => {
       ToastService.success('Your account has been activated! Now you can login.');
 
       handleCloseModal();
-      navigate(uamPaths.login);
+      setTimeout(() => {
+        navigate(uamPaths.login);
+      }, 2000);
     },
     onError(e) {
       ErrorService.handler(e);
@@ -57,7 +59,6 @@ const SignUpCodeModal = ({ email }: Props) => {
   });
 
   const onValidFormSubmit = (values: ISignUpCodeForm) => {
-    console.log('onValidFormSubmit ~ values:', values);
     confirmSignUpCode(values);
   };
 

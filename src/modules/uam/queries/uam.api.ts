@@ -1,12 +1,15 @@
 import { newCancelToken } from '@core/common';
 import { httpService } from '@core/common/services/http';
-import { IConfirmSignUpCodePayload } from './confirmSignUpCode';
-import { IForgotPasswordPayload } from './forgotPassword/useForgotPassword.types';
-import { ISignUpCodePayload } from './getSignupCode';
-import { SignInPayload } from './login';
-import { ISignUpPayload } from './signup';
+import {
+  IConfirmSignUpCodePayload,
+  IForgotPasswordPayload,
+  IResetPasswordPayload,
+  ISignInPayload,
+  ISignUpCodePayload,
+  ISignUpPayload,
+} from '.';
 
-const signIn = (body: SignInPayload) => httpService.post('/login', body, newCancelToken());
+const signIn = (body: ISignInPayload) => httpService.post('/login', body, newCancelToken());
 
 const signUp = (body: ISignUpPayload) => httpService.post('/signup', body, newCancelToken());
 
@@ -19,4 +22,7 @@ const confirmSignUpCode = (payload: IConfirmSignUpCodePayload) =>
 const forgotPassword = (payload: IForgotPasswordPayload) =>
   httpService.post('/forgot-password', payload, newCancelToken());
 
-export { confirmSignUpCode, forgotPassword, getSignUpCode, signIn, signUp };
+const resetPassword = (payload: IResetPasswordPayload) =>
+  httpService.post('/reset-password', payload, newCancelToken());
+
+export { confirmSignUpCode, forgotPassword, getSignUpCode, resetPassword, signIn, signUp };

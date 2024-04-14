@@ -1,5 +1,4 @@
 import { FormCore } from '@components';
-import { PATHS } from '@config/paths';
 import {
   COLOR_CODE,
   ErrorService,
@@ -85,7 +84,7 @@ const SignIn = () => {
           </Grid.Col>
           <Grid.Col span={12} style={{ textAlign: 'end' }}>
             <Link
-              to={PATHS.forgotPassword}
+              to={uamPaths.forgotPassword}
               style={{
                 color: COLOR_CODE.SUCCESS,
                 textDecoration: 'none',

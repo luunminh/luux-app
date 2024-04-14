@@ -1,9 +1,4 @@
-const authPaths = {
-  login: '/login',
-  signup: '/signup',
-  forgotPassword: '/forgot-password',
-  resetPassword: '/reset-password',
-};
+import { uamPaths } from '@modules/uam/route';
 
 export const PATHS = {
   root: '',
@@ -11,28 +6,11 @@ export const PATHS = {
   settings: '/settings',
   design: '/design',
 
-  ...authPaths,
-
   dev: '/dev',
 };
 
-export const HIDE_NAV_PATHS: string[] = [
-  PATHS.login,
-  PATHS.signup,
-  PATHS.forgotPassword,
-  PATHS.resetPassword,
-];
+export const HIDE_NAV_PATHS: string[] = [...Object.values(uamPaths)];
 
-export const HIDE_SIDEBAR_PATHS: string[] = [
-  PATHS.login,
-  PATHS.signup,
-  PATHS.forgotPassword,
-  PATHS.resetPassword,
-];
+export const HIDE_SIDEBAR_PATHS: string[] = [...Object.values(uamPaths)];
 
-export const NOT_REQUIRED_AUTH_PATHS: string[] = [
-  PATHS.login,
-  PATHS.signup,
-  PATHS.forgotPassword,
-  PATHS.resetPassword,
-];
+export const NOT_REQUIRED_AUTH_PATHS: string[] = [...Object.values(uamPaths)];

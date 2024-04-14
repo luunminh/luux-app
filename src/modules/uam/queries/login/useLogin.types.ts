@@ -1,4 +1,4 @@
-export interface SignInPayload {
+export interface ISignInPayload {
   email: string;
   password: string;
 }

@@ -77,7 +77,7 @@ const ForgotPassword = () => {
               </Button>
               <Button
                 onClick={handleBackToLogin}
-                loading={isLoading}
+                disabled={isLoading}
                 variant="outline"
                 fullWidth
                 size="md"

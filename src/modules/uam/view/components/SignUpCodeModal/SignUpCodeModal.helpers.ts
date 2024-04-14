@@ -12,7 +12,7 @@ export enum SignUpCodeFormKey {
 
 export const signUpCodeFormSchema = Yup.object().shape({
   [SignUpCodeFormKey.EMAIL]: Yup.string().email().required(),
-  [SignUpCodeFormKey.TOKEN]: Yup.string().required(),
+  [SignUpCodeFormKey.TOKEN]: Yup.string().required().numberOnly().length(6),
 });
 
 export const numberRegex = /^-?\d*(\.\d+)?$/;

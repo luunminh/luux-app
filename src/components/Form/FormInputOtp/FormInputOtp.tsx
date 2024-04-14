@@ -1,5 +1,5 @@
 import { COLOR_CODE, isEmpty } from '@core/common';
-import { PinInput, PinInputProps, Text } from '@mantine/core';
+import { PinInput, PinInputProps, Stack, Text } from '@mantine/core';
 import { UseControllerProps, useController } from 'react-hook-form';
 
 const FormInputOtp = ({
@@ -14,7 +14,7 @@ const FormInputOtp = ({
   const hasError = !isEmpty(fieldState.error);
 
   return (
-    <>
+    <Stack gap={1}>
       <PinInput
         {...props}
         {...field}
@@ -30,7 +30,7 @@ const FormInputOtp = ({
           {fieldState.error?.message}
         </Text>
       )}
-    </>
+    </Stack>
   );
 };
 
