@@ -8,6 +8,7 @@ import {
   deepKeysHookFormErrors,
   scrollToTopError,
 } from '@core/common';
+import { Form } from '@core/components';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Grid, Stack, Text, Title } from '@mantine/core';
 import { useLogin } from '@modules/uam/queries';
@@ -62,7 +63,7 @@ const SignIn = () => {
           Welcome
         </Title>
       </Stack>
-      <form autoComplete="off" onSubmit={handleSubmit(onValidFormSubmit, onInvalidFormSubmit)}>
+      <Form customSubmit={handleSubmit(onValidFormSubmit, onInvalidFormSubmit)}>
         <Grid grow gutter="md">
           <Grid.Col span={12}>
             <FormCore.Input
@@ -113,7 +114,7 @@ const SignIn = () => {
             </Text>
           </Grid.Col>
         </Grid>
-      </form>
+      </Form>
     </UAMBody>
   );
 };

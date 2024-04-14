@@ -1,7 +1,6 @@
-import { Navbar } from '@components';
+import { CustomErrorBoundary, Navbar } from '@components';
 import appConfigs from '@config';
 import { LoadingGlobalContainer } from '@containers';
-import { CustomErrorBoundary } from '@core/components';
 import { AppShell } from '@mantine/core';
 import { PropsWithChildren } from 'react';
 import useLayoutProps from './useLayoutProps';

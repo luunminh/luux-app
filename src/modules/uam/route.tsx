@@ -3,6 +3,7 @@ import { Route } from 'react-router-dom';
 
 const SignIn = lazy(() => import('./view/SignIn'));
 const SignUp = lazy(() => import('./view/SignUp'));
+const ForgotPassword = lazy(() => import('./view/ForgotPassword'));
 
 export const uamPaths = {
   login: '/login',
@@ -14,4 +15,9 @@ export const uamPaths = {
 export const uamRoutes = [
   <Route key={uamPaths.login} path={uamPaths.login} element={<SignIn />} />,
   <Route key={uamPaths.signup} path={uamPaths.signup} element={<SignUp />} />,
+  <Route
+    key={uamPaths.forgotPassword}
+    path={uamPaths.forgotPassword}
+    element={<ForgotPassword />}
+  />,
 ];

@@ -6,10 +6,11 @@ import {
   isEmpty,
   scrollToTopError,
 } from '@core/common';
+import { Form } from '@core/components';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Grid, Stack, Text, Title } from '@mantine/core';
 import { modals } from '@mantine/modals';
-import { useSignUp } from '@modules/uam/queries/signup/useSignup';
+import { useSignUp } from '@modules/uam/queries';
 import { uamPaths } from '@modules/uam/route';
 import { useCallback, useEffect } from 'react';
 import { FieldErrors, useForm } from 'react-hook-form';
@@ -74,11 +75,7 @@ const SignUp = () => {
           Create Account
         </Title>
       </Stack>
-      <form
-        autoComplete="off"
-        noValidate
-        onSubmit={handleSubmit(onValidFormSubmit, onInvalidFormSubmit)}
-      >
+      <Form customSubmit={handleSubmit(onValidFormSubmit, onInvalidFormSubmit)}>
         <Grid grow gutter="md">
           <Grid.Col span={6}>
             <FormCore.Input
@@ -145,7 +142,7 @@ const SignUp = () => {
             </Text>
           </Grid.Col>
         </Grid>
-      </form>
+      </Form>
     </UAMBody>
   );
 };

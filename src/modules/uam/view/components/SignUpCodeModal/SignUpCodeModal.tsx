@@ -8,8 +8,7 @@ import {
 } from '@core/common';
 import { Button, Flex, Stack, Text, UnstyledButton } from '@mantine/core';
 import { modals } from '@mantine/modals';
-import { useGetSignUpCode } from '@modules/uam/queries';
-import { useConfirmSignUpCode } from '@modules/uam/queries/confirmSignUpCode';
+import { useConfirmSignUpCode, useGetSignUpCode } from '@modules/uam/queries';
 import { uamPaths } from '@modules/uam/route';
 import { FieldErrors, useForm } from 'react-hook-form';
 import { useNavigate, useSearchParams } from 'react-router-dom';
