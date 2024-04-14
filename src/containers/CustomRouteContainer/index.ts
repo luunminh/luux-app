@@ -1,1 +1,1 @@
-export { default as CustomRouteContainer } from './CustomRouteContainer';
+export { default as CustomRoute } from './CustomRouteContainer';

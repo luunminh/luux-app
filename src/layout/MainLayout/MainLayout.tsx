@@ -3,7 +3,6 @@ import appConfigs from '@config';
 import { LoadingGlobalContainer } from '@containers';
 import { CustomErrorBoundary } from '@core/components';
 import { AppShell } from '@mantine/core';
-import { SignIn } from '@modules/uam/view/SignIn';
 import { PropsWithChildren } from 'react';
 import useLayoutProps from './useLayoutProps';
 
@@ -35,9 +34,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
         <AppShell.Navbar />
 
         <AppShell.Main>
-          {/* {children} */}
-
-          <SignIn />
+          {children}
 
           <LoadingGlobalContainer />
         </AppShell.Main>

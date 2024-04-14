@@ -1,41 +1,29 @@
-// import { FC, Suspense, lazy } from 'react';
-// import { Navigate, Route, Routes } from 'react-router-dom';
-// import CustomRoute from './CustomRouteContainer';
+import { LoadingContainer } from '@components';
+import { PATHS } from '@config/paths';
+import { uamRoutes } from '@modules/uam/route';
+import { FC, Suspense, lazy } from 'react';
+import { Navigate, Route, Routes } from 'react-router-dom';
+import Root from './Root';
 
-// const NotFound = lazy(() => import('../modules/shared/containers/NotFound'));
-// const Dev = lazy(() => import('@core/containers/dev'));
+const NotFound = lazy(() => import('@components/NotFound'));
 
-// const routes = [
-//   ...accountRoutes,
-//   ...dashboardRoutes,
-//   ...rolesPermissionsRoutes,
-//   ...userPermissionsRoutes,
-//   ...multiLanguageRoutes,
-//   ...skeletonRoutes,
-// ];
+const testPaths = [<Route key={PATHS.root} path={PATHS.root} element={<Root />} />];
 
-// type RootContainerProps = {};
+const routes = [...uamRoutes, ...testPaths];
 
-// const RootContainer: FC<RootContainerProps> = () => {
-//   return (
-//     <Suspense fallback={<LoadingContainer />}>
-//       <Routes>
-//         <Route path={PATHS.root} element={<Navigate to={dashboardPaths.dashboard} />} />
-//         {...routes}
+type RootContainerProps = {};
 
-//         <Route
-//           path={PATHS.dev}
-//           element={
-//             <CustomRoute>
-//               <Dev />
-//             </CustomRoute>
-//           }
-//         />
-//         <Route path={`${PREFIX_ROUTE}/*`} element={<NotFound />} />
-//         <Route path={'*'} element={<Navigate to={dashboardPaths.dashboard} />} />
-//       </Routes>
-//     </Suspense>
-//   );
-// };
+const RootContainer: FC<RootContainerProps> = () => {
+  return (
+    <Suspense fallback={<LoadingContainer />}>
+      <Routes>
+        {...routes}
 
-// export default RootContainer;
+        <Route path={`/*`} element={<NotFound />} />
+        <Route path={'*'} element={<Navigate to={PATHS.root} />} />
+      </Routes>
+    </Suspense>
+  );
+};
+
+export default RootContainer;

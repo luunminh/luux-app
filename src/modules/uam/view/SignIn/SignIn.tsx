@@ -11,6 +11,7 @@ import {
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Grid, Stack, Text, Title } from '@mantine/core';
 import { useLogin } from '@modules/uam/queries';
+import { uamPaths } from '@modules/uam/route';
 import { FieldErrors, useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import { UAMBody } from '../components';
@@ -101,7 +102,7 @@ const SignIn = () => {
             <Text mt="sm">
               DON'T HAVE AN ACCOUNT?{' '}
               <Link
-                to={PATHS.signup}
+                to={uamPaths.signup}
                 style={{
                   color: COLOR_CODE.SUCCESS,
                   textDecoration: 'none',

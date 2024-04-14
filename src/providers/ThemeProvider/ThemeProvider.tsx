@@ -12,7 +12,14 @@ type Props = PropsWithChildren;
 const ThemeProvider: FC<Props> = ({ children }) => {
   return (
     <MantineProvider theme={themeConfig}>
-      <ModalsProvider>{children}</ModalsProvider>
+      <ModalsProvider
+        modalProps={{
+          centered: true,
+          padding: 24,
+        }}
+      >
+        {children}
+      </ModalsProvider>
     </MantineProvider>
   );
 };
