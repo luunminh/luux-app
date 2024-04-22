@@ -9,6 +9,10 @@ export const PATHS = {
   dev: '/dev',
 };
 
+// project paths
+
+// design paths
+
 export const HIDE_NAV_PATHS: string[] = [...Object.values(uamPaths)];
 
 export const HIDE_SIDEBAR_PATHS: string[] = [...Object.values(uamPaths)];

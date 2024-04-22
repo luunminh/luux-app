@@ -4,6 +4,9 @@ import { resolve } from 'path';
 import { ConfigEnv, defineConfig, loadEnv } from 'vite';
 import checker from 'vite-plugin-checker';
 
+// TODO: add react-hotkeys-hook to the project
+// pnpm i react-hotkeys-hook
+
 function pathResolve(dir: string) {
   return resolve(__dirname, '.', dir);
 }

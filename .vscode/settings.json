@@ -30,7 +30,10 @@
     "LUUX",
     "minh_luu",
     "mantine",
-    "signup"
+    "signup",
+    "konva",
+    "zustand",
+    "liveblock"
   ],
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {

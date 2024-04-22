@@ -1,6 +1,7 @@
 import { CustomErrorBoundary, Navbar } from '@components';
 import appConfigs from '@config';
 import { LoadingGlobalContainer } from '@containers';
+import { AuthContainer } from '@core/startup';
 import { AppShell } from '@mantine/core';
 import { PropsWithChildren } from 'react';
 import useLayoutProps from './useLayoutProps';
@@ -8,7 +9,7 @@ import useLayoutProps from './useLayoutProps';
 type MainLayoutProps = PropsWithChildren;
 
 const MainLayout = ({ children }: MainLayoutProps) => {
-  const { isHideNav, isHideSidebar, isNotRequiredAuth } = useLayoutProps();
+  const { isHideNav, isHideSidebar } = useLayoutProps();
 
   return (
     <CustomErrorBoundary showErrorMessage>
@@ -35,6 +36,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
         <AppShell.Main>
           {children}
 
+          <AuthContainer />
           <LoadingGlobalContainer />
         </AppShell.Main>
       </AppShell>
