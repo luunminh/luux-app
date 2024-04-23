@@ -4,6 +4,10 @@ import { IShape } from '../types';
 const useShape = () => {
   const { shapes, onSetShapes } = useDesignStore();
 
+  const addShape = (newShape: IShape) => {
+    onSetShapes([...shapes, newShape]);
+  };
+
   const addShapes = (newShapes: IShape[]) => {
     onSetShapes([...shapes, ...newShapes]);
   };
@@ -42,7 +46,15 @@ const useShape = () => {
     onSetShapes([]);
   };
 
-  return { addShapes, removeShape, removeShapes, updateShape, removeAllShapes, updateShapes };
+  return {
+    addShape,
+    addShapes,
+    removeShape,
+    removeShapes,
+    updateShape,
+    removeAllShapes,
+    updateShapes,
+  };
 };
 
 export default useShape;

@@ -4,7 +4,9 @@ import { useStage, useTransformer } from '../hooks';
 import { ShapeTypeEnum } from './constant';
 
 export type BaseShape = {
-  [ShapeTypeEnum.CUSTOM]: Konva.ShapeConfig;
+  [ShapeTypeEnum.CUSTOM]: Konva.ShapeConfig & {
+    src?: string;
+  };
 
   [ShapeTypeEnum.TAG]: Konva.TagConfig;
   [ShapeTypeEnum.ARC]: Konva.ArcConfig;

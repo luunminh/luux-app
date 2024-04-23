@@ -22,6 +22,7 @@ const ShapeWrapper = <T extends IShape>({ children, shape, onSelect, transformer
 
   const isText = shape.attrs.shapeType === ShapeTypeEnum.TEXT;
   const isImage = shape.attrs.shapeType === ShapeTypeEnum.IMAGE;
+  const isCustom = shape.attrs.shapeType === ShapeTypeEnum.CUSTOM;
 
   const handleDragStart = (e: Konva.KonvaEventObject<DragEvent>) => {
     onSetIsDragging(true);
@@ -218,7 +219,7 @@ const ShapeWrapper = <T extends IShape>({ children, shape, onSelect, transformer
     }, delayTimer);
   };
 
-  // TODO: handle hotkeys, selection, editor menu
+  // TODO: editor bar, aside
   return (
     <>
       {React.cloneElement(children, {
@@ -229,7 +230,7 @@ const ShapeWrapper = <T extends IShape>({ children, shape, onSelect, transformer
         ...shape.attrs,
         ...(isImage && { image: img }),
         ...(isText && { onDblClick: handleDoubleClickText, onDblTap: handleDoubleClickText }),
-
+        ...(isCustom && { fillPatternImage: img }),
         onDragStart: handleDragStart,
         onDragEnd: handleDragEnd,
       })}

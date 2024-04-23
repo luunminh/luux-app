@@ -1,8 +1,10 @@
 import { COLOR_CODE, isEmpty } from '@core/common';
 import Konva from 'konva';
+import { useState } from 'react';
+import { useHotkeys } from 'react-hotkeys-hook';
 import { Transformer } from 'react-konva';
 import { Html } from 'react-konva-utils';
-import { useSelection, useStage, useTransformer } from '../../hooks';
+import { useHotkeyFunc, useSelection, useStage, useTransformer } from '../../hooks';
 import { useDesignStore } from '../../store';
 import { IShape } from '../../types';
 import Shape, { ShapeMap } from '../Shapes';
@@ -11,12 +13,44 @@ import BoardMenuItem from './Board.menu-item';
 
 const Board = () => {
   const stage = useStage();
+  const [clipboard, setClipboard] = useState<IShape[]>([]);
 
   const { shapes, isDragging } = useDesignStore();
   const transformer = useTransformer();
 
+  const { selectAll, copyItems, pasteItems } = useHotkeyFunc();
   const { selectedItems, onSelection, clearSelection } = useSelection(transformer);
   const menuPos = getMenuAbsolutePosition(transformer.transformerRef.current);
+
+  useHotkeys(
+    'ctrl+a',
+    (e) => {
+      e.preventDefault();
+      selectAll(stage, onSelection);
+    },
+    {},
+    [selectedItems],
+  );
+
+  useHotkeys(
+    'ctrl+c',
+    (e) => {
+      e.preventDefault();
+      copyItems(selectedItems, setClipboard);
+    },
+    {},
+    [selectedItems, stage, clipboard],
+  );
+
+  useHotkeys(
+    'ctrl+v',
+    (e) => {
+      e.preventDefault();
+      pasteItems(clipboard);
+    },
+    {},
+    [clipboard, pasteItems],
+  );
 
   return (
     <Stage stage={stage} onSelect={onSelection}>
