@@ -15,7 +15,7 @@ const useShape = () => {
   const updateShape = (shapeId: string, newShape: IShape) => {
     const updatedShapes = shapes.map((shape) => {
       if (shape.id === shapeId) {
-        return { ...shape, newShape };
+        return { ...shape, ...newShape };
       }
       return shape;
     });
@@ -47,8 +47,7 @@ const useShape = () => {
   };
 
   const alterShapes = (dataList: IShape[]) => {
-    removeAllShapes();
-    addShapes(dataList);
+    onSetShapes(dataList);
   };
 
   return {

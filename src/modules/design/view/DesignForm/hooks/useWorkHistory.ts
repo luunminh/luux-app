@@ -14,7 +14,6 @@ const useWorkHistory = ({ past, future, setPast, setFuture }: Props) => {
   const [current, setCurrent] = useState<IShape[] | null>(null);
 
   const goToPast = useCallback(() => {
-    console.log('useWorkHistory ~ current:', current);
     if (past.length > 0 && current) {
       const newFuture = [...current];
       const newStageData = [...past[past.length - 1]];

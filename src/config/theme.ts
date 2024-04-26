@@ -1,5 +1,5 @@
 import { COLOR_CODE } from '@core/common';
-import { Button, PasswordInput, TextInput, createTheme } from '@mantine/core';
+import { Button, MenuItem, PasswordInput, TextInput, createTheme } from '@mantine/core';
 
 export const themeConfig = createTheme({
   fontFamily: 'Public Sans, sans-serif',
@@ -42,6 +42,12 @@ export const themeConfig = createTheme({
         errorProps: {
           size: 'md',
         },
+      },
+    }),
+
+    MenuItem: MenuItem.extend({
+      defaultProps: {
+        color: COLOR_CODE.TEXT_BODY,
       },
     }),
   },

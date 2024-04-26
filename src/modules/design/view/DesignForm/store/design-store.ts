@@ -52,9 +52,9 @@ const initialData: IShape[] = [
       shapeType: ShapeTypeEnum.TEXT,
       fontSize: 30,
       name: 'Text 1',
-      x: 300,
-      y: 300,
-      text: 'Hello World!',
+      x: 100,
+      y: 400,
+      text: 'nihao lai la toi day',
     },
   },
   {

@@ -36,7 +36,7 @@ const Logo = ({ onClick, titleStyle, gap = 'xs', imgStyle = { height: 40, width:
       <Title
         order={2}
         style={{
-          fontFamily: 'cursive',
+          fontFamily: 'monospace',
           ...titleStyle,
         }}
         className="cmp-logo__title"

@@ -1,10 +1,10 @@
 import { getRandomId } from '@core/common';
 import { Node, NodeConfig } from 'konva/lib/Node';
-import { useSelection, useShape, useStage } from '.';
+import { useSelection, useShape, useStage, useTransformer } from '.';
 import { IShape, ShapeTypeEnum } from '../types';
 
 const useHotkeyFunc = () => {
-  const { addShape, addShapes, updateShape, removeShape } = useShape();
+  const { addShape, addShapes, removeShapes } = useShape();
 
   const selectAll = (
     stage: ReturnType<typeof useStage>,
@@ -85,11 +85,22 @@ const useHotkeyFunc = () => {
     }
   };
 
+  const deleteItems = (
+    selectedItems: Node<NodeConfig>[],
+    setSelectedItems: (value: React.SetStateAction<Node<NodeConfig>[]>) => void,
+    transformerRef: ReturnType<typeof useTransformer>['transformerRef'],
+  ) => {
+    setSelectedItems([]);
+    transformerRef.current?.nodes([]);
+    removeShapes(selectedItems.map((item) => item.id()));
+  };
+
   return {
     selectAll,
     copyItems,
     pasteItems,
     duplicateItems,
+    deleteItems,
   };
 };
 

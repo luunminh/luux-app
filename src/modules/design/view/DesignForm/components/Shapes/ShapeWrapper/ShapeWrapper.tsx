@@ -5,6 +5,8 @@ import { useShape } from '../../../hooks';
 import { useDesignStore } from '../../../store';
 import { BaseShapeRef, IShape, ITEMS_CONTEXT, ShapeTypeEnum } from '../../../types';
 
+import './styles.scss';
+
 type Props<T extends IShape> = PropsWithChildren<T> & {
   shape: T;
   onSelect: ITEMS_CONTEXT['onSelect'];

@@ -1,4 +1,5 @@
 import { COLOR_CODE, isEmpty } from '@core/common';
+import { useMantineTheme } from '@mantine/core';
 import Konva from 'konva';
 import { useEffect, useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
@@ -15,6 +16,8 @@ const Board = () => {
   const stage = useStage();
   const [clipboard, setClipboard] = useState<IShape[]>([]);
 
+  const theme = useMantineTheme();
+
   const [past, setPast] = useState<IShape[][]>([]);
   const [future, setFuture] = useState<IShape[][]>([]);
   const { goToFuture, goToPast, recordPast } = useWorkHistory({ past, future, setPast, setFuture });
@@ -22,13 +25,13 @@ const Board = () => {
   const { shapes, isDragging } = useDesignStore();
   const transformer = useTransformer();
 
-  const { selectAll, copyItems, pasteItems, duplicateItems } = useHotkeyFunc();
-  const { selectedItems, onSelection, clearSelection } = useSelection(transformer);
+  const { selectAll, copyItems, pasteItems, duplicateItems, deleteItems } = useHotkeyFunc();
+  const { selectedItems, onSelection, clearSelection, setSelectedItems } =
+    useSelection(transformer);
 
   const menuPos = getMenuAbsolutePosition(transformer.transformerRef.current);
 
   useEffect(() => {
-    console.log('change');
     recordPast(shapes);
   }, [shapes, recordPast]);
 
@@ -92,6 +95,16 @@ const Board = () => {
     [clipboard, pasteItems],
   );
 
+  useHotkeys(
+    'backspace',
+    (e) => {
+      e.preventDefault();
+      deleteItems(selectedItems, setSelectedItems, transformer.transformerRef);
+    },
+    { enabled: Boolean(selectedItems.length) },
+    [selectedItems, transformer.transformerRef.current],
+  );
+
   return (
     <Stage stage={stage} onSelect={onSelection}>
       {shapes.map((shape: IShape) => {
@@ -120,7 +133,7 @@ const Board = () => {
         anchorCornerRadius={10}
         shouldOverdrawWholeArea
         anchorFill={COLOR_CODE.WHITE}
-        borderStroke={COLOR_CODE.SUCCESS}
+        borderStroke={theme.colors.blue[5]}
         anchorStroke={COLOR_CODE.GRAY_500}
         boundBoxFunc={(_, newBox) => newBox}
         onTransformEnd={transformer.onTransformEnd}
