@@ -4,7 +4,7 @@ import { useSelection, useShape, useStage } from '.';
 import { IShape, ShapeTypeEnum } from '../types';
 
 const useHotkeyFunc = () => {
-  const { addShapes, updateShape, removeShape } = useShape();
+  const { addShape, addShapes, updateShape, removeShape } = useShape();
 
   const selectAll = (
     stage: ReturnType<typeof useStage>,
@@ -33,7 +33,10 @@ const useHotkeyFunc = () => {
     setClipboard(selectedShapes);
   };
 
-  const pasteItems = (clipboard: IShape[]) => {
+  const pasteItems = (
+    clipboard: IShape[],
+    setClipboard: (value: React.SetStateAction<IShape[]>) => void,
+  ) => {
     //@ts-ignore
     const newShapes: IShape[] = clipboard.map((item) => {
       if (Object.keys(item.attrs).length === 0) {
@@ -50,15 +53,43 @@ const useHotkeyFunc = () => {
       };
     });
 
+    setClipboard(newShapes);
     addShapes(newShapes);
   };
 
-  // TODO: handle undo, redo
+  const duplicateItems = (selectedItems: Node<NodeConfig>[]) => {
+    selectedItems
+      .map((item) => {
+        const { id } = item.attrs;
+
+        return {
+          id: getRandomId(),
+          attrs: {
+            ...(selectedItems.find((_item) => _item.attrs.id === id)?.attrs ?? ({} as any)),
+          },
+        };
+      })
+      .forEach((item, index) => {
+        addShape({
+          ...item,
+          attrs: {
+            ...item.attrs,
+            x: item.attrs.x + selectedItems[0].scaleX() * 50,
+            y: item.attrs.y + selectedItems[0].scaleY() * 50,
+          },
+        });
+      });
+
+    if (selectedItems.length > 0) {
+      selectedItems[0].getStage().batchDraw();
+    }
+  };
 
   return {
     selectAll,
     copyItems,
     pasteItems,
+    duplicateItems,
   };
 };
 

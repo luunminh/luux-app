@@ -1,10 +1,10 @@
 import { COLOR_CODE, isEmpty } from '@core/common';
 import Konva from 'konva';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { Transformer } from 'react-konva';
 import { Html } from 'react-konva-utils';
-import { useHotkeyFunc, useSelection, useStage, useTransformer } from '../../hooks';
+import { useHotkeyFunc, useSelection, useStage, useTransformer, useWorkHistory } from '../../hooks';
 import { useDesignStore } from '../../store';
 import { IShape } from '../../types';
 import Shape, { ShapeMap } from '../Shapes';
@@ -15,12 +15,42 @@ const Board = () => {
   const stage = useStage();
   const [clipboard, setClipboard] = useState<IShape[]>([]);
 
+  const [past, setPast] = useState<IShape[][]>([]);
+  const [future, setFuture] = useState<IShape[][]>([]);
+  const { goToFuture, goToPast, recordPast } = useWorkHistory({ past, future, setPast, setFuture });
+
   const { shapes, isDragging } = useDesignStore();
   const transformer = useTransformer();
 
-  const { selectAll, copyItems, pasteItems } = useHotkeyFunc();
+  const { selectAll, copyItems, pasteItems, duplicateItems } = useHotkeyFunc();
   const { selectedItems, onSelection, clearSelection } = useSelection(transformer);
+
   const menuPos = getMenuAbsolutePosition(transformer.transformerRef.current);
+
+  useEffect(() => {
+    console.log('change');
+    recordPast(shapes);
+  }, [shapes, recordPast]);
+
+  useHotkeys(
+    'ctrl+z',
+    (e) => {
+      e.preventDefault();
+      goToPast();
+    },
+    {},
+    [goToPast],
+  );
+
+  useHotkeys(
+    'ctrl+y',
+    (e) => {
+      e.preventDefault();
+      goToFuture();
+    },
+    {},
+    [goToFuture],
+  );
 
   useHotkeys(
     'ctrl+a',
@@ -30,6 +60,16 @@ const Board = () => {
     },
     {},
     [selectedItems],
+  );
+
+  useHotkeys(
+    'ctrl+d',
+    (e) => {
+      e.preventDefault();
+      duplicateItems(selectedItems);
+    },
+    {},
+    [selectedItems, shapes],
   );
 
   useHotkeys(
@@ -46,7 +86,7 @@ const Board = () => {
     'ctrl+v',
     (e) => {
       e.preventDefault();
-      pasteItems(clipboard);
+      pasteItems(clipboard, setClipboard);
     },
     {},
     [clipboard, pasteItems],

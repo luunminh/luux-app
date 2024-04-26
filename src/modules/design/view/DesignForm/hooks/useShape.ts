@@ -46,6 +46,11 @@ const useShape = () => {
     onSetShapes([]);
   };
 
+  const alterShapes = (dataList: IShape[]) => {
+    removeAllShapes();
+    addShapes(dataList);
+  };
+
   return {
     addShape,
     addShapes,
@@ -54,6 +59,7 @@ const useShape = () => {
     updateShape,
     removeAllShapes,
     updateShapes,
+    alterShapes,
   };
 };
 
