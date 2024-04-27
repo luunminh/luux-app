@@ -19,14 +19,6 @@ const MainLayout = ({ children }: MainLayoutProps) => {
           collapsed: isHideNav,
           height: appConfigs.NAVBAR_HEIGHT,
         }}
-        navbar={{
-          collapsed: {
-            mobile: isHideSidebar,
-            desktop: isHideSidebar,
-          },
-          breakpoint: 'md',
-          width: appConfigs.SIDEBAR_WIDTH,
-        }}
       >
         <AppShell.Header>
           <Navbar />

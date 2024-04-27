@@ -1,8 +1,29 @@
+import { useMemo } from 'react';
 import { useDesignStore } from '../store';
 import { IShape } from '../types';
 
 const useShape = () => {
-  const { shapes, onSetShapes } = useDesignStore();
+  const { data, onSetData, selectedPage } = useDesignStore();
+
+  const shapes = useMemo(
+    () => data.find((page) => page.pageNumber === selectedPage)?.shapes || [],
+    [data, selectedPage],
+  );
+
+  const onSetShapes = (shapes: IShape[]) => {
+    const newData = data.map((page) => {
+      if (page.pageNumber === selectedPage) {
+        return {
+          ...page,
+          shapes: shapes,
+        };
+      }
+
+      return page;
+    });
+
+    onSetData(newData);
+  };
 
   const addShape = (newShape: IShape) => {
     onSetShapes([...shapes, newShape]);
@@ -51,6 +72,7 @@ const useShape = () => {
   };
 
   return {
+    shapes,
     addShape,
     addShapes,
     removeShape,

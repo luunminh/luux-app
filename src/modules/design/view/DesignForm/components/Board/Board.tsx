@@ -5,14 +5,28 @@ import { useEffect, useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { Transformer } from 'react-konva';
 import { Html } from 'react-konva-utils';
-import { useHotkeyFunc, useSelection, useStage, useTransformer, useWorkHistory } from '../../hooks';
+import {
+  useHotkeyFunc,
+  useSelection,
+  useShape,
+  useStage,
+  useTransformer,
+  useWorkHistory,
+} from '../../hooks';
 import { useDesignStore } from '../../store';
 import { IShape } from '../../types';
 import Shape, { ShapeMap } from '../Shapes';
 import { Stage } from '../Stage';
 import BoardMenuItem from './Board.menu-item';
 
-const Board = () => {
+type Props = {
+  pageNumber: number;
+};
+
+const Board = ({ pageNumber }: Props) => {
+  const { isDragging } = useDesignStore();
+  const { shapes } = useShape();
+
   const stage = useStage();
   const [clipboard, setClipboard] = useState<IShape[]>([]);
 
@@ -22,7 +36,6 @@ const Board = () => {
   const [future, setFuture] = useState<IShape[][]>([]);
   const { goToFuture, goToPast, recordPast } = useWorkHistory({ past, future, setPast, setFuture });
 
-  const { shapes, isDragging } = useDesignStore();
   const transformer = useTransformer();
 
   const { selectAll, copyItems, pasteItems, duplicateItems, deleteItems } = useHotkeyFunc();

@@ -58,27 +58,18 @@ const useHotkeyFunc = () => {
   };
 
   const duplicateItems = (selectedItems: Node<NodeConfig>[]) => {
-    selectedItems
-      .map((item) => {
-        const { id } = item.attrs;
+    const newShapes = selectedItems.map((item) => {
+      return {
+        id: getRandomId(),
+        attrs: {
+          ...item.attrs,
+          x: item.attrs.x + 10,
+          y: item.attrs.y + 10,
+        },
+      };
+    });
 
-        return {
-          id: getRandomId(),
-          attrs: {
-            ...(selectedItems.find((_item) => _item.attrs.id === id)?.attrs ?? ({} as any)),
-          },
-        };
-      })
-      .forEach((item, index) => {
-        addShape({
-          ...item,
-          attrs: {
-            ...item.attrs,
-            x: item.attrs.x + selectedItems[0].scaleX() * 50,
-            y: item.attrs.y + selectedItems[0].scaleY() * 50,
-          },
-        });
-      });
+    addShapes(newShapes);
 
     if (selectedItems.length > 0) {
       selectedItems[0].getStage().batchDraw();

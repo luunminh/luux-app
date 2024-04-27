@@ -1,4 +1,5 @@
-import { ActionIcon, Button, Menu } from '@mantine/core';
+import { COLOR_CODE } from '@core/common';
+import { ActionIcon, Button, Menu, Tooltip } from '@mantine/core';
 import { Node, NodeConfig } from 'konva/lib/Node';
 import { BiDuplicate } from 'react-icons/bi';
 import { BsLayerBackward, BsLayerForward } from 'react-icons/bs';
@@ -31,68 +32,74 @@ const BoardMenuItem = ({ selectedItems, clearSelection }: Props) => {
     >
       <Menu width={250}>
         <Menu.Target>
-          <ActionIcon
-            style={{
-              borderTopRightRadius: 0,
-              borderBottomRightRadius: 0,
-            }}
-            variant="light"
-            size="lg"
-            aria-label="Menu"
-          >
-            <HiMenu size={18} />
-          </ActionIcon>
+          <Tooltip label="Menu" withArrow>
+            <ActionIcon
+              style={{
+                borderTopRightRadius: 0,
+                borderBottomRightRadius: 0,
+              }}
+              variant="light"
+              size="xl"
+              aria-label="Menu"
+            >
+              <HiMenu size={18} />
+            </ActionIcon>
+          </Tooltip>
         </Menu.Target>
         <Menu.Dropdown>
-          <Menu.Label>Actions</Menu.Label>
+          <Menu.Label c="blue">Actions</Menu.Label>
           <Menu.Divider />
-          <Menu.Item color="blue" leftSection={<IoCopyOutline />}>
+          <Menu.Item color="blue" c={COLOR_CODE.TEXT_CONTROL} leftSection={<IoCopyOutline />}>
             Copy
           </Menu.Item>
-          <Menu.Item color="blue" leftSection={<LuClipboardPaste />}>
+          <Menu.Item color="blue" c={COLOR_CODE.TEXT_CONTROL} leftSection={<LuClipboardPaste />}>
             Paste
           </Menu.Item>
-          <Menu.Item color="blue" leftSection={<BiDuplicate />}>
+          <Menu.Item color="blue" c={COLOR_CODE.TEXT_CONTROL} leftSection={<BiDuplicate />}>
             Duplicate
           </Menu.Item>
           <Menu.Divider />
-          <Menu.Label>Layer</Menu.Label>
-          <Menu.Item color="blue" leftSection={<BsLayerForward />}>
+          <Menu.Label c="blue">Layer</Menu.Label>
+          <Menu.Item color="blue" c={COLOR_CODE.TEXT_CONTROL} leftSection={<BsLayerForward />}>
             Bring forward
           </Menu.Item>
-          <Menu.Item color="blue" leftSection={<TbArrowsUp />}>
+          <Menu.Item color="blue" c={COLOR_CODE.TEXT_CONTROL} leftSection={<TbArrowsUp />}>
             Bring to front
           </Menu.Item>
-          <Menu.Item color="blue" leftSection={<BsLayerBackward />}>
+          <Menu.Item color="blue" c={COLOR_CODE.TEXT_CONTROL} leftSection={<BsLayerBackward />}>
             Bring backward
           </Menu.Item>
-          <Menu.Item color="blue" leftSection={<TbArrowsDown />}>
+          <Menu.Item color="blue" c={COLOR_CODE.TEXT_CONTROL} leftSection={<TbArrowsDown />}>
             Bring to back
           </Menu.Item>
         </Menu.Dropdown>
       </Menu>
-      <ActionIcon
-        onClick={handleRemoveShapes}
-        variant="light"
-        aria-label="Copy"
-        size="lg"
-        style={{
-          borderRadius: 0,
-        }}
-      >
-        <IoTrash />
-      </ActionIcon>
-      <ActionIcon
-        style={{
-          borderTopLeftRadius: 0,
-          borderBottomLeftRadius: 0,
-        }}
-        variant="light"
-        size="lg"
-        aria-label="Comment"
-      >
-        <FaRegComment size={14} />
-      </ActionIcon>
+      <Tooltip label="Delete" withArrow>
+        <ActionIcon
+          onClick={handleRemoveShapes}
+          variant="light"
+          aria-label="Delete"
+          size="xl"
+          style={{
+            borderRadius: 0,
+          }}
+        >
+          <IoTrash />
+        </ActionIcon>
+      </Tooltip>
+      <Tooltip label="Comment" withArrow>
+        <ActionIcon
+          style={{
+            borderTopLeftRadius: 0,
+            borderBottomLeftRadius: 0,
+          }}
+          variant="light"
+          size="xl"
+          aria-label="Comment"
+        >
+          <FaRegComment size={14} />
+        </ActionIcon>
+      </Tooltip>
     </Button.Group>
   );
 };

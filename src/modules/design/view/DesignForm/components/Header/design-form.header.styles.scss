@@ -1,0 +1,21 @@
+.mantine-TextInput-input {
+  border: none;
+  background-color: transparent;
+  caret-color: white;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.4);
+
+  &::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+    font-weight: 600;
+  }
+
+
+  &:hover,
+  &:active,
+  &:focus {
+    color: #FFF;
+    border: 2px solid #FFF;
+
+  }
+}

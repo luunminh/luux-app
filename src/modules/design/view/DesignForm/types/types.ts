@@ -60,3 +60,16 @@ export type ITEMS_CONTEXT = {
 
   onSelect: (e?: KonvaEventObject<MouseEvent>, itemList?: Konva.Node[]) => void;
 };
+
+export interface IDesignContent {
+  pageNumber: number;
+  shapes: IShape[];
+  thumbnail?: string;
+}
+
+export interface IDesign {
+  id: string;
+  name: string;
+  category: string;
+  content: IDesignContent[];
+}
