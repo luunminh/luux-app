@@ -4,12 +4,12 @@ import { AppShell, Stack } from '@mantine/core';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { IDesignForm, designFormInitialValues, designFormSchema } from './DesignForm.helpers';
-import { Board } from './components';
-import DesignFormHeader from './components/Header/DesignForm.header';
+import { Board, DesignFormHeader } from './components';
 import { useTransformer, useWorkHistory } from './hooks';
 import { IDesignContent } from './types';
 
 const HEADER_HEIGHT = 56;
+const SIDEBAR_WIDTH = 430;
 
 const DesignForm = () => {
   const [past, setPast] = useState<IDesignContent[][]>([]);
@@ -34,6 +34,10 @@ const DesignForm = () => {
       header={{
         height: HEADER_HEIGHT,
       }}
+      navbar={{
+        breakpoint: 'md',
+        width: SIDEBAR_WIDTH,
+      }}
     >
       <AppShell.Header>
         <DesignForm.Header
@@ -43,9 +47,12 @@ const DesignForm = () => {
           workHistory={workHistory}
         />
       </AppShell.Header>
+      <AppShell.Navbar>
+        <div>Sidebar</div>
+      </AppShell.Navbar>
       <AppShell.Main>
         <Stack align="center" justify="center" h="80vh">
-          <Board pageNumber={1} transformer={transformer} workHistory={workHistory} />
+          <DesignForm.Board pageNumber={1} transformer={transformer} workHistory={workHistory} />
         </Stack>
       </AppShell.Main>
     </AppShell>
@@ -53,5 +60,6 @@ const DesignForm = () => {
 };
 
 DesignForm.Header = DesignFormHeader;
+DesignForm.Board = Board;
 
 export default DesignForm;

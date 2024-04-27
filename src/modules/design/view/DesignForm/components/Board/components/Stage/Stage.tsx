@@ -1,13 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { COLOR_CODE } from '@core/common';
+import { useStage } from '@design/hooks';
+import { ITEMS_CONTEXT } from '@design/types';
+import { decimalUpToSeven } from '@design/utils';
 import { Box, Stack } from '@mantine/core';
 import { KonvaEventObject, Node, NodeConfig } from 'konva/lib/Node';
 import { ForwardedRef, PropsWithChildren, forwardRef, useCallback } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { Stage as KonvaStage, Layer, Rect } from 'react-konva';
-import { useStage } from '../../hooks';
-import { ITEMS_CONTEXT } from '../../types';
-import { decimalUpToSeven } from '../../utils';
 import { getItemsInBoundary, getOriginFromTwoPoint, getScaledMousePosition } from './Stage.helpers';
 
 type Props = PropsWithChildren & {

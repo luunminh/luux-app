@@ -1,1 +1,1 @@
-export * from './DesignForm.header';
+export { default as DesignFormHeader } from './DesignForm.header';

@@ -1,6 +1,6 @@
+import { decimalUpToSeven } from '@modules/design/view/DesignForm/utils';
 import Konva from 'konva';
 import { IRect, Vector2d } from 'konva/lib/types';
-import { decimalUpToSeven } from '../../utils';
 
 export const getScaledMousePosition = (stage: Konva.Stage, e: DragEvent | MouseEvent) => {
   stage.setPointersPositions(e);

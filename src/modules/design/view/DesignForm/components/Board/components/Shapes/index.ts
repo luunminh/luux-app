@@ -1,3 +1,4 @@
+import { ShapeTypeEnum } from '@design/types';
 import { FC } from 'react';
 import {
   Arc,
@@ -16,7 +17,6 @@ import {
   Tag,
   Text,
 } from 'react-konva';
-import { ShapeTypeEnum } from '../../types';
 import ShapeWrapper from './ShapeWrapper';
 
 const Shape = {

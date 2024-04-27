@@ -31,6 +31,7 @@ export default defineConfig((_env: ConfigEnv) => {
         '@components': pathResolve('src/components'),
         '@modules': pathResolve('src/modules'),
         '@hooks': pathResolve('src/hooks'),
+        '@design': pathResolve('src/modules/design/view/DesignForm'),
         src: pathResolve('src'),
         './runtimeConfig': './runtimeConfig.browser',
       },

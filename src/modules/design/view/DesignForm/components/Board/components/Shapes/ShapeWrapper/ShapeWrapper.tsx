@@ -1,9 +1,9 @@
+import { useShape } from '@design/hooks';
+import { useDesignStore } from '@design/store';
+import { BaseShapeRef, IShape, ITEMS_CONTEXT, ShapeTypeEnum } from '@design/types';
 import Konva from 'konva';
 import React, { PropsWithChildren, useCallback, useRef } from 'react';
 import { useImage } from 'react-konva-utils';
-import { useShape } from '../../../hooks';
-import { useDesignStore } from '../../../store';
-import { BaseShapeRef, IShape, ITEMS_CONTEXT, ShapeTypeEnum } from '../../../types';
 
 import './styles.scss';
 

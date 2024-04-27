@@ -16,9 +16,9 @@ import {
 } from '../../hooks';
 import { useDesignStore } from '../../store';
 import { IShape } from '../../types';
-import Shape, { ShapeMap } from '../Shapes';
-import { Stage } from '../Stage';
 import BoardMenuItem from './Board.menu-item';
+import { ShapeMap, Stage } from './components';
+import Shape from './components/Shapes';
 
 type Props = {
   pageNumber: number;
