@@ -6,13 +6,18 @@ import { LuRedo2 as RedoIcon, LuUndo2 as UndoIcon } from 'react-icons/lu';
 import { IDesignForm, IDesignFormKey } from '../../DesignForm.helpers';
 import { AvatarGroup } from './components';
 
+import { useWorkHistory } from '../../hooks';
 import './design-form.header.styles.scss';
 
 type Props = {
   form: UseFormReturn<IDesignForm>;
+  workHistory: ReturnType<typeof useWorkHistory>;
+  hasPast: boolean;
+  hasFuture: boolean;
 };
 
-const DesignFormHeader = ({ form }: Props) => {
+const DesignFormHeader = ({ form, workHistory, hasPast, hasFuture }: Props) => {
+  const { goToPast, goToFuture } = workHistory;
   const { control } = form;
   return (
     <Flex
@@ -28,19 +33,19 @@ const DesignFormHeader = ({ form }: Props) => {
     >
       <Flex gap={16}>
         <Tooltip label="Menu">
-          <ActionIcon variant="transparent" size="xl">
+          <ActionIcon variant="subtle" size="xl">
             <MenuIcon size={26} color="white" />
           </ActionIcon>
         </Tooltip>
         <Divider orientation="vertical" c="white" />
         <Tooltip label="Undo">
-          <ActionIcon variant="transparent" size="xl">
-            <UndoIcon size={22} color="white" />
+          <ActionIcon variant="subtle" size="xl" disabled={!hasPast} onClick={goToPast}>
+            <UndoIcon size={22} color={hasPast ? 'white' : 'rgba(255,255,255,0.3)'} />
           </ActionIcon>
         </Tooltip>
         <Tooltip label="Redo">
-          <ActionIcon variant="transparent" size="xl">
-            <RedoIcon size={22} color="white" />
+          <ActionIcon variant="subtle" size="xl" disabled={!hasFuture} onClick={goToFuture}>
+            <RedoIcon size={22} color={hasFuture ? 'white' : 'rgba(255,255,255,0.3)'} />
           </ActionIcon>
         </Tooltip>
       </Flex>

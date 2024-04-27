@@ -19,3 +19,9 @@
 
   }
 }
+
+.mantine-ActionIcon-root {
+  &:disabled {
+    background-color: transparent;
+  }
+}

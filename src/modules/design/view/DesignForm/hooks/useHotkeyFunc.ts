@@ -1,11 +1,11 @@
 import { getRandomId } from '@core/common';
 import { Node, NodeConfig } from 'konva/lib/Node';
-import { useSelection, useShape, useStage, useTransformer } from '.';
+import { useDesignLS, useSelection, useShape, useStage, useTransformer } from '.';
 import { IShape, ShapeTypeEnum } from '../types';
 
 const useHotkeyFunc = () => {
-  const { addShape, addShapes, removeShapes } = useShape();
-
+  const { addShapes, removeShapes } = useShape();
+  const { setClipboard: setLsClipboard } = useDesignLS();
   const selectAll = (
     stage: ReturnType<typeof useStage>,
     onSelectItem: ReturnType<typeof useSelection>['onSelection'],
@@ -30,6 +30,7 @@ const useHotkeyFunc = () => {
       };
     });
 
+    setLsClipboard(selectedShapes);
     setClipboard(selectedShapes);
   };
 

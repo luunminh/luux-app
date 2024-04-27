@@ -1,11 +1,12 @@
 import { COLOR_CODE, isEmpty } from '@core/common';
 import { useMantineTheme } from '@mantine/core';
 import Konva from 'konva';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { Transformer } from 'react-konva';
 import { Html } from 'react-konva-utils';
 import {
+  useDesignLS,
   useHotkeyFunc,
   useSelection,
   useShape,
@@ -21,22 +22,24 @@ import BoardMenuItem from './Board.menu-item';
 
 type Props = {
   pageNumber: number;
+  transformer: ReturnType<typeof useTransformer>;
+  workHistory: ReturnType<typeof useWorkHistory>;
 };
 
-const Board = ({ pageNumber }: Props) => {
-  const { isDragging } = useDesignStore();
+const Board = ({ pageNumber, transformer, workHistory }: Props) => {
+  const { isDragging, data } = useDesignStore();
+
   const { shapes } = useShape();
 
   const stage = useStage();
-  const [clipboard, setClipboard] = useState<IShape[]>([]);
+  const stageRef = useRef<HTMLDivElement>(null);
+
+  const { getClipboard } = useDesignLS();
+  const [clipboard, setClipboard] = useState<IShape[]>(getClipboard() || []);
 
   const theme = useMantineTheme();
 
-  const [past, setPast] = useState<IShape[][]>([]);
-  const [future, setFuture] = useState<IShape[][]>([]);
-  const { goToFuture, goToPast, recordPast } = useWorkHistory({ past, future, setPast, setFuture });
-
-  const transformer = useTransformer();
+  const { goToFuture, goToPast, recordPast } = workHistory;
 
   const { selectAll, copyItems, pasteItems, duplicateItems, deleteItems } = useHotkeyFunc();
   const { selectedItems, onSelection, clearSelection, setSelectedItems } =
@@ -45,8 +48,8 @@ const Board = ({ pageNumber }: Props) => {
   const menuPos = getMenuAbsolutePosition(transformer.transformerRef.current);
 
   useEffect(() => {
-    recordPast(shapes);
-  }, [shapes, recordPast]);
+    recordPast(data);
+  }, [data, recordPast]);
 
   useHotkeys(
     'ctrl+z',
@@ -119,7 +122,7 @@ const Board = ({ pageNumber }: Props) => {
   );
 
   return (
-    <Stage stage={stage} onSelect={onSelection}>
+    <Stage stage={stage} onSelect={onSelection} ref={stageRef}>
       {shapes.map((shape: IShape) => {
         const ShapeComponent = ShapeMap[shape.attrs.shapeType];
         if (!isEmpty(ShapeComponent)) {

@@ -1,17 +1,20 @@
 import React, { useCallback, useState } from 'react';
-import { IShape } from '../types';
+import { useDesignStore } from '../store';
+import { IDesignContent } from '../types';
 import useShape from './useShape';
 
 type Props = {
-  past: IShape[][];
-  future: IShape[][];
-  setPast: React.Dispatch<React.SetStateAction<IShape[][]>>;
-  setFuture: React.Dispatch<React.SetStateAction<IShape[][]>>;
+  past: IDesignContent[][];
+  future: IDesignContent[][];
+  setPast: React.Dispatch<React.SetStateAction<IDesignContent[][]>>;
+  setFuture: React.Dispatch<React.SetStateAction<IDesignContent[][]>>;
 };
 
 const useWorkHistory = ({ past, future, setPast, setFuture }: Props) => {
   const { alterShapes } = useShape();
-  const [current, setCurrent] = useState<IShape[] | null>(null);
+  const { selectedPage } = useDesignStore();
+
+  const [current, setCurrent] = useState<IDesignContent[] | null>(null);
 
   const goToPast = useCallback(() => {
     if (past.length > 0 && current) {
@@ -22,9 +25,10 @@ const useWorkHistory = ({ past, future, setPast, setFuture }: Props) => {
       setFuture((prev) => [...prev, newFuture]);
 
       setCurrent(newStageData);
-      alterShapes(newStageData);
+      const { shapes } = newStageData.find((page) => page.pageNumber === selectedPage);
+      alterShapes(shapes);
     }
-  }, [past, current, setPast, setFuture, alterShapes]);
+  }, [past, current, setPast, setFuture, alterShapes, selectedPage]);
 
   const goToFuture = useCallback(() => {
     if (future.length > 0 && current) {
@@ -35,12 +39,13 @@ const useWorkHistory = ({ past, future, setPast, setFuture }: Props) => {
       setPast((prev) => [...prev, newPast]);
 
       setCurrent(newStageData);
-      alterShapes(newStageData);
+      const { shapes } = newStageData.find((page) => page.pageNumber === selectedPage);
+      alterShapes(shapes);
     }
-  }, [future, current, setFuture, setPast, alterShapes]);
+  }, [future, current, setFuture, setPast, alterShapes, selectedPage]);
 
   const recordPast = useCallback(
-    (newCurrent: IShape[]) => {
+    (newCurrent: IDesignContent[]) => {
       if (newCurrent.length !== 0 && current !== null) {
         if (JSON.stringify(newCurrent) !== JSON.stringify(current)) {
           setPast((prev) => [...prev, current]);
