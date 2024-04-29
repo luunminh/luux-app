@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { IDesignForm, designFormInitialValues, designFormSchema } from './DesignForm.helpers';
 import { Board, ConfigurationAside, DesignFormHeader } from './components';
-import { useStage, useTransformer, useWorkHistory } from './hooks';
+import { useTransformer, useWorkHistory } from './hooks';
 import { useDesignStore } from './store';
 import { IDesignContent } from './types';
 
@@ -14,8 +14,6 @@ const HEADER_HEIGHT = 56;
 const SIDEBAR_WIDTH = 430;
 
 const DesignForm = () => {
-  const stage = useStage();
-
   const [past, setPast] = useState<IDesignContent[][]>([]);
   const [future, setFuture] = useState<IDesignContent[][]>([]);
 
@@ -59,12 +57,7 @@ const DesignForm = () => {
       </AppShell.Header>
       <AppShell.Main className="board-wrapper">
         <Stack align="center" justify="center" h="80vh">
-          <DesignForm.Board
-            stage={stage}
-            pageNumber={1}
-            transformer={transformer}
-            workHistory={workHistory}
-          />
+          <DesignForm.Board pageNumber={1} transformer={transformer} workHistory={workHistory} />
         </Stack>
       </AppShell.Main>
       <AppShell.Aside>

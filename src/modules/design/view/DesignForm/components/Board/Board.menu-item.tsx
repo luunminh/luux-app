@@ -8,15 +8,17 @@ import { HiMenu } from 'react-icons/hi';
 import { IoCopyOutline, IoTrash } from 'react-icons/io5';
 import { LuClipboardPaste } from 'react-icons/lu';
 import { TbArrowsDown, TbArrowsUp } from 'react-icons/tb';
-import { useShape } from '../../hooks';
+import { useShape, useStage } from '../../hooks';
 
 type Props = {
+  stage: ReturnType<typeof useStage>;
   selectedItems: Node<NodeConfig>[];
   clearSelection: () => void;
 };
 
-const BoardMenuItem = ({ selectedItems, clearSelection }: Props) => {
+const BoardMenuItem = ({ selectedItems, clearSelection, stage }: Props) => {
   const { removeShapes, updateShapes } = useShape();
+  const { stageRef } = stage;
 
   const isShowLockButton = selectedItems.length === 1;
   const isLocked = selectedItems[0]?.attrs.locked;
@@ -27,6 +29,33 @@ const BoardMenuItem = ({ selectedItems, clearSelection }: Props) => {
   };
 
   const handleLockShape = () => {
+    toggleLockStatus();
+    clearSelection();
+  };
+
+  const handleBringFrontShapes = () => {
+    updateLayerIndex(1);
+    moveShapes('up');
+  };
+
+  const handleBringBackShapes = () => {
+    updateLayerIndex(-1);
+    moveShapes('down');
+  };
+
+  const handleBringToTop = () => {
+    const maxLayerIdx = Math.max(...selectedItems.map((item) => item.attrs.layerIdx));
+    updateLayerIndex(maxLayerIdx + 1);
+    moveShapes('top');
+  };
+
+  const handleBringToBottom = () => {
+    const minLayerIdx = Math.min(...selectedItems.map((item) => item.attrs.layerIdx));
+    updateLayerIndex(minLayerIdx);
+    moveShapes('bottom');
+  };
+
+  const toggleLockStatus = () => {
     const updatedShapes = selectedItems.map((item) => ({
       ...item,
       id: item.id(),
@@ -40,7 +69,45 @@ const BoardMenuItem = ({ selectedItems, clearSelection }: Props) => {
       selectedItems.map((item) => item.id()),
       updatedShapes,
     );
-    clearSelection();
+  };
+
+  const updateLayerIndex = (newIndex: number) => {
+    const updatedShapes = selectedItems.map((item) => ({
+      ...item,
+      id: item.id(),
+      attrs: {
+        ...item.attrs,
+        layerIdx: newIndex,
+      },
+    }));
+
+    updateShapes(
+      selectedItems.map((item) => item.id()),
+      updatedShapes,
+    );
+  };
+
+  const moveShapes = (direction: 'up' | 'down' | 'top' | 'bottom') => {
+    const selectedItemRefs = stageRef.current
+      .getChildren()[0]
+      .getChildren((node) => selectedItems.some((item) => item.id() === node.id()));
+
+    selectedItemRefs.forEach((item) => {
+      switch (direction) {
+        case 'up':
+          item.moveUp();
+          break;
+        case 'down':
+          item.moveDown();
+          break;
+        case 'top':
+          item.moveToTop();
+          break;
+        case 'bottom':
+          item.moveToBottom();
+          break;
+      }
+    });
   };
 
   return (
@@ -80,16 +147,36 @@ const BoardMenuItem = ({ selectedItems, clearSelection }: Props) => {
           </Menu.Item>
           <Menu.Divider />
           <Menu.Label c="blue">Layer</Menu.Label>
-          <Menu.Item color="blue" c={COLOR_CODE.TEXT_CONTROL} leftSection={<BsLayerForward />}>
+          <Menu.Item
+            onClick={handleBringFrontShapes}
+            color="blue"
+            c={COLOR_CODE.TEXT_CONTROL}
+            leftSection={<BsLayerForward />}
+          >
             Bring forward
           </Menu.Item>
-          <Menu.Item color="blue" c={COLOR_CODE.TEXT_CONTROL} leftSection={<TbArrowsUp />}>
+          <Menu.Item
+            onClick={handleBringToTop}
+            color="blue"
+            c={COLOR_CODE.TEXT_CONTROL}
+            leftSection={<TbArrowsUp />}
+          >
             Bring to front
           </Menu.Item>
-          <Menu.Item color="blue" c={COLOR_CODE.TEXT_CONTROL} leftSection={<BsLayerBackward />}>
+          <Menu.Item
+            onClick={handleBringBackShapes}
+            color="blue"
+            c={COLOR_CODE.TEXT_CONTROL}
+            leftSection={<BsLayerBackward />}
+          >
             Bring backward
           </Menu.Item>
-          <Menu.Item color="blue" c={COLOR_CODE.TEXT_CONTROL} leftSection={<TbArrowsDown />}>
+          <Menu.Item
+            onClick={handleBringToBottom}
+            color="blue"
+            c={COLOR_CODE.TEXT_CONTROL}
+            leftSection={<TbArrowsDown />}
+          >
             Bring to back
           </Menu.Item>
         </Menu.Dropdown>

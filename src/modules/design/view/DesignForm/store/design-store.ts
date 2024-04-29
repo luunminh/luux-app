@@ -36,6 +36,7 @@ const initialData: IDesignContent[] = [
           scale: { x: 1, y: 1 },
           draggable: true,
           shapeType: ShapeTypeEnum.RECTANGLE,
+          layerIdx: 1,
         },
       },
       {
@@ -50,6 +51,7 @@ const initialData: IDesignContent[] = [
           scale: { x: 1, y: 1 },
           draggable: true,
           shapeType: ShapeTypeEnum.CIRCLE,
+          layerIdx: 2,
         },
       },
       {
@@ -61,6 +63,7 @@ const initialData: IDesignContent[] = [
           x: 100,
           y: 400,
           content: '<div>hi</div>',
+          layerIdx: 3,
         },
       },
       {
@@ -73,8 +76,8 @@ const initialData: IDesignContent[] = [
           height: 300,
           x: 400,
           y: 200,
-          zIndex: 2,
           src: 'https://upload.wikimedia.org/wikipedia/vi/thumb/a/a1/Man_Utd_FC_.svg/800px-Man_Utd_FC_.svg.png',
+          layerIdx: 4,
         },
       },
       {
@@ -85,6 +88,7 @@ const initialData: IDesignContent[] = [
           points: [0, 0, 100, 100],
           stroke: 'black',
           strokeWidth: 5,
+          layerIdx: 0,
         },
       },
       {
@@ -99,6 +103,7 @@ const initialData: IDesignContent[] = [
           points: [0, 0, 100, 100],
           stroke: 'black',
           strokeWidth: 4,
+          layerIdx: 0,
         },
       },
       {
@@ -117,6 +122,7 @@ const initialData: IDesignContent[] = [
           strokeWidth: 4,
           draggable: true,
           fillPatternScale: { x: 0.1, y: 0.1 },
+          layerIdx: 0,
           sceneFunc: (context: Konva.Context, shape: Konva.Shape) => {
             context.beginPath();
             context.moveTo(20, 50);

@@ -1,6 +1,7 @@
 import { COLOR_CODE, isEmpty } from '@core/common';
 import { useMantineTheme } from '@mantine/core';
 import Konva from 'konva';
+import { orderBy } from 'lodash';
 import { ForwardedRef, forwardRef, useEffect, useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { Transformer } from 'react-konva';
@@ -22,15 +23,16 @@ import Shape from './components/Shapes';
 
 type Props = {
   pageNumber: number;
-  stage: ReturnType<typeof useStage>;
   transformer: ReturnType<typeof useTransformer>;
   workHistory: ReturnType<typeof useWorkHistory>;
 };
 
 const Board = forwardRef(
-  ({ pageNumber, transformer, workHistory, stage }: Props, ref: ForwardedRef<HTMLDivElement>) => {
+  ({ pageNumber, transformer, workHistory }: Props, ref: ForwardedRef<HTMLDivElement>) => {
     const { isDragging, data } = useDesignStore();
     const { shapes } = useShape();
+
+    const stage = useStage();
 
     const { getClipboard } = useDesignLS();
     const [clipboard, setClipboard] = useState<IShape[]>(getClipboard() || []);
@@ -142,7 +144,7 @@ const Board = forwardRef(
 
     return (
       <Stage stage={stage} onSelect={onSelection}>
-        {shapes.map((shape: IShape) => {
+        {orderBy(shapes, ['attrs.zIndex'], ['desc']).map((shape: IShape) => {
           const ShapeComponent = ShapeMap[shape.attrs.shapeType];
           if (!isEmpty(ShapeComponent)) {
             return (
@@ -163,9 +165,9 @@ const Board = forwardRef(
         <Transformer
           ref={transformer.transformerRef}
           rotateEnabled
-          keepRatio
           borderDash={[6, 0]}
           anchorCornerRadius={10}
+          shouldOverdrawWholeArea
           anchorFill={COLOR_CODE.WHITE}
           borderStroke={theme.colors.blue[5]}
           anchorStroke={COLOR_CODE.GRAY_500}
@@ -179,7 +181,11 @@ const Board = forwardRef(
               y: menuPos.y,
             }}
           >
-            <BoardMenuItem selectedItems={selectedItems} clearSelection={clearSelection} />
+            <BoardMenuItem
+              stage={stage}
+              selectedItems={selectedItems}
+              clearSelection={clearSelection}
+            />
           </Html>
         )}
       </Stage>
