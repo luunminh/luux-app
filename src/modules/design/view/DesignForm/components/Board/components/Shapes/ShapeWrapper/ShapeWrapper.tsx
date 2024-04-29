@@ -6,6 +6,7 @@ import Konva from 'konva';
 import React, { PropsWithChildren, useCallback, useEffect, useRef, useState } from 'react';
 import { useImage } from 'react-konva-utils';
 
+import { isEmpty } from '@core/common';
 import './styles.scss';
 
 type Props<T extends IShape> = PropsWithChildren<T> & {
@@ -27,11 +28,20 @@ const ShapeWrapper = <T extends IShape>({ children, shape, onSelect, transformer
   const isSelected = selectedItems.some((item) => item.id() === shape.id);
 
   useEffect(() => {
-    const elmContent = document.querySelector('.ProseMirror') as HTMLElement;
+    if (isEmpty(shape.attrs.content)) return;
 
-    if (elmContent) {
-      html2canvas(elmContent, {}).then((canvas) => setTextRendered(canvas));
-    }
+    const elmContent = document.createElement('div');
+
+    elmContent.innerHTML = shape.attrs.content;
+    document.body.appendChild(elmContent);
+
+    html2canvas(elmContent, {
+      useCORS: true,
+      allowTaint: true,
+    }).then((canvas) => {
+      setTextRendered(canvas);
+      document.body.removeChild(elmContent);
+    });
   }, [shape.attrs.content]);
 
   const [img] = useImage(shape.attrs.src);
@@ -236,14 +246,22 @@ const ShapeWrapper = <T extends IShape>({ children, shape, onSelect, transformer
         ref: shapeRef,
         id: shape.id,
 
-        ...shape.attrs,
         ...(isImage && { image: img }),
-        ...(isText && { image: textRendered }),
+        ...(isText && {
+          image: textRendered,
+          x: 10,
+          y: 10,
+          draggable: true,
+          scaleX: 1 / window.devicePixelRatio,
+          scaleY: 1 / window.devicePixelRatio,
+        }),
         ...(isText && { onDblClick: handleDoubleClickText, onDblTap: handleDoubleClickText }),
         ...(isCustom && { fillPatternImage: img }),
         onDragStart: handleDragStart,
         onDragEnd: handleDragEnd,
         onClick: handleClick,
+
+        ...shape.attrs,
         listening: isSelected ? false : true,
       })}
     </>

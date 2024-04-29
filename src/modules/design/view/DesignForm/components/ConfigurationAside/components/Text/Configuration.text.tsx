@@ -33,6 +33,9 @@ const ConfigurationText = ({ id }: Props) => {
       TextAlign.configure({ types: ['heading', 'paragraph'] }),
     ],
     content: selectedShape.attrs.content,
+    onUpdate({ editor }) {
+      handleChangeShape('content', editor.getHTML());
+    },
   });
 
   const handleChangeShape = (

@@ -201,7 +201,7 @@ const Stage = forwardRef(
           <KonvaStage
             draggable={false}
             ref={stageRef}
-            width={window.innerWidth * 0.7}
+            width={1000}
             height={window.innerHeight * 0.7}
             onWheel={zoomOnWheel}
             onMouseUp={onMouseUpOnStage}
