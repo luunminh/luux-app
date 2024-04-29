@@ -1,10 +1,10 @@
 import { COLOR_CODE } from '@core/common';
-import { Button, MenuItem, PasswordInput, TextInput, createTheme } from '@mantine/core';
+import { Button, InputLabel, MenuItem, PasswordInput, TextInput, createTheme } from '@mantine/core';
 
 export const themeConfig = createTheme({
-  fontFamily: 'Public Sans, sans-serif',
-  fontFamilyMonospace: 'Public Sans, sans-serif',
-  headings: { fontFamily: 'Public Sans, sans-serif' },
+  fontFamily: 'Roboto, sans-serif',
+  fontFamilyMonospace: 'Roboto, sans-serif',
+  headings: { fontFamily: 'Roboto, sans-serif' },
 
   defaultRadius: 'md',
 
@@ -48,6 +48,15 @@ export const themeConfig = createTheme({
     MenuItem: MenuItem.extend({
       defaultProps: {
         color: COLOR_CODE.TEXT_BODY,
+      },
+    }),
+
+    InputLabel: InputLabel.extend({
+      defaultProps: {
+        style: {
+          fontFamily: 'Roboto',
+          fontWeight: 500,
+        },
       },
     }),
   },

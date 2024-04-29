@@ -189,7 +189,7 @@ const Stage = forwardRef(
     );
 
     return (
-      <Stack align="center" justify="center" ref={ref}>
+      <Stack align="center" justify="center" ref={ref} className="stage-wrapper">
         <Box
           pos="relative"
           style={{

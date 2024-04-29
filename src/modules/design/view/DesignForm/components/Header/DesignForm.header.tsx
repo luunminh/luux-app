@@ -51,6 +51,7 @@ const DesignFormHeader = ({ form, workHistory, hasPast, hasFuture }: Props) => {
       </Flex>
       <Flex gap={16} align="center" justify="end">
         <FormCore.Input
+          className="design-form__name"
           width="auto"
           control={control}
           autoComplete="off"

@@ -1,5 +1,6 @@
 import { SplashScreen } from '@components';
 import { PATHS } from '@config/paths';
+import { ToastService } from '@core/common';
 import { useAuthStore } from '@core/store';
 import { FC, PropsWithChildren } from 'react';
 import { Navigate } from 'react-router-dom';
@@ -25,6 +26,8 @@ const CustomRoute: FC<PropsWithChildren<CustomRouteProps>> = ({
   }
 
   const redirectPath = PATHS.root;
+
+  ToastService.error('You are not authorized to access this page');
 
   return <Navigate to={redirectPath} />;
 };

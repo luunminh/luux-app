@@ -1,9 +1,16 @@
+import { isEmpty } from '@core/common';
 import { KonvaEventObject, Node, NodeConfig } from 'konva/lib/Node';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useDesignStore } from '../store';
 import useTransformer from './useTransformer';
 
 const useSelection = (transformer: ReturnType<typeof useTransformer>) => {
   const [selectedItems, setSelectedItems] = useState<Node[]>([]);
+  const { onSetSelectedItems } = useDesignStore();
+
+  useEffect(() => {
+    onSetSelectedItems(!isEmpty(selectedItems));
+  }, [selectedItems, onSetSelectedItems]);
 
   const onSelection = (e?: KonvaEventObject<MouseEvent>, itemList?: Node<NodeConfig>[]) => {
     if (transformer === undefined || transformer === null) {
@@ -13,10 +20,16 @@ const useSelection = (transformer: ReturnType<typeof useTransformer>) => {
     if (!transformer.transformerRef.current) {
       return;
     }
-    if (itemList) {
+
+    const list = itemList?.filter((item) => !item.attrs.locked);
+
+    if (!isEmpty(list)) {
+      transformer.transformerRef.current.nodes(list as any);
+      setSelectedItems(list);
+      return;
+    } else if (itemList) {
       transformer.transformerRef.current.nodes(itemList as any);
       setSelectedItems(itemList);
-      return;
     }
     if (!e) {
       return;

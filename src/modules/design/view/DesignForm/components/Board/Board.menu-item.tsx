@@ -3,7 +3,7 @@ import { ActionIcon, Button, Menu, Tooltip } from '@mantine/core';
 import { Node, NodeConfig } from 'konva/lib/Node';
 import { BiDuplicate } from 'react-icons/bi';
 import { BsLayerBackward, BsLayerForward } from 'react-icons/bs';
-import { FaRegComment } from 'react-icons/fa';
+import { FaLock, FaLockOpen, FaRegComment } from 'react-icons/fa';
 import { HiMenu } from 'react-icons/hi';
 import { IoCopyOutline, IoTrash } from 'react-icons/io5';
 import { LuClipboardPaste } from 'react-icons/lu';
@@ -16,10 +16,30 @@ type Props = {
 };
 
 const BoardMenuItem = ({ selectedItems, clearSelection }: Props) => {
-  const { removeShapes } = useShape();
+  const { removeShapes, updateShapes } = useShape();
+
+  const isShowLockButton = selectedItems.length === 1;
+  const isLocked = selectedItems[0]?.attrs.locked;
 
   const handleRemoveShapes = () => {
     removeShapes(selectedItems.map((item) => item.id()));
+    clearSelection();
+  };
+
+  const handleLockShape = () => {
+    const updatedShapes = selectedItems.map((item) => ({
+      ...item,
+      id: item.id(),
+      attrs: {
+        ...item.attrs,
+        locked: !item.attrs.locked,
+      },
+    }));
+
+    updateShapes(
+      selectedItems.map((item) => item.id()),
+      updatedShapes,
+    );
     clearSelection();
   };
 
@@ -87,6 +107,19 @@ const BoardMenuItem = ({ selectedItems, clearSelection }: Props) => {
           <IoTrash />
         </ActionIcon>
       </Tooltip>
+      {isShowLockButton && (
+        <Tooltip label={isLocked ? 'Unlock' : 'Lock'} withArrow onClick={handleLockShape}>
+          <ActionIcon
+            style={{
+              borderRadius: 0,
+            }}
+            variant="light"
+            size="xl"
+          >
+            {isLocked ? <FaLockOpen size={14} /> : <FaLock />}
+          </ActionIcon>
+        </Tooltip>
+      )}
       <Tooltip label="Comment" withArrow>
         <ActionIcon
           style={{

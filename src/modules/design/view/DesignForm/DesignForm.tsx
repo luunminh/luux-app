@@ -4,14 +4,18 @@ import { AppShell, Stack } from '@mantine/core';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { IDesignForm, designFormInitialValues, designFormSchema } from './DesignForm.helpers';
-import { Board, DesignFormHeader } from './components';
-import { useTransformer, useWorkHistory } from './hooks';
+import { Board, ConfigurationAside, DesignFormHeader } from './components';
+import { useStage, useTransformer, useWorkHistory } from './hooks';
+import { useDesignStore } from './store';
 import { IDesignContent } from './types';
 
+const ASIDE_WIDTH = 350;
 const HEADER_HEIGHT = 56;
 const SIDEBAR_WIDTH = 430;
 
 const DesignForm = () => {
+  const stage = useStage();
+
   const [past, setPast] = useState<IDesignContent[][]>([]);
   const [future, setFuture] = useState<IDesignContent[][]>([]);
 
@@ -20,6 +24,8 @@ const DesignForm = () => {
 
   const transformer = useTransformer();
   const workHistory = useWorkHistory({ past, future, setPast, setFuture });
+
+  const { isSelectedItems } = useDesignStore();
 
   const form = useForm<IDesignForm>({
     defaultValues: designFormInitialValues,
@@ -34,9 +40,13 @@ const DesignForm = () => {
       header={{
         height: HEADER_HEIGHT,
       }}
-      navbar={{
+      aside={{
         breakpoint: 'md',
-        width: SIDEBAR_WIDTH,
+        width: ASIDE_WIDTH,
+        collapsed: {
+          mobile: true,
+          desktop: !isSelectedItems,
+        },
       }}
     >
       <AppShell.Header>
@@ -47,19 +57,25 @@ const DesignForm = () => {
           workHistory={workHistory}
         />
       </AppShell.Header>
-      <AppShell.Navbar>
-        <div>Sidebar</div>
-      </AppShell.Navbar>
-      <AppShell.Main>
+      <AppShell.Main className="board-wrapper">
         <Stack align="center" justify="center" h="80vh">
-          <DesignForm.Board pageNumber={1} transformer={transformer} workHistory={workHistory} />
+          <DesignForm.Board
+            stage={stage}
+            pageNumber={1}
+            transformer={transformer}
+            workHistory={workHistory}
+          />
         </Stack>
       </AppShell.Main>
+      <AppShell.Aside>
+        <DesignForm.Aside transformer={transformer} />
+      </AppShell.Aside>
     </AppShell>
   );
 };
 
-DesignForm.Header = DesignFormHeader;
 DesignForm.Board = Board;
+DesignForm.Header = DesignFormHeader;
+DesignForm.Aside = ConfigurationAside;
 
 export default DesignForm;

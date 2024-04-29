@@ -25,6 +25,10 @@ const useShape = () => {
     onSetData(newData);
   };
 
+  const getShapeById = (id: string) => {
+    return shapes.find((shape) => shape.id === id);
+  };
+
   const addShape = (newShape: IShape) => {
     onSetShapes([...shapes, newShape]);
   };
@@ -73,6 +77,7 @@ const useShape = () => {
 
   return {
     shapes,
+    getShapeById,
     addShape,
     addShapes,
     removeShape,

@@ -1,8 +1,9 @@
-import { useShape } from '@design/hooks';
+import { useSelection, useShape } from '@design/hooks';
 import { useDesignStore } from '@design/store';
 import { BaseShapeRef, IShape, ITEMS_CONTEXT, ShapeTypeEnum } from '@design/types';
+import html2canvas from 'html2canvas';
 import Konva from 'konva';
-import React, { PropsWithChildren, useCallback, useRef } from 'react';
+import React, { PropsWithChildren, useCallback, useEffect, useRef, useState } from 'react';
 import { useImage } from 'react-konva-utils';
 
 import './styles.scss';
@@ -17,8 +18,21 @@ type Props<T extends IShape> = PropsWithChildren<T> & {
 const ShapeWrapper = <T extends IShape>({ children, shape, onSelect, transformer }: Props<T>) => {
   const shapeRef = useRef<BaseShapeRef>(null);
 
+  const [textRendered, setTextRendered] = useState(null);
+
   const { updateShape } = useShape();
   const { onSetIsDragging } = useDesignStore();
+
+  const { selectedItems } = useSelection(transformer);
+  const isSelected = selectedItems.some((item) => item.id() === shape.id);
+
+  useEffect(() => {
+    const elmContent = document.querySelector('.ProseMirror') as HTMLElement;
+
+    if (elmContent) {
+      html2canvas(elmContent, {}).then((canvas) => setTextRendered(canvas));
+    }
+  }, [shape.attrs.content]);
 
   const [img] = useImage(shape.attrs.src);
 
@@ -213,28 +227,24 @@ const ShapeWrapper = <T extends IShape>({ children, shape, onSelect, transformer
   };
 
   const handleClick = (e: Konva.KonvaEventObject<MouseEvent>) => {
-    // Add delay for text double click text event
-    const delayTimer = isText ? 200 : 0;
-
-    setTimeout(() => {
-      onSelect(e);
-    }, delayTimer);
+    onSelect(e);
   };
 
-  // TODO: editor bar, aside
   return (
     <>
       {React.cloneElement(children, {
         ref: shapeRef,
         id: shape.id,
-        onClick: handleClick,
 
         ...shape.attrs,
         ...(isImage && { image: img }),
+        ...(isText && { image: textRendered }),
         ...(isText && { onDblClick: handleDoubleClickText, onDblTap: handleDoubleClickText }),
         ...(isCustom && { fillPatternImage: img }),
         onDragStart: handleDragStart,
         onDragEnd: handleDragEnd,
+        onClick: handleClick,
+        listening: isSelected ? false : true,
       })}
     </>
   );

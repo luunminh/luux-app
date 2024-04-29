@@ -12,8 +12,9 @@ const useHotkeyFunc = () => {
   ) => {
     const layer = stage.stageRef.current.getChildren()[0];
 
-    const items = layer.getChildren((_item) =>
-      Object.values(ShapeTypeEnum).includes(_item.attrs.shapeType),
+    const items = layer.getChildren(
+      (_item) =>
+        Object.values(ShapeTypeEnum).includes(_item.attrs.shapeType) && !_item.attrs.locked,
     );
 
     onSelectItem(null, items);

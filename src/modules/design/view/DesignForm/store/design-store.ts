@@ -14,6 +14,9 @@ type DesignStore = {
 
   isDrawing: boolean;
   onSetIsDrawing: (isDrawing: boolean) => void;
+
+  isSelectedItems: boolean;
+  onSetSelectedItems: (isSelectedItems: boolean) => void;
 };
 
 // TODO: get initData and canvasObject from liveblock and API
@@ -29,7 +32,7 @@ const initialData: IDesignContent[] = [
           y: 50,
           width: 100,
           height: 100,
-          fill: 'red',
+          fill: '#e30606',
           scale: { x: 1, y: 1 },
           draggable: true,
           shapeType: ShapeTypeEnum.RECTANGLE,
@@ -57,7 +60,7 @@ const initialData: IDesignContent[] = [
           name: 'Text 1',
           x: 100,
           y: 400,
-          text: 'nihao lai la toi day',
+          content: '<div>hi</div>',
         },
       },
       {
@@ -70,6 +73,7 @@ const initialData: IDesignContent[] = [
           height: 300,
           x: 400,
           y: 200,
+          zIndex: 2,
           src: 'https://upload.wikimedia.org/wikipedia/vi/thumb/a/a1/Man_Utd_FC_.svg/800px-Man_Utd_FC_.svg.png',
         },
       },
@@ -114,19 +118,13 @@ const initialData: IDesignContent[] = [
           draggable: true,
           fillPatternScale: { x: 0.1, y: 0.1 },
           sceneFunc: (context: Konva.Context, shape: Konva.Shape) => {
-            const sides = shape.attrs.sides;
-            const radius = shape.attrs.radius;
-
             context.beginPath();
-            context.moveTo(radius, 0);
-
-            for (let i = 1; i < sides; i++) {
-              const x = radius * Math.cos((i * 2 * Math.PI) / sides);
-              const y = radius * Math.sin((i * 2 * Math.PI) / sides);
-              context.lineTo(x, y);
-            }
-
+            context.moveTo(20, 50);
+            context.lineTo(220, 80);
+            context.quadraticCurveTo(150, 100, 260, 170);
             context.closePath();
+
+            // Konva specific method
             context.fillStrokeShape(shape);
           },
         },
@@ -147,4 +145,7 @@ export const useDesignStore = create<DesignStore>((set) => ({
 
   isDrawing: false,
   onSetIsDrawing: (isDrawing: boolean) => set({ isDrawing }),
+
+  isSelectedItems: false,
+  onSetSelectedItems: (isSelectedItems: boolean) => set({ isSelectedItems }),
 }));

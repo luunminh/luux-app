@@ -51,7 +51,7 @@ export const ShapeMap: { [K in ShapeTypeEnum]: FC<any> } = {
   [ShapeTypeEnum.SPRITE]: Sprite,
   [ShapeTypeEnum.STAR]: Star,
   [ShapeTypeEnum.TAG]: Tag,
-  [ShapeTypeEnum.TEXT]: Text,
+  [ShapeTypeEnum.TEXT]: Image,
   [ShapeTypeEnum.CUSTOM]: CustomShape,
   [ShapeTypeEnum.RECTANGLE]: Rect,
 };
