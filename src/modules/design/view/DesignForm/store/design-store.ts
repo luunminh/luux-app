@@ -60,6 +60,8 @@ const initialData: IDesignContent[] = [
           shapeType: ShapeTypeEnum.TEXT,
           fontSize: 30,
           name: 'Text 1',
+          height: 50,
+          width: 200,
           x: 100,
           y: 400,
           text: 'Hello World',

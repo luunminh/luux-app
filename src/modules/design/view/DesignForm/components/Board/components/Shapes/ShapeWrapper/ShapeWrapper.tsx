@@ -50,13 +50,13 @@ const ShapeWrapper = <T extends IShape>({ children, shape, onSelect, transformer
       return;
     }
     shapeRef.current.hide();
-    // transformer.transformerRef.current!.hide();
+    transformer.transformerRef.current!.hide();
     const textPosition = shapeRef.current.getAbsolutePosition();
     const stage = shapeRef.current.getStage();
     const container = stage!.container().getBoundingClientRect();
     const areaPosition = {
       x: container.x + textPosition.x,
-      y: container.y + textPosition.y,
+      y: container.y + textPosition.y + 15,
     };
     const textarea = document.createElement('textarea');
 
@@ -83,7 +83,7 @@ const ShapeWrapper = <T extends IShape>({ children, shape, onSelect, transformer
             : acc + shapeRef.current!.fontSize() * stage!.scaleY() * shapeRef.current!.scaleY(),
         0,
       )}px`;
-    textarea.style.height = `${shapeRef.current.height() + shapeRef.current.padding() * 2 + 5}px`;
+    textarea.style.height = `${shapeRef.current.height() + shapeRef.current.padding() * 2 + 10}px`;
     textarea.style.border = 'none';
     textarea.style.padding = '0px';
     textarea.style.margin = '0px';
@@ -98,6 +98,9 @@ const ShapeWrapper = <T extends IShape>({ children, shape, onSelect, transformer
     textarea.style.color = shapeRef.current.fill();
 
     document.body.appendChild(textarea);
+
+    transformer.transformerRef.current!.show();
+    updateSize();
 
     const rotation = shapeRef.current.rotation();
     let transform = '';
@@ -123,87 +126,46 @@ const ShapeWrapper = <T extends IShape>({ children, shape, onSelect, transformer
 
     textarea.focus();
 
-    function removeTextarea() {
-      window.removeEventListener('click', handleOutsideClick);
-      shapeRef!.current!.show();
-      //@ts-ignore
-      const newShape: IShape = {
-        id: shapeRef.current!.id,
-        attrs: {
-          ...shapeRef.current!.attrs,
-          width:
-            textarea.getBoundingClientRect().width / stage!.scaleY() / shapeRef.current!.scaleY(),
-          height: textarea.value.split('\n').length * shapeRef.current!.fontSize() * 1.2,
-        },
-      };
-      updateShape(shapeRef.current!.id, newShape);
-      textarea.parentNode!.removeChild(textarea);
-    }
+    function updateSize() {
+      const lines = textarea.value.split('\n');
+      const lineHeight = shapeRef.current!.fontSize() * shapeRef.current!.scaleY();
+      const newHeight = (lines.length === 0 ? lineHeight : lines.length * lineHeight) + 10;
 
-    function setTextareaWidth() {
-      let newWidth = textarea.value
-        .split('\n')
-        .sort((a, b) => b.length - a.length)[0]
-        .split('')
-        .reduce(
-          (acc, curr) =>
-            curr.charCodeAt(0) >= 32 && curr.charCodeAt(0) <= 126
-              ? acc +
-                shapeRef.current!.fontSize() *
-                  stage!.scaleY() *
-                  shapeRef.current!.scaleY() *
-                  (3 / 5)
-              : acc + shapeRef.current!.fontSize() * stage!.scaleY() * shapeRef.current!.scaleY(),
-          0,
-        );
-      // some extra fixes on different browsers
-      const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-      const isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
-      if (isSafari || isFirefox) {
-        newWidth = Math.ceil(newWidth);
-      }
+      shapeRef.current!.height(newHeight);
+
+      // Create a canvas to measure the text width
+      const canvas = document.createElement('canvas');
+      const context = canvas.getContext('2d');
+
+      // Set the font of the context to match the font of the shape
+      context.font = `${shapeRef.current!.fontSize()}px ${shapeRef.current!.fontFamily()}`;
+
+      // Get the width of the longest line
+      const newWidth = Math.max(...lines.map((line) => context.measureText(line).width)) + 10;
 
       textarea.style.width = `${newWidth}px`;
+      textarea.style.height = `${newHeight}px`;
+
+      // Update the width and height of the shape
+      shapeRef.current!.width(newWidth);
+      shapeRef.current!.height(textarea.scrollHeight);
     }
 
     textarea.addEventListener('input', (e) => {
       shapeRef!.current!.text(textarea.value);
 
-      const lines = textarea.value.split('\n');
-      const lineHeight =
-        shapeRef.current!.fontSize() * stage!.scaleY() * shapeRef.current!.scaleY();
-
-      shapeRef.current!.height(lines.length * lineHeight);
-
-      textarea.style.width = `${lines
-        .sort((a, b) => b.length - a.length)[0]
-        .split('')
-        .reduce(
-          (acc, curr) =>
-            curr.charCodeAt(0) >= 32 && curr.charCodeAt(0) <= 126
-              ? acc +
-                shapeRef.current!.fontSize() *
-                  stage!.scaleY() *
-                  shapeRef.current!.scaleY() *
-                  (3 / 5)
-              : acc + shapeRef.current!.fontSize() * stage!.scaleY() * shapeRef.current!.scaleY(),
-          0,
-        )}px`;
-
-      textarea.style.height = `${lines.length * lineHeight}px`;
+      updateSize();
     });
 
     textarea.addEventListener('keydown', (e) => {
       // on esc do not set value back to node
       if (e.keyCode === 27) {
-        removeTextarea();
+        removeTextArea();
       }
     });
 
     textarea.addEventListener('keydown', (e) => {
-      setTextareaWidth();
-      textarea.style.height = 'auto';
-      textarea.style.height = `${textarea.scrollHeight + shapeRef!.current!.fontSize()}px`;
+      updateSize();
     });
 
     setTimeout(() => {
@@ -270,6 +232,16 @@ const ShapeWrapper = <T extends IShape>({ children, shape, onSelect, transformer
     }
   }, [wrapperWidth]);
 
+  //update shape size when font family is changed
+  useEffect(() => {
+    if (shapeRef.current?.attrs.fontFamily) {
+      const textarea = document.getElementById('current_text_editor') as HTMLTextAreaElement;
+      if (textarea) {
+        textarea.onkeydown(new KeyboardEvent('keydown', { key: 'alt' }));
+      }
+    }
+  }, [shapeRef.current?.attrs.fontFamily]);
+
   const handleDoubleClickShape = (e: Konva.KonvaEventObject<MouseEvent>) => {
     if (isText) {
       setTimeout(() => {
@@ -297,6 +269,10 @@ const ShapeWrapper = <T extends IShape>({ children, shape, onSelect, transformer
       onSelect(e);
     }, delayTimer);
   };
+
+  /**
+   * Layer, group handling
+   */
 
   useEffect(() => {
     if (typeof shapeRef.current?.attrs.layerIdx === 'number') {

@@ -3,7 +3,7 @@ import { COLOR_CODE, isEmpty, useFonts } from '@core/common';
 import { Select, SelectOption, SelectOptionsProps } from '@core/components';
 import { IFont, useGetFont, useGetFonts } from '@core/queries';
 import { IShape } from '@design/types';
-import { Box, Button, Flex, InputWrapper, Text } from '@mantine/core';
+import { Box, Button, Flex, InputWrapper, Skeleton, Text } from '@mantine/core';
 import { useEffect, useState } from 'react';
 
 type Props = {
@@ -87,20 +87,22 @@ const mapFontOptions = (fonts: IFont[]) =>
 
 FontSelection.Option = (props: SelectOptionsProps) => {
   const { createFontFaces, loadFontFace } = useFonts([], false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (props.data.font) {
       const fontFaces = createFontFaces(props.data.font);
 
       Promise.all(fontFaces.map((fontFace) => loadFontFace(fontFace)))
-        .then(() => {
-          console.log('All fonts have been loaded');
-        })
-        .catch((error) => {
-          console.error('Error loading fonts:', error);
+        .then(() => {})
+        .catch((error) => {})
+        .finally(() => {
+          setLoading(false);
         });
     }
   }, [createFontFaces, loadFontFace, props.data]);
+
+  if (loading) return <Skeleton height={30} width="40%%" radius="md" />;
 
   return (
     <Box>

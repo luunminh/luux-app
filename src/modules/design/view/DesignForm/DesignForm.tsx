@@ -100,7 +100,7 @@ const DesignForm = () => {
             </Stack>
           </TransformComponent>
         </AppShell.Main>
-        <AppShell.Aside>
+        <AppShell.Aside withBorder>
           <DesignForm.Aside transformer={transformer} />
         </AppShell.Aside>
       </AppShell>

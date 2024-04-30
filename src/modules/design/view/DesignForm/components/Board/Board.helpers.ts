@@ -3,6 +3,9 @@ import Konva from 'konva';
 import { groupBy, orderBy } from 'lodash';
 import { IShape } from '../../types';
 
+const ROTATION_BUTTON_HEIGHT = 70;
+const MENU_WIDTH = 132;
+
 export const getMenuAbsolutePosition = (transformRef: Konva.Transformer) => {
   if (isEmpty(transformRef)) return { x: 0, y: 0 };
 
@@ -10,8 +13,8 @@ export const getMenuAbsolutePosition = (transformRef: Konva.Transformer) => {
   const { x, y, width } = transformRef.getClientRect();
 
   return {
-    x: x * scale + width * scale,
-    y: y * scale,
+    x: x * scale + (width * scale) / 2 - MENU_WIDTH / 2,
+    y: y * scale - ROTATION_BUTTON_HEIGHT,
   };
 };
 
