@@ -13,9 +13,7 @@ export type BaseShape = {
   [ShapeTypeEnum.LINE]: Konva.LineConfig;
   [ShapeTypeEnum.STAR]: Konva.StarConfig;
   [ShapeTypeEnum.RING]: Konva.RingConfig;
-  [ShapeTypeEnum.TEXT]: Omit<Konva.TextConfig, 'text'> & {
-    content: string;
-  };
+  [ShapeTypeEnum.TEXT]: Konva.TextConfig;
   [ShapeTypeEnum.IMAGE]: Konva.ImageConfig & {
     src: string;
   };

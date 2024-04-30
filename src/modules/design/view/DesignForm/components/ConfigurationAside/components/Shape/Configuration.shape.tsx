@@ -12,6 +12,12 @@ const ConfigurationShape = ({ id }: Props) => {
 
   const selectedShape = getShapeById(id);
 
+  const colorValue = selectedShape.attrs.fill
+    ? selectedShape.attrs.fill === 'black'
+      ? '#000'
+      : selectedShape.attrs.fill
+    : '#000';
+
   const handleChangeShape = (
     key: keyof typeof selectedShape,
     value: string | number | string[] | number[] | boolean | any,
@@ -40,7 +46,7 @@ const ConfigurationShape = ({ id }: Props) => {
       </InputWrapper>
       <ColorInput
         label="Color"
-        value={selectedShape.attrs.fill as string}
+        value={colorValue}
         onChange={(value) => {
           handleChangeShape('fill', value);
         }}

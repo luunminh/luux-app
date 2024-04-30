@@ -9,9 +9,9 @@ import { useTransformer, useWorkHistory } from './hooks';
 import { useDesignStore } from './store';
 import { IDesignContent } from './types';
 
-const ASIDE_WIDTH = 350;
-const HEADER_HEIGHT = 56;
-const SIDEBAR_WIDTH = 430;
+export const ASIDE_WIDTH = 350;
+export const HEADER_HEIGHT = 56;
+export const SIDEBAR_WIDTH = 430;
 
 const DesignForm = () => {
   const [past, setPast] = useState<IDesignContent[][]>([]);

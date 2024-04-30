@@ -1,9 +1,8 @@
-import { useSelection, useShape } from '@design/hooks';
+import { useShape } from '@design/hooks';
 import { useDesignStore } from '@design/store';
 import { BaseShapeRef, IShape, ITEMS_CONTEXT, ShapeTypeEnum } from '@design/types';
-import html2canvas from 'html2canvas';
 import Konva from 'konva';
-import React, { PropsWithChildren, useCallback, useEffect, useRef, useState } from 'react';
+import React, { PropsWithChildren, useCallback, useRef } from 'react';
 import { useImage } from 'react-konva-utils';
 
 import './styles.scss';
@@ -18,21 +17,12 @@ type Props<T extends IShape> = PropsWithChildren<T> & {
 const ShapeWrapper = <T extends IShape>({ children, shape, onSelect, transformer }: Props<T>) => {
   const shapeRef = useRef<BaseShapeRef>(null);
 
-  const [textRendered, setTextRendered] = useState(null);
-
   const { updateShape } = useShape();
   const { onSetIsDragging } = useDesignStore();
 
-  const { selectedItems } = useSelection(transformer);
-  const isSelected = selectedItems.some((item) => item.id() === shape.id);
-
-  useEffect(() => {
-    const elmContent = document.querySelector('.ProseMirror') as HTMLElement;
-
-    if (elmContent) {
-      html2canvas(elmContent, {}).then((canvas) => setTextRendered(canvas));
-    }
-  }, [shape.attrs.content]);
+  const isSelected = transformer.transformerRef?.current
+    ?.getNodes()
+    .some((node) => node.id() === shape.id);
 
   const [img] = useImage(shape.attrs.src);
 
@@ -60,7 +50,7 @@ const ShapeWrapper = <T extends IShape>({ children, shape, onSelect, transformer
       return;
     }
     shapeRef.current.hide();
-    transformer.transformerRef.current!.hide();
+    // transformer.transformerRef.current!.hide();
     const textPosition = shapeRef.current.getAbsolutePosition();
     const stage = shapeRef.current.getStage();
     const container = stage!.container().getBoundingClientRect();
@@ -69,7 +59,6 @@ const ShapeWrapper = <T extends IShape>({ children, shape, onSelect, transformer
       y: container.y + textPosition.y,
     };
     const textarea = document.createElement('textarea');
-    document.body.appendChild(textarea);
 
     textarea.id = 'current_text_editor';
     textarea.innerHTML = shapeRef.current.text();
@@ -105,6 +94,9 @@ const ShapeWrapper = <T extends IShape>({ children, shape, onSelect, transformer
     textarea.style.transformOrigin = 'left top';
     textarea.style.textAlign = shapeRef.current.align();
     textarea.style.color = shapeRef.current.fill();
+
+    document.body.appendChild(textarea);
+
     const rotation = shapeRef.current.rotation();
     let transform = '';
     if (rotation) {
@@ -132,7 +124,6 @@ const ShapeWrapper = <T extends IShape>({ children, shape, onSelect, transformer
     function removeTextarea() {
       window.removeEventListener('click', handleOutsideClick);
       shapeRef!.current!.show();
-      transformer.transformerRef.current!.show();
       //@ts-ignore
       const newShape: IShape = {
         id: shapeRef.current!.id,
@@ -174,8 +165,15 @@ const ShapeWrapper = <T extends IShape>({ children, shape, onSelect, transformer
     }
 
     textarea.addEventListener('input', (e) => {
-      textarea.style.width = `${textarea.value
-        .split('\n')
+      shapeRef!.current!.text(textarea.value);
+
+      const lines = textarea.value.split('\n');
+      const lineHeight =
+        shapeRef.current!.fontSize() * stage!.scaleY() * shapeRef.current!.scaleY();
+
+      shapeRef.current!.height(lines.length * lineHeight);
+
+      textarea.style.width = `${lines
         .sort((a, b) => b.length - a.length)[0]
         .split('')
         .reduce(
@@ -189,15 +187,11 @@ const ShapeWrapper = <T extends IShape>({ children, shape, onSelect, transformer
               : acc + shapeRef.current!.fontSize() * stage!.scaleY() * shapeRef.current!.scaleY(),
           0,
         )}px`;
+
+      textarea.style.height = `${lines.length * lineHeight}px`;
     });
 
     textarea.addEventListener('keydown', (e) => {
-      // hide on enter
-      // but don't hide on shift + enter
-      if (e.keyCode === 13 && !e.shiftKey) {
-        shapeRef!.current!.text(textarea.value);
-        removeTextarea();
-      }
       // on esc do not set value back to node
       if (e.keyCode === 27) {
         removeTextarea();
@@ -210,24 +204,56 @@ const ShapeWrapper = <T extends IShape>({ children, shape, onSelect, transformer
       textarea.style.height = `${textarea.scrollHeight + shapeRef!.current!.fontSize()}px`;
     });
 
-    function handleOutsideClick(e: MouseEvent) {
-      if (e.target !== textarea) {
-        shapeRef!.current!.text(textarea.value);
-        removeTextarea();
-      }
-    }
-
     setTimeout(() => {
       window.addEventListener('click', handleOutsideClick);
     });
-  }, [shapeRef, transformer, updateShape]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [shapeRef, updateShape]);
+
+  function handleOutsideClick(e: MouseEvent) {
+    const textarea = document.getElementById('current_text_editor') as HTMLTextAreaElement;
+
+    if (e.target !== textarea) {
+      shapeRef!.current!.text(textarea.value);
+      removeTextArea();
+    }
+  }
+
+  const removeTextArea = () => {
+    const textarea = document.getElementById('current_text_editor') as HTMLTextAreaElement;
+    const stage = shapeRef.current.getStage();
+
+    if (textarea) {
+      window.removeEventListener('click', handleOutsideClick);
+      shapeRef!.current!.show();
+      //@ts-ignore
+      const newShape: IShape = {
+        id: shapeRef.current!.id,
+        attrs: {
+          ...shapeRef.current!.attrs,
+          width:
+            textarea.getBoundingClientRect().width / stage!.scaleY() / shapeRef.current!.scaleY(),
+          height: textarea.value.split('\n').length * shapeRef.current!.fontSize() * 1.2,
+        },
+      };
+      updateShape(shapeRef.current!.id, newShape);
+      textarea.parentNode!.removeChild(textarea);
+    }
+  };
 
   const handleDoubleClickText = (e: Konva.KonvaEventObject<MouseEvent>) => {
-    onEditTextStart();
+    setTimeout(() => {
+      onEditTextStart();
+    }, 500);
   };
 
   const handleClick = (e: Konva.KonvaEventObject<MouseEvent>) => {
-    onSelect(e);
+    // Add delay for text double click text event
+    const delayTimer = isText ? 200 : 0;
+
+    setTimeout(() => {
+      onSelect(e);
+    }, delayTimer);
   };
 
   return (
@@ -238,8 +264,10 @@ const ShapeWrapper = <T extends IShape>({ children, shape, onSelect, transformer
 
         ...shape.attrs,
         ...(isImage && { image: img }),
-        ...(isText && { image: textRendered }),
-        ...(isText && { onDblClick: handleDoubleClickText, onDblTap: handleDoubleClickText }),
+        ...(isText && {
+          onDblClick: handleDoubleClickText,
+          onTransformStart: removeTextArea,
+        }),
         ...(isCustom && { fillPatternImage: img }),
         onDragStart: handleDragStart,
         onDragEnd: handleDragEnd,

@@ -62,7 +62,7 @@ const initialData: IDesignContent[] = [
           name: 'Text 1',
           x: 100,
           y: 400,
-          content: '<div>hi</div>',
+          text: 'Hello World',
           layerIdx: 3,
         },
       },

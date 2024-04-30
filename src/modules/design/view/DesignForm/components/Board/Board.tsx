@@ -1,6 +1,7 @@
 import { COLOR_CODE, isEmpty } from '@core/common';
 import { useMantineTheme } from '@mantine/core';
 import Konva from 'konva';
+import { KonvaEventObject } from 'konva/lib/Node';
 import { orderBy } from 'lodash';
 import { ForwardedRef, forwardRef, useEffect, useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
@@ -16,7 +17,7 @@ import {
   useWorkHistory,
 } from '../../hooks';
 import { useDesignStore } from '../../store';
-import { IShape } from '../../types';
+import { IShape, ShapeTypeEnum } from '../../types';
 import BoardMenuItem from './Board.menu-item';
 import { ShapeMap, Stage } from './components';
 import Shape from './components/Shapes';
@@ -51,6 +52,7 @@ const Board = forwardRef(
       recordPast(data);
     }, [data, recordPast]);
 
+    // handle click outside of stage
     useEffect(() => {
       const boardContainer = document.querySelector('.board-wrapper');
       const stageContainer = document.querySelector('.stage-wrapper');
@@ -142,6 +144,14 @@ const Board = forwardRef(
       [selectedItems, transformer.transformerRef.current],
     );
 
+    const handleDoubleClickTransform = (e: KonvaEventObject<MouseEvent>) => {
+      if (selectedItems.length === 1) {
+        if (selectedItems[0].attrs.shapeType === ShapeTypeEnum.TEXT) {
+          selectedItems[0].fire('dblclick');
+        }
+      }
+    };
+
     return (
       <Stage stage={stage} onSelect={onSelection}>
         {orderBy(shapes, ['attrs.zIndex'], ['desc']).map((shape: IShape) => {
@@ -168,6 +178,7 @@ const Board = forwardRef(
           borderDash={[6, 0]}
           anchorCornerRadius={10}
           shouldOverdrawWholeArea
+          onDblClick={handleDoubleClickTransform}
           anchorFill={COLOR_CODE.WHITE}
           borderStroke={theme.colors.blue[5]}
           anchorStroke={COLOR_CODE.GRAY_500}

@@ -1,5 +1,5 @@
 import { isEmpty } from '@core/common';
-import { Box, Title } from '@mantine/core';
+import { Box, Stack, Title } from '@mantine/core';
 import { Node, NodeConfig } from 'konva/lib/Node';
 import { ForwardedRef, forwardRef, useMemo } from 'react';
 import { useTransformer } from '../../hooks';
@@ -37,12 +37,23 @@ const ConfigurationAside = forwardRef(
         case ShapeTypeEnum.IMAGE:
           return <Configuration.Shape id={id} />;
         case ShapeTypeEnum.TEXT:
-          return <Configuration.Text id={id} />;
+          return (
+            <Stack gap={16}>
+              <Configuration.Text id={id} />
+              <Configuration.Shape id={id} />
+            </Stack>
+          );
       }
     }, [isMultipleSelection, selectedItems]);
 
     return (
-      <Box p={24} ref={ref}>
+      <Box
+        p={24}
+        ref={ref}
+        style={{
+          overflowY: 'auto',
+        }}
+      >
         <Title mb={12} order={3} c="cyan">
           Configuration
         </Title>

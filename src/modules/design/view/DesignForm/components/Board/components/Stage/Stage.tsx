@@ -203,7 +203,6 @@ const Stage = forwardRef(
             ref={stageRef}
             width={window.innerWidth * 0.7}
             height={window.innerHeight * 0.7}
-            onWheel={zoomOnWheel}
             onMouseUp={onMouseUpOnStage}
             onMouseDown={onMouseDownOnStage}
             onMouseMove={onMouseMoveOnStage}
