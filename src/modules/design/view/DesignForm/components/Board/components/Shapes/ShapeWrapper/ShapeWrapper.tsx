@@ -270,10 +270,16 @@ const ShapeWrapper = <T extends IShape>({ children, shape, onSelect, transformer
     }
   }, [wrapperWidth]);
 
-  const handleDoubleClickText = (e: Konva.KonvaEventObject<MouseEvent>) => {
-    setTimeout(() => {
-      onEditTextStart();
-    }, 300);
+  const handleDoubleClickShape = (e: Konva.KonvaEventObject<MouseEvent>) => {
+    if (isText) {
+      setTimeout(() => {
+        onEditTextStart();
+      }, 300);
+
+      return;
+    }
+
+    onSelect(e);
   };
 
   const handleClick = (e: Konva.KonvaEventObject<MouseEvent>) => {
@@ -281,9 +287,31 @@ const ShapeWrapper = <T extends IShape>({ children, shape, onSelect, transformer
     const delayTimer = isText ? 200 : 0;
 
     setTimeout(() => {
+      const parent = e.target?.getParent();
+
+      if (parent.getType() === 'Group') {
+        onSelect(null, parent.getChildren());
+        return;
+      }
+
       onSelect(e);
     }, delayTimer);
   };
+
+  useEffect(() => {
+    if (typeof shapeRef.current?.attrs.layerIdx === 'number') {
+      shapeRef.current.setZIndex(shapeRef.current.attrs.layerIdx);
+    }
+  }, [shapeRef.current?.attrs.layerIdx]);
+
+  useEffect(() => {
+    if (shapeRef.current?.attrs.group) {
+      const group = shapeRef.current.getParent();
+
+      const maxZIndex = Math.max(...group.getChildren().map((node) => node.attrs.layerIdx || 0));
+      group.setZIndex(maxZIndex);
+    }
+  }, [shapeRef.current?.attrs.group]);
 
   return (
     <>
@@ -294,13 +322,13 @@ const ShapeWrapper = <T extends IShape>({ children, shape, onSelect, transformer
         ...shape.attrs,
         ...(isImage && { image: img }),
         ...(isText && {
-          onDblClick: handleDoubleClickText,
           onTransformStart: removeTextArea,
         }),
         ...(isCustom && { fillPatternImage: img }),
         onDragStart: handleDragStart,
         onDragEnd: handleDragEnd,
         onClick: handleClick,
+        onDblClick: handleDoubleClickShape,
         listening: isSelected ? false : true,
       })}
     </>

@@ -78,6 +78,7 @@ const initialData: IDesignContent[] = [
           y: 200,
           src: 'https://upload.wikimedia.org/wikipedia/vi/thumb/a/a1/Man_Utd_FC_.svg/800px-Man_Utd_FC_.svg.png',
           layerIdx: 4,
+          group: 'group1',
         },
       },
       {
@@ -89,6 +90,7 @@ const initialData: IDesignContent[] = [
           stroke: 'black',
           strokeWidth: 5,
           layerIdx: 0,
+          group: 'group1',
         },
       },
       {

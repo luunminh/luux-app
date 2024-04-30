@@ -1,11 +1,9 @@
 import { COLOR_CODE, isEmpty } from '@core/common';
 import { useMantineTheme } from '@mantine/core';
-import Konva from 'konva';
 import { KonvaEventObject } from 'konva/lib/Node';
-import { orderBy } from 'lodash';
 import { ForwardedRef, forwardRef, useEffect, useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
-import { Transformer } from 'react-konva';
+import { Group, Transformer } from 'react-konva';
 import { Html } from 'react-konva-utils';
 import {
   useDesignLS,
@@ -18,6 +16,7 @@ import {
 } from '../../hooks';
 import { useDesignStore } from '../../store';
 import { IShape, ShapeTypeEnum } from '../../types';
+import { getMenuAbsolutePosition, mapShapeByGroupAndZIndex } from './Board.helpers';
 import BoardMenuItem from './Board.menu-item';
 import { ShapeMap, Stage } from './components';
 import Shape from './components/Shapes';
@@ -149,28 +148,43 @@ const Board = forwardRef(
         if (selectedItems[0].attrs.shapeType === ShapeTypeEnum.TEXT) {
           selectedItems[0].fire('dblclick');
         }
+        return;
       }
+    };
+
+    const renderShapes = (shapes: IShape[]) => {
+      return shapes.map((shape: IShape) => {
+        const ShapeComponent = ShapeMap[shape.attrs.shapeType];
+        if (!isEmpty(ShapeComponent)) {
+          return (
+            //@ts-ignore
+            <Shape.Wrapper<typeof shape>
+              key={shape.id}
+              shape={shape}
+              onSelect={onSelection}
+              transformer={transformer}
+            >
+              <ShapeComponent />
+            </Shape.Wrapper>
+          );
+        } else {
+          return null;
+        }
+      });
     };
 
     return (
       <Stage stage={stage} onSelect={onSelection}>
-        {orderBy(shapes, ['attrs.zIndex'], ['desc']).map((shape: IShape) => {
-          const ShapeComponent = ShapeMap[shape.attrs.shapeType];
-          if (!isEmpty(ShapeComponent)) {
-            return (
-              //@ts-ignore
-              <Shape.Wrapper<typeof shape>
-                key={shape.id}
-                shape={shape}
-                onSelect={onSelection}
-                transformer={transformer}
-              >
-                <ShapeComponent />
-              </Shape.Wrapper>
-            );
-          } else {
-            return null;
+        {mapShapeByGroupAndZIndex(shapes).map(({ group, shapes, maxZIndex }) => {
+          if (group === 'undefined') {
+            return renderShapes(shapes);
           }
+
+          return (
+            <Group listening key={group} id={group} zIndex={maxZIndex}>
+              {renderShapes(shapes)}
+            </Group>
+          );
         })}
         <Transformer
           ref={transformer.transformerRef}
@@ -203,17 +217,5 @@ const Board = forwardRef(
     );
   },
 );
-
-const getMenuAbsolutePosition = (transformRef: Konva.Transformer) => {
-  if (isEmpty(transformRef)) return { x: 0, y: 0 };
-
-  const scale = transformRef.getAbsoluteScale().x;
-  const { x, y, width } = transformRef.getClientRect();
-
-  return {
-    x: x * scale + width * scale,
-    y: y * scale,
-  };
-};
 
 export default Board;

@@ -36,6 +36,7 @@ const FontSelection = ({ onChange, selectedShape }: Props) => {
         <Flex
           p={16}
           mt={8}
+          mb={16}
           gap={16}
           wrap="wrap"
           justify="center"

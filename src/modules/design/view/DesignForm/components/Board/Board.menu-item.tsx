@@ -1,15 +1,21 @@
-import { COLOR_CODE } from '@core/common';
+import { COLOR_CODE, getRandomId, isEmpty } from '@core/common';
 import { ActionIcon, Button, Menu, Tooltip } from '@mantine/core';
+import { Group } from 'konva/lib/Group';
+import { Layer } from 'konva/lib/Layer';
 import { Node, NodeConfig } from 'konva/lib/Node';
 import { BiDuplicate } from 'react-icons/bi';
 import { BsLayerBackward, BsLayerForward } from 'react-icons/bs';
-import { FaLock, FaLockOpen, FaRegComment } from 'react-icons/fa';
+import {
+  FaLock,
+  FaLockOpen,
+  FaLayerGroup as GroupIcon,
+  FaObjectUngroup as UnGroupIcon,
+} from 'react-icons/fa';
 import { HiMenu } from 'react-icons/hi';
 import { IoCopyOutline, IoTrash } from 'react-icons/io5';
 import { LuClipboardPaste } from 'react-icons/lu';
 import { TbArrowsDown, TbArrowsUp } from 'react-icons/tb';
 import { useShape, useStage } from '../../hooks';
-
 type Props = {
   stage: ReturnType<typeof useStage>;
   selectedItems: Node<NodeConfig>[];
@@ -22,6 +28,7 @@ const BoardMenuItem = ({ selectedItems, clearSelection, stage }: Props) => {
 
   const isShowLockButton = selectedItems.length === 1;
   const isLocked = selectedItems[0]?.attrs.locked;
+  const hasGroup = selectedItems.some((item) => !isEmpty(item.attrs?.group));
 
   const handleRemoveShapes = () => {
     removeShapes(selectedItems.map((item) => item.id()));
@@ -88,9 +95,34 @@ const BoardMenuItem = ({ selectedItems, clearSelection, stage }: Props) => {
   };
 
   const moveShapes = (direction: 'up' | 'down' | 'top' | 'bottom') => {
-    const selectedItemRefs = stageRef.current
-      .getChildren()[0]
-      .getChildren((node) => selectedItems.some((item) => item.id() === node.id()));
+    let containerRef;
+    if (hasGroup) {
+      const groupRef = stageRef.current
+        .getChildren()[0]
+        .getChildren((node) => selectedItems.some((item) => item.attrs.group === node.id()))[0];
+
+      switch (direction) {
+        case 'up':
+          groupRef.moveUp();
+          break;
+        case 'down':
+          groupRef.moveDown();
+          break;
+        case 'top':
+          groupRef.moveToTop();
+          break;
+        case 'bottom':
+          groupRef.moveToBottom();
+          break;
+      }
+      containerRef = groupRef as Group;
+    } else {
+      containerRef = stageRef.current.getChildren()[0] as Layer;
+    }
+
+    const selectedItemRefs = containerRef.getChildren((node) =>
+      selectedItems.some((item) => item.id() === node.id()),
+    );
 
     selectedItemRefs.forEach((item) => {
       switch (direction) {
@@ -108,6 +140,43 @@ const BoardMenuItem = ({ selectedItems, clearSelection, stage }: Props) => {
           break;
       }
     });
+  };
+
+  const handleGroupShapes = () => {
+    const groupIds = getRandomId();
+    const groupShapes = selectedItems.map((item) => ({
+      ...item,
+      id: item.id(),
+      attrs: {
+        ...item.attrs,
+        group: groupIds,
+      },
+    }));
+
+    updateShapes(
+      selectedItems.map((item) => item.id()),
+      groupShapes,
+    );
+
+    clearSelection();
+  };
+
+  const handleUnGroupShapes = () => {
+    const unGroupShapes = selectedItems.map((item) => ({
+      ...item,
+      id: item.id(),
+      attrs: {
+        ...item.attrs,
+        group: undefined,
+      },
+    }));
+
+    updateShapes(
+      selectedItems.map((item) => item.id()),
+      unGroupShapes,
+    );
+
+    clearSelection();
   };
 
   return (
@@ -181,19 +250,6 @@ const BoardMenuItem = ({ selectedItems, clearSelection, stage }: Props) => {
           </Menu.Item>
         </Menu.Dropdown>
       </Menu>
-      <Tooltip label="Delete" withArrow>
-        <ActionIcon
-          onClick={handleRemoveShapes}
-          variant="light"
-          aria-label="Delete"
-          size="xl"
-          style={{
-            borderRadius: 0,
-          }}
-        >
-          <IoTrash />
-        </ActionIcon>
-      </Tooltip>
       {isShowLockButton && (
         <Tooltip label={isLocked ? 'Unlock' : 'Lock'} withArrow onClick={handleLockShape}>
           <ActionIcon
@@ -207,17 +263,35 @@ const BoardMenuItem = ({ selectedItems, clearSelection, stage }: Props) => {
           </ActionIcon>
         </Tooltip>
       )}
-      <Tooltip label="Comment" withArrow>
+      {selectedItems.length > 1 && (
+        <Tooltip
+          label={hasGroup ? 'UnGroup' : 'Group'}
+          withArrow
+          onClick={hasGroup ? handleUnGroupShapes : handleGroupShapes}
+        >
+          <ActionIcon
+            style={{
+              borderRadius: 0,
+            }}
+            variant="light"
+            size="xl"
+          >
+            {hasGroup ? <UnGroupIcon size={16} /> : <GroupIcon size={16} />}
+          </ActionIcon>
+        </Tooltip>
+      )}
+      <Tooltip label="Delete" withArrow>
         <ActionIcon
+          onClick={handleRemoveShapes}
+          variant="light"
+          aria-label="Delete"
+          size="xl"
           style={{
             borderTopLeftRadius: 0,
             borderBottomLeftRadius: 0,
           }}
-          variant="light"
-          size="xl"
-          aria-label="Comment"
         >
-          <FaRegComment size={14} />
+          <IoTrash />
         </ActionIcon>
       </Tooltip>
     </Button.Group>

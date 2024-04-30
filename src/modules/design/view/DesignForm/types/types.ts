@@ -43,7 +43,20 @@ export type BaseShapeRef = Konva.Shape &
 
 export type IShapeConfig<T extends ShapeTypeEnum> = {
   id: string;
-  attrs: BaseShape[T] & { shapeType: T; locked?: boolean; layerIdx?: number };
+  attrs: BaseShape[T] & {
+    shapeType: T;
+
+    /**Disabled configuration shape */
+    locked?: boolean;
+
+    /** Shape layer zIndex */
+    layerIdx?: number;
+
+    /**
+     * Shape group ID
+     */
+    group?: string;
+  };
 
   [key: string]: any;
 };
