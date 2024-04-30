@@ -3,6 +3,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { AppShell, Stack } from '@mantine/core';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { TransformComponent, TransformWrapper } from 'react-zoom-pan-pinch';
 import { IDesignForm, designFormInitialValues, designFormSchema } from './DesignForm.helpers';
 import { Board, ConfigurationAside, DesignFormHeader } from './components';
 import { useTransformer, useWorkHistory } from './hooks';
@@ -12,6 +13,9 @@ import { IDesignContent } from './types';
 export const ASIDE_WIDTH = 350;
 export const HEADER_HEIGHT = 56;
 export const SIDEBAR_WIDTH = 430;
+
+const MIN_SCALE = 0.5;
+const MAX_SCALE = 5;
 
 const DesignForm = () => {
   const [past, setPast] = useState<IDesignContent[][]>([]);
@@ -33,37 +37,78 @@ const DesignForm = () => {
   });
 
   return (
-    <AppShell
-      withBorder={false}
-      header={{
-        height: HEADER_HEIGHT,
+    <TransformWrapper
+      minScale={MIN_SCALE}
+      maxScale={MAX_SCALE}
+      centerOnInit
+      centerZoomedOut
+      limitToBounds
+      disablePadding
+      wheel={{
+        step: 100,
+        wheelDisabled: true,
       }}
-      aside={{
-        breakpoint: 'md',
-        width: ASIDE_WIDTH,
-        collapsed: {
-          mobile: true,
-          desktop: !isSelectedItems,
-        },
+      panning={{
+        disabled: true,
       }}
     >
-      <AppShell.Header>
-        <DesignForm.Header
-          form={form}
-          hasPast={hasPast}
-          hasFuture={hasFuture}
-          workHistory={workHistory}
-        />
-      </AppShell.Header>
-      <AppShell.Main className="board-wrapper">
-        <Stack align="center" justify="center" h="80vh">
-          <DesignForm.Board pageNumber={1} transformer={transformer} workHistory={workHistory} />
-        </Stack>
-      </AppShell.Main>
-      <AppShell.Aside>
-        <DesignForm.Aside transformer={transformer} />
-      </AppShell.Aside>
-    </AppShell>
+      <AppShell
+        withBorder={false}
+        header={{
+          height: HEADER_HEIGHT,
+        }}
+        aside={{
+          breakpoint: 'md',
+          width: ASIDE_WIDTH,
+          collapsed: {
+            mobile: true,
+            desktop: !isSelectedItems,
+          },
+        }}
+      >
+        <AppShell.Header>
+          <DesignForm.Header
+            form={form}
+            hasPast={hasPast}
+            hasFuture={hasFuture}
+            workHistory={workHistory}
+          />
+        </AppShell.Header>
+        <AppShell.Main
+          className="board-wrapper"
+          style={{
+            padding: 0,
+          }}
+        >
+          <TransformComponent
+            wrapperStyle={{
+              width: '100%',
+              height: '100vh',
+              border: '1px solid blue',
+            }}
+          >
+            <Stack
+              w="100vw"
+              h="100%"
+              style={{
+                border: '1px solid red',
+              }}
+            >
+              <Stack align="center" justify="center" h="80vh">
+                <DesignForm.Board
+                  pageNumber={1}
+                  transformer={transformer}
+                  workHistory={workHistory}
+                />
+              </Stack>
+            </Stack>
+          </TransformComponent>
+        </AppShell.Main>
+        <AppShell.Aside>
+          <DesignForm.Aside transformer={transformer} />
+        </AppShell.Aside>
+      </AppShell>
+    </TransformWrapper>
   );
 };
 
