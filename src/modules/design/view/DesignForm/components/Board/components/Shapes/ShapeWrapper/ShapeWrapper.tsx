@@ -2,7 +2,7 @@ import { useShape } from '@design/hooks';
 import { useDesignStore } from '@design/store';
 import { BaseShapeRef, IShape, ITEMS_CONTEXT, ShapeTypeEnum } from '@design/types';
 import Konva from 'konva';
-import React, { PropsWithChildren, useCallback, useRef } from 'react';
+import React, { PropsWithChildren, useCallback, useEffect, useRef } from 'react';
 import { useImage } from 'react-konva-utils';
 
 import './styles.scss';
@@ -63,6 +63,8 @@ const ShapeWrapper = <T extends IShape>({ children, shape, onSelect, transformer
     textarea.id = 'current_text_editor';
     textarea.innerHTML = shapeRef.current.text();
     textarea.style.zIndex = '100';
+    textarea.style.fontFamily = shapeRef.current.attrs.fontFamily;
+    textarea.style.fontWeight = shapeRef.current.attrs.fontStyle;
     textarea.style.position = 'absolute';
     textarea.style.top = `${areaPosition.y}px`;
     textarea.style.left = `${areaPosition.x}px`;
@@ -90,7 +92,7 @@ const ShapeWrapper = <T extends IShape>({ children, shape, onSelect, transformer
     textarea.style.outline = 'none';
     textarea.style.resize = 'none';
     textarea.style.lineHeight = shapeRef.current.lineHeight().toString();
-    textarea.style.fontFamily = shapeRef.current.fontFamily();
+    textarea.style.fontFamily = shapeRef.current.attrs.fontFamily;
     textarea.style.transformOrigin = 'left top';
     textarea.style.textAlign = shapeRef.current.align();
     textarea.style.color = shapeRef.current.fill();
@@ -241,10 +243,37 @@ const ShapeWrapper = <T extends IShape>({ children, shape, onSelect, transformer
     }
   };
 
+  const updateTextareaPosition = () => {
+    const textarea = document.getElementById('current_text_editor') as HTMLTextAreaElement;
+    if (textarea) {
+      const textPosition = shapeRef.current.getAbsolutePosition();
+      const stage = shapeRef.current.getStage();
+      const container = stage!.container().getBoundingClientRect();
+      const areaPosition = {
+        x: container.x + textPosition.x,
+        y: container.y + textPosition.y,
+      };
+
+      textarea.style.top = `${areaPosition.y}px`;
+      textarea.style.left = `${areaPosition.x}px`;
+      textarea.style.fontFamily = shapeRef.current.attrs.fontFamily;
+      textarea.style.fontWeight = shapeRef.current.attrs.fontStyle;
+    }
+  };
+
+  const wrapperWidth = document.querySelector('.board-wrapper')?.clientWidth;
+
+  useEffect(() => {
+    const textarea = document.getElementById('current_text_editor') as HTMLTextAreaElement;
+    if (textarea) {
+      updateTextareaPosition();
+    }
+  }, [wrapperWidth]);
+
   const handleDoubleClickText = (e: Konva.KonvaEventObject<MouseEvent>) => {
     setTimeout(() => {
       onEditTextStart();
-    }, 500);
+    }, 300);
   };
 
   const handleClick = (e: Konva.KonvaEventObject<MouseEvent>) => {

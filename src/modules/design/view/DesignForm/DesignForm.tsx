@@ -48,6 +48,9 @@ const DesignForm = () => {
         step: 100,
         wheelDisabled: true,
       }}
+      doubleClick={{
+        disabled: true,
+      }}
       panning={{
         disabled: true,
       }}
@@ -84,16 +87,9 @@ const DesignForm = () => {
             wrapperStyle={{
               width: '100%',
               height: '100vh',
-              border: '1px solid blue',
             }}
           >
-            <Stack
-              w="100vw"
-              h="100%"
-              style={{
-                border: '1px solid red',
-              }}
-            >
+            <Stack w="100vw" h="100%">
               <Stack align="center" justify="center" h="80vh">
                 <DesignForm.Board
                   pageNumber={1}

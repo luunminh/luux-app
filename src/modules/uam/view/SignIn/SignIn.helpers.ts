@@ -10,7 +10,10 @@ export type SignInFormValue = {
   password: string;
 };
 
-export const initialSignInFormValue: SignInFormValue = { email: '', password: '' };
+export const initialSignInFormValue: SignInFormValue = {
+  email: 'minh_luu@datahouse.com',
+  password: 'Abcd@1234',
+};
 
 export const signInFormSchema = Yup.object().shape({
   email: Yup.string().required().notTrimmable().email(),
