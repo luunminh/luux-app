@@ -1,4 +1,3 @@
-import Konva from 'konva';
 import { create } from 'zustand';
 import { IDesignContent, ShapeTypeEnum } from '../types';
 
@@ -52,6 +51,7 @@ const initialData: IDesignContent[] = [
           draggable: true,
           shapeType: ShapeTypeEnum.CIRCLE,
           layerIdx: 2,
+          group: 'group1',
         },
       },
       {
@@ -80,7 +80,6 @@ const initialData: IDesignContent[] = [
           y: 200,
           src: 'https://upload.wikimedia.org/wikipedia/vi/thumb/a/a1/Man_Utd_FC_.svg/800px-Man_Utd_FC_.svg.png',
           layerIdx: 4,
-          group: 'group1',
         },
       },
       {
@@ -128,16 +127,6 @@ const initialData: IDesignContent[] = [
           draggable: true,
           fillPatternScale: { x: 0.1, y: 0.1 },
           layerIdx: 0,
-          sceneFunc: (context: Konva.Context, shape: Konva.Shape) => {
-            context.beginPath();
-            context.moveTo(20, 50);
-            context.lineTo(220, 80);
-            context.quadraticCurveTo(150, 100, 260, 170);
-            context.closePath();
-
-            // Konva specific method
-            context.fillStrokeShape(shape);
-          },
         },
       },
     ],

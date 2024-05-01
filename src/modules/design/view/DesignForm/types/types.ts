@@ -7,7 +7,13 @@ export type BaseShape = {
   [ShapeTypeEnum.CUSTOM]: Konva.ShapeConfig & {
     src?: string;
   };
+  [ShapeTypeEnum.IMAGE_FRAME]: Konva.ShapeConfig & {
+    src?: string;
+  };
 
+  /**
+   * Konva default nodes
+   */
   [ShapeTypeEnum.TAG]: Konva.TagConfig;
   [ShapeTypeEnum.ARC]: Konva.ArcConfig;
   [ShapeTypeEnum.LINE]: Konva.LineConfig;

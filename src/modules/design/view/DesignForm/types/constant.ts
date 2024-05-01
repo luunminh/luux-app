@@ -14,5 +14,15 @@ export enum ShapeTypeEnum {
   ARC = 'arc',
   ELLIPSE = 'ellipse',
 
+  // custom lib support shapes
   CUSTOM = 'custom',
+
+  // custom shape with image inside
+  IMAGE_FRAME = 'imageFrame',
+
+  // custom shape by point
+  // CUSTOM_POINT = 'customPoint',
+
+  // svg image, we can change the color of this
+  // GRAPHIC_SHAPE = 'graphicShape',
 }
