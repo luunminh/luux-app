@@ -19,7 +19,7 @@ const ConfigurationAside = forwardRef(
     const renderConfigurationItems = useMemo(() => {
       if (isEmpty(selectedItems)) return null;
 
-      if (isMultipleSelection) return <div>Multiple selection</div>;
+      if (isMultipleSelection) return <Configuration.Nodes transformer={transformer} />;
 
       const {
         attrs: { id, shapeType, locked },

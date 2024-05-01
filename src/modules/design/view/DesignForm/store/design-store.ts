@@ -105,7 +105,7 @@ const initialData: IDesignContent[] = [
           shapeType: ShapeTypeEnum.ARROW,
           name: 'Custom 1',
           points: [0, 0, 100, 100],
-          stroke: 'black',
+          stroke: 'red',
           strokeWidth: 4,
           layerIdx: 0,
         },

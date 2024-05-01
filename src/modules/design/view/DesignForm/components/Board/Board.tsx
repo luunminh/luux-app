@@ -29,7 +29,7 @@ type Props = {
 
 const Board = forwardRef(
   ({ pageNumber, transformer, workHistory }: Props, ref: ForwardedRef<HTMLDivElement>) => {
-    const { isDragging, data } = useDesignStore();
+    const { isDragging, data, isSelectedItems } = useDesignStore();
     const { shapes } = useShape();
 
     const stage = useStage();
@@ -199,7 +199,7 @@ const Board = forwardRef(
           boundBoxFunc={(_, newBox) => newBox}
           onTransformEnd={transformer.onTransformEnd}
         />
-        {!isEmpty(selectedItems) && !isDragging && (
+        {!isEmpty(selectedItems) && !isDragging && isSelectedItems && (
           <Html
             groupProps={{
               x: menuPos.x,
