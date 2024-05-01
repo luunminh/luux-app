@@ -1,6 +1,7 @@
 import { useShape } from '@design/hooks';
 import { IShape } from '@design/types';
 import { ColorInput, InputWrapper, Slider, Stack } from '@mantine/core';
+import { LINE_TYPES } from '../../helpers';
 import { BorderConfiguration, ShadowConfiguration } from '../section';
 
 type Props = {
@@ -19,14 +20,18 @@ const ConfigurationShape = ({ id }: Props) => {
     : '#000';
 
   const handleChangeShape = (
-    key: keyof typeof selectedShape,
-    value: string | number | string[] | number[] | boolean | any,
+    keys: string[],
+    values: (string | number | string[] | number[] | boolean | any)[],
   ) => {
+    const updatedAttrs = keys.reduce((result, key, index) => {
+      return { ...result, [key]: values[index] };
+    }, {});
+
     const updatedShape = {
       ...selectedShape,
       attrs: {
         ...selectedShape.attrs,
-        [key]: value,
+        ...updatedAttrs,
       },
     } as IShape;
     updateShape(id, updatedShape);
@@ -40,17 +45,19 @@ const ConfigurationShape = ({ id }: Props) => {
           color="blue"
           value={selectedShape.attrs.opacity * 100 || 100}
           onChange={(value) => {
-            handleChangeShape('opacity', Number(value) / 100);
+            handleChangeShape(['opacity'], [Number(value) / 100]);
           }}
         />
       </InputWrapper>
-      <ColorInput
-        label="Color"
-        value={colorValue}
-        onChange={(value) => {
-          handleChangeShape('fill', value);
-        }}
-      />
+      {!LINE_TYPES.includes(selectedShape.attrs.shapeType) && (
+        <ColorInput
+          label="Color"
+          value={colorValue}
+          onChange={(value) => {
+            handleChangeShape(['fill'], [value]);
+          }}
+        />
+      )}
       <BorderConfiguration selectedShape={selectedShape} onChange={handleChangeShape} />
       <ShadowConfiguration selectedShape={selectedShape} onChange={handleChangeShape} />
     </Stack>

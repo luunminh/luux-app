@@ -6,9 +6,10 @@ import { AiOutlineDash } from 'react-icons/ai';
 import { GrSubtract } from 'react-icons/gr';
 import { IoBanSharp } from 'react-icons/io5';
 import { TbLineDotted } from 'react-icons/tb';
+import { LINE_TYPES } from '../../helpers';
 type Props = {
   selectedShape: IShape;
-  onChange: (key: string, value: any) => void;
+  onChange: (keys: string[], values: any[]) => void;
 };
 
 type BorderStyle = 'solid' | 'dashed' | 'dotted' | 'none';
@@ -23,30 +24,33 @@ const BorderConfiguration = ({ selectedShape, onChange }: Props) => {
     dotted: <TbLineDotted size={30} />,
   };
 
+  const isLineType = LINE_TYPES.includes(selectedShape.attrs.shapeType);
+
   const handleChangeBorderStyle = (type: BorderStyle) => {
     const dashStyle: any = {
       //@ts-ignore
       solid: [],
-      dotted: [5, 5],
-      dashed: [5, 20],
+      dotted: [0.001, 20, 0.001, 20],
+      dashed: [15, 15, 15, 15],
     };
     setActiveBorderStyle(type);
 
     switch (type) {
+      case 'dotted':
       case 'solid':
       case 'dashed':
-      case 'dotted':
-        onChange('dashEnabled', true);
-        onChange('dash', dashStyle[type]);
+        const keys = ['dashEnabled', 'lineCap', 'dash'];
+        const values = [true, 'round', dashStyle[type]];
+        onChange(keys, values);
         break;
       case 'none':
-        onChange('dashEnabled', false);
+        onChange(['dashEnabled'], [false]);
         break;
     }
   };
 
   return (
-    <InputWrapper label="Border">
+    <InputWrapper label={isLineType ? 'Color' : 'Border'}>
       <Stack
         mt={4}
         gap={16}
@@ -80,7 +84,7 @@ const BorderConfiguration = ({ selectedShape, onChange }: Props) => {
           label="Color"
           value={selectedShape.attrs.stroke as string}
           onChange={(value) => {
-            onChange('stroke', value);
+            onChange(['stroke'], [value]);
           }}
         />
         <InputWrapper label="Weight">
@@ -89,7 +93,7 @@ const BorderConfiguration = ({ selectedShape, onChange }: Props) => {
             color="blue"
             value={selectedShape.attrs.strokeWidth}
             onChange={(value) => {
-              onChange('strokeWidth', Number(value));
+              onChange(['strokeWidth'], [Number(value)]);
             }}
           />
         </InputWrapper>
@@ -100,7 +104,7 @@ const BorderConfiguration = ({ selectedShape, onChange }: Props) => {
             max={200}
             value={selectedShape.attrs.cornerRadius}
             onChange={(value) => {
-              onChange('cornerRadius', Number(value));
+              onChange(['cornerRadius'], [Number(value)]);
             }}
           />
         </InputWrapper>

@@ -108,6 +108,7 @@ const initialData: IDesignContent[] = [
           stroke: 'red',
           strokeWidth: 4,
           layerIdx: 0,
+          dash: [10, 20, 50],
         },
       },
       {

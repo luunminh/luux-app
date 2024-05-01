@@ -4,7 +4,7 @@ import { ColorInput, Grid, InputWrapper, Slider, Stack } from '@mantine/core';
 
 type Props = {
   selectedShape: IShape;
-  onChange: (key: string, value: any) => void;
+  onChange: (keys: string[], values: any[]) => void;
 };
 
 const ShadowConfiguration = ({ selectedShape, onChange }: Props) => {
@@ -24,7 +24,7 @@ const ShadowConfiguration = ({ selectedShape, onChange }: Props) => {
           label="Color"
           value={(selectedShape.attrs.shadowColor as string) || '#000'}
           onChange={(value) => {
-            onChange('shadowColor', value);
+            onChange(['shadowColor'], [value]);
           }}
         />
         <InputWrapper label="Blur">
@@ -33,7 +33,7 @@ const ShadowConfiguration = ({ selectedShape, onChange }: Props) => {
             color="blue"
             value={selectedShape.attrs.shadowBlur}
             onChange={(value) => {
-              onChange('shadowBlur', Number(value));
+              onChange(['shadowBlur'], [Number(value)]);
             }}
           />
         </InputWrapper>
@@ -43,7 +43,7 @@ const ShadowConfiguration = ({ selectedShape, onChange }: Props) => {
             color="blue"
             value={selectedShape.attrs.shadowOpacity * 100}
             onChange={(value) => {
-              onChange('shadowOpacity', Number(value) / 100);
+              onChange(['shadowOpacity'], [Number(value) / 100]);
             }}
           />
         </InputWrapper>
@@ -57,7 +57,7 @@ const ShadowConfiguration = ({ selectedShape, onChange }: Props) => {
                 color="blue"
                 value={selectedShape.attrs.shadowOffsetX || 0}
                 onChange={(value) => {
-                  onChange('shadowOffsetX', value);
+                  onChange(['shadowOffsetX'], [value]);
                 }}
               />
             </InputWrapper>
@@ -71,7 +71,7 @@ const ShadowConfiguration = ({ selectedShape, onChange }: Props) => {
                 color="blue"
                 value={selectedShape.attrs.shadowOffsetY || 0}
                 onChange={(value) => {
-                  onChange('shadowOffsetY', value);
+                  onChange(['shadowOffsetY'], [value]);
                 }}
               />
             </InputWrapper>

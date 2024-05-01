@@ -43,8 +43,16 @@ const ConfigurationAside = forwardRef(
               <Configuration.Shape id={id} />
             </Stack>
           );
+        case ShapeTypeEnum.LINE:
+        case ShapeTypeEnum.ARROW:
+          return (
+            <Stack gap={16}>
+              <Configuration.Line id={id} />
+              <Configuration.Shape id={id} />
+            </Stack>
+          );
       }
-    }, [isMultipleSelection, selectedItems]);
+    }, [isMultipleSelection, selectedItems, transformer]);
 
     return (
       <Box
