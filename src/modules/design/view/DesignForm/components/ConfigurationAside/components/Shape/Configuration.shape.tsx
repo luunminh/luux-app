@@ -41,7 +41,7 @@ const ConfigurationShape = ({ id }: Props) => {
     <Stack>
       <InputWrapper label="Transparent">
         <Slider
-          label={selectedShape.attrs.opacity * 100}
+          label={selectedShape.attrs.opacity * 100 || 100}
           color="blue"
           value={selectedShape.attrs.opacity * 100 || 100}
           onChange={(value) => {

@@ -51,6 +51,13 @@ const ConfigurationAside = forwardRef(
               <Configuration.Shape id={id} />
             </Stack>
           );
+        case ShapeTypeEnum.IMAGE_FRAME:
+          return (
+            <Stack gap={16}>
+              <Configuration.Frame id={id} />
+              <Configuration.Shape id={id} />
+            </Stack>
+          );
       }
     }, [isMultipleSelection, selectedItems, transformer]);
 

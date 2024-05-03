@@ -1,3 +1,4 @@
+import { ConfigurationImageFrame } from './Frame';
 import { ConfigurationLine } from './Line';
 import { ConfigurationMultipleNodes } from './MultipleNodes';
 import { ConfigurationShape } from './Shape';
@@ -8,6 +9,7 @@ const Configuration = {
   Text: ConfigurationText,
   Line: ConfigurationLine,
   Nodes: ConfigurationMultipleNodes,
+  Frame: ConfigurationImageFrame,
 };
 
 export default Configuration;

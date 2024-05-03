@@ -17,6 +17,7 @@ import {
   Tag,
   Text,
 } from 'react-konva';
+import { ImageFramer } from './ImageFramer';
 import ShapeWrapper from './ShapeWrapper';
 
 const Shape = {
@@ -55,7 +56,7 @@ export const ShapeMap: { [K in ShapeTypeEnum]: FC<any> } = {
   [ShapeTypeEnum.RECTANGLE]: Rect,
 
   [ShapeTypeEnum.CUSTOM]: CustomShape,
-  [ShapeTypeEnum.IMAGE_FRAME]: CustomShape,
+  [ShapeTypeEnum.IMAGE_FRAME]: ImageFramer,
 };
 
 export default Shape;

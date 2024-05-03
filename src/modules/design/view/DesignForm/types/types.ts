@@ -9,6 +9,7 @@ export type BaseShape = {
   };
   [ShapeTypeEnum.IMAGE_FRAME]: Konva.ShapeConfig & {
     src?: string;
+    baseNode: ShapeTypeEnum;
   };
 
   /**

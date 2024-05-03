@@ -49,6 +49,12 @@ const BorderConfiguration = ({ selectedShape, onChange }: Props) => {
     }
   };
 
+  const colorValue = selectedShape.attrs.stroke
+    ? selectedShape.attrs.stroke === 'black'
+      ? '#000'
+      : selectedShape.attrs.stroke
+    : '#000';
+
   return (
     <InputWrapper label={isLineType ? 'Color' : 'Border'}>
       <Stack
@@ -82,7 +88,7 @@ const BorderConfiguration = ({ selectedShape, onChange }: Props) => {
         </Flex>
         <ColorInput
           label="Color"
-          value={selectedShape.attrs.stroke as string}
+          value={colorValue}
           onChange={(value) => {
             onChange(['stroke'], [value]);
           }}
