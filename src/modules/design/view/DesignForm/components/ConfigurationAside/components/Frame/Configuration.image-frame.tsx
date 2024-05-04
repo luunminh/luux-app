@@ -11,7 +11,6 @@ const BASE_PATTERN_SCALE = { x: 0.15, y: 0.15 };
 const ConfigurationImageFrame = ({ id }: Props) => {
   const { updateShape, getShapeById } = useShape();
   const selectedShape = getShapeById(id);
-  console.log('ConfigurationImageFrame ~ selectedShape:', selectedShape);
 
   const handleChangeShape = (
     keys: string[],

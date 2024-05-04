@@ -17,7 +17,12 @@ const useHotkeyFunc = () => {
         Object.values(ShapeTypeEnum).includes(_item.attrs.shapeType) && !_item.attrs.locked,
     );
 
-    onSelectItem(null, items);
+    const itemInsideGroups = layer
+      .getChildren((item) => item.getClassName() === 'Group')
+      .map((group: any) => group.children)
+      .flat();
+
+    onSelectItem(null, [...items, ...itemInsideGroups]);
   };
 
   const copyItems = (
@@ -44,11 +49,12 @@ const useHotkeyFunc = () => {
       if (Object.keys(item.attrs).length === 0) {
         return null;
       }
-
+      const id = getRandomId();
       return {
-        id: getRandomId(),
+        id,
         attrs: {
           ...item.attrs,
+          id,
           x: item.attrs.x + 10 || 0,
           y: item.attrs.y + 10 || 0,
         },
@@ -61,10 +67,12 @@ const useHotkeyFunc = () => {
 
   const duplicateItems = (selectedItems: Node<NodeConfig>[]) => {
     const newShapes = selectedItems.map((item) => {
+      const id = getRandomId();
       return {
-        id: getRandomId(),
+        id,
         attrs: {
           ...item.attrs,
+          id,
           x: item.attrs.x + 10,
           y: item.attrs.y + 10,
         },

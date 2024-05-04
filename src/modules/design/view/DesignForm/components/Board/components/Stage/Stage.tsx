@@ -175,6 +175,7 @@ const Stage = forwardRef(
             <Layer>
               {children}
               <Rect
+                id="select-box"
                 name="select-box"
                 x={0}
                 y={0}

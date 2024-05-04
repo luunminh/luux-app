@@ -28,7 +28,6 @@ const ShapeWrapper = <T extends IShape>({ children, shape, onSelect, transformer
 
   const isText = shape.attrs.shapeType === ShapeTypeEnum.TEXT;
   const isImage = shape.attrs.shapeType === ShapeTypeEnum.IMAGE;
-  const isCustom = shape.attrs.shapeType === ShapeTypeEnum.CUSTOM;
 
   const handleDragStart = (e: Konva.KonvaEventObject<DragEvent>) => {
     onSetIsDragging(true);
@@ -60,7 +59,7 @@ const ShapeWrapper = <T extends IShape>({ children, shape, onSelect, transformer
     };
     const textarea = document.createElement('textarea');
 
-    textarea.id = 'current_text_editor';
+    textarea.id = `current_text_editor--${shape.id}`;
     textarea.innerHTML = shapeRef.current.text();
     textarea.style.zIndex = '100';
     textarea.style.fontFamily = shapeRef.current.attrs.fontFamily;
@@ -160,7 +159,7 @@ const ShapeWrapper = <T extends IShape>({ children, shape, onSelect, transformer
     textarea.addEventListener('keydown', (e) => {
       // on esc do not set value back to node
       if (e.keyCode === 27) {
-        removeTextArea();
+        removeTextArea(true);
       }
     });
 
@@ -175,16 +174,20 @@ const ShapeWrapper = <T extends IShape>({ children, shape, onSelect, transformer
   }, [shapeRef, updateShape]);
 
   function handleOutsideClick(e: MouseEvent) {
-    const textarea = document.getElementById('current_text_editor') as HTMLTextAreaElement;
+    const textarea = document.getElementById(
+      `current_text_editor--${shape.id}`,
+    ) as HTMLTextAreaElement;
 
     if (e.target !== textarea) {
       shapeRef!.current!.text(textarea.value);
-      removeTextArea();
+      removeTextArea(true);
     }
   }
 
-  const removeTextArea = () => {
-    const textarea = document.getElementById('current_text_editor') as HTMLTextAreaElement;
+  const removeTextArea = (isUpdate = false) => {
+    const textarea = document.getElementById(
+      `current_text_editor--${shape.id}`,
+    ) as HTMLTextAreaElement;
     const stage = shapeRef.current.getStage();
 
     if (textarea) {
@@ -200,13 +203,17 @@ const ShapeWrapper = <T extends IShape>({ children, shape, onSelect, transformer
           height: textarea.value.split('\n').length * shapeRef.current!.fontSize() * 1.2,
         },
       };
-      updateShape(shapeRef.current!.id, newShape);
+      if (isUpdate) {
+        updateShape(shapeRef.current!.id, newShape);
+      }
       textarea.parentNode!.removeChild(textarea);
     }
   };
 
-  const updateTextareaPosition = () => {
-    const textarea = document.getElementById('current_text_editor') as HTMLTextAreaElement;
+  const updateTextareaPosition = useCallback(() => {
+    const textarea = document.getElementById(
+      `current_text_editor--${shape.id}`,
+    ) as HTMLTextAreaElement;
     if (textarea) {
       const textPosition = shapeRef.current.getAbsolutePosition();
       const stage = shapeRef.current.getStage();
@@ -221,26 +228,30 @@ const ShapeWrapper = <T extends IShape>({ children, shape, onSelect, transformer
       textarea.style.fontFamily = shapeRef.current.attrs.fontFamily;
       textarea.style.fontWeight = shapeRef.current.attrs.fontStyle;
     }
-  };
+  }, [shape.id]);
 
   const wrapperWidth = document.querySelector('.board-wrapper')?.clientWidth;
 
   useEffect(() => {
-    const textarea = document.getElementById('current_text_editor') as HTMLTextAreaElement;
+    const textarea = document.getElementById(
+      `current_text_editor--${shape.id}`,
+    ) as HTMLTextAreaElement;
     if (textarea) {
       updateTextareaPosition();
     }
-  }, [wrapperWidth]);
+  }, [wrapperWidth, shape.id, updateTextareaPosition]);
 
   //update shape size when font family is changed
   useEffect(() => {
     if (shapeRef.current?.attrs.fontFamily) {
-      const textarea = document.getElementById('current_text_editor') as HTMLTextAreaElement;
+      const textarea = document.getElementById(
+        `current_text_editor--${shape.id}`,
+      ) as HTMLTextAreaElement;
       if (textarea) {
         textarea.onkeydown(new KeyboardEvent('keydown', { key: 'alt' }));
       }
     }
-  }, [shapeRef.current?.attrs.fontFamily]);
+  }, [shapeRef.current?.attrs.fontFamily, shape.id]);
 
   const handleDoubleClickShape = (e: Konva.KonvaEventObject<MouseEvent>) => {
     if (isText) {
@@ -261,7 +272,7 @@ const ShapeWrapper = <T extends IShape>({ children, shape, onSelect, transformer
     setTimeout(() => {
       const parent = e.target?.getParent();
 
-      if (parent.getType() === 'Group') {
+      if (parent.getClassName() === 'Group') {
         onSelect(null, parent.getChildren());
         return;
       }
@@ -300,7 +311,6 @@ const ShapeWrapper = <T extends IShape>({ children, shape, onSelect, transformer
         ...(isText && {
           onTransformStart: removeTextArea,
         }),
-        ...(isCustom && { fillPatternImage: img }),
         onDragStart: handleDragStart,
         onDragEnd: handleDragEnd,
         onClick: handleClick,

@@ -10,7 +10,8 @@ const useSelection = (transformer: ReturnType<typeof useTransformer>) => {
 
   useEffect(() => {
     onSetSelectedItems(!isEmpty(selectedItems));
-  }, [selectedItems, onSetSelectedItems]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedItems]);
 
   const onSelection = (e?: KonvaEventObject<MouseEvent>, itemList?: Node<NodeConfig>[]) => {
     if (transformer === undefined || transformer === null) {
