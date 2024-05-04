@@ -23,12 +23,15 @@ type Props = {
 };
 
 const BoardMenuItem = ({ selectedItems, clearSelection, stage }: Props) => {
-  const { removeShapes, updateShapes } = useShape();
+  const { removeShapes, updateShapes, shapes } = useShape();
   const { stageRef } = stage;
 
   const isShowLockButton = selectedItems.length === 1;
   const isLocked = selectedItems[0]?.attrs.locked;
   const hasGroup = selectedItems.some((item) => !isEmpty(item.attrs?.group));
+
+  const maxShapesZIndex = Math.max(...shapes.map((item) => item.attrs.layerIdx));
+  const minShapesZIndex = Math.min(...shapes.map((item) => item.attrs.layerIdx));
 
   const handleRemoveShapes = () => {
     removeShapes(selectedItems.map((item) => item.id()));
@@ -51,14 +54,12 @@ const BoardMenuItem = ({ selectedItems, clearSelection, stage }: Props) => {
   };
 
   const handleBringToTop = () => {
-    const maxLayerIdx = Math.max(...selectedItems.map((item) => item.attrs.layerIdx));
-    updateLayerIndex(maxLayerIdx + 1);
+    updateLayerIndex(maxShapesZIndex + 1);
     moveShapes('top');
   };
 
   const handleBringToBottom = () => {
-    const minLayerIdx = Math.min(...selectedItems.map((item) => item.attrs.layerIdx));
-    updateLayerIndex(minLayerIdx);
+    updateLayerIndex(minShapesZIndex);
     moveShapes('bottom');
   };
 
