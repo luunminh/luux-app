@@ -6,6 +6,11 @@ import { ShapeTypeEnum } from './constant';
 export type BaseShape = {
   [ShapeTypeEnum.CUSTOM]: Konva.ShapeConfig & {
     src?: string;
+
+    /**
+     * color to fill into svg
+     */
+    colors: string[];
   };
   [ShapeTypeEnum.IMAGE_FRAME]: Konva.ShapeConfig & {
     src?: string;

@@ -4,7 +4,6 @@ import {
   Arc,
   Arrow,
   Circle,
-  Shape as CustomShape,
   Ellipse,
   Image,
   Label,
@@ -17,6 +16,7 @@ import {
   Tag,
   Text,
 } from 'react-konva';
+import { CustomShape } from './CustomShape';
 import { ImageFramer } from './ImageFramer';
 import ShapeWrapper from './ShapeWrapper';
 

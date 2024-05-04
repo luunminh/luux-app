@@ -130,6 +130,20 @@ const initialData: IDesignContent[] = [
           fillPatternRepeat: 'no-repeat',
         },
       },
+      {
+        id: 'Custom SVG',
+        attrs: {
+          width: 100,
+          height: 100,
+          x: 400,
+          y: 100,
+          shapeType: ShapeTypeEnum.CUSTOM,
+          name: 'Custom',
+          layerIdx: 1,
+          src: 'https://res.cloudinary.com/dqjshrusa/image/upload/v1710061222/luux/logo_qndzbx.svg',
+          colors: ['#000', '#ddd', '#ddd', '#ddd', '#ddd'],
+        },
+      },
     ],
   },
 ];

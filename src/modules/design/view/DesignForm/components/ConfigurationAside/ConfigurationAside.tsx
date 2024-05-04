@@ -58,6 +58,13 @@ const ConfigurationAside = forwardRef(
               <Configuration.Shape id={id} />
             </Stack>
           );
+        case ShapeTypeEnum.CUSTOM:
+          return (
+            <Stack gap={16}>
+              <Configuration.CustomShape id={id} />
+              <Configuration.Shape id={id} />
+            </Stack>
+          );
       }
     }, [isMultipleSelection, selectedItems, transformer]);
 
