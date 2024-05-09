@@ -1,4 +1,4 @@
-import { Select, SelectOption } from '@core/components';
+import { Select, SelectOption } from '@components';
 import { useShape } from '@design/hooks';
 import { IShape } from '@design/types';
 import { InputWrapper, Stack } from '@mantine/core';

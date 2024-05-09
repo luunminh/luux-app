@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
+import { Select, SelectOption, SelectOptionsProps } from '@components';
 import { COLOR_CODE, isEmpty, useFonts } from '@core/common';
-import { Select, SelectOption, SelectOptionsProps } from '@core/components';
 import { IFont, useGetFont, useGetFonts } from '@core/queries';
 import { IShape } from '@design/types';
 import { Box, Button, Flex, InputWrapper, Skeleton, Text } from '@mantine/core';
