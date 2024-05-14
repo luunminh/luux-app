@@ -9,16 +9,16 @@ import {
   Label,
   Line,
   Rect,
-  RegularPolygon,
   Ring,
   Sprite,
-  Star,
   Tag,
   Text,
 } from 'react-konva';
 import { CustomShape } from './CustomShape';
 import { ImageFramer } from './ImageFramer';
+import { Polygon } from './Polygon';
 import ShapeWrapper from './ShapeWrapper';
+import { Star } from './Star';
 
 const Shape = {
   Wrapper: ShapeWrapper,
@@ -29,7 +29,7 @@ const Shape = {
   Image: Image,
   Label: Label,
   Line: Line,
-  RegularPolygon: RegularPolygon,
+  RegularPolygon: Polygon,
   Ring: Ring,
   Sprite: Sprite,
   Star: Star,
@@ -47,7 +47,7 @@ export const ShapeMap: { [K in ShapeTypeEnum]: FC<any> } = {
   [ShapeTypeEnum.IMAGE]: Image,
   [ShapeTypeEnum.LABEL]: Label,
   [ShapeTypeEnum.LINE]: Line,
-  [ShapeTypeEnum.REGULAR_POLYGON]: RegularPolygon,
+  [ShapeTypeEnum.REGULAR_POLYGON]: Polygon,
   [ShapeTypeEnum.RING]: Ring,
   [ShapeTypeEnum.SPRITE]: Sprite,
   [ShapeTypeEnum.STAR]: Star,

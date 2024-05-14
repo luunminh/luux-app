@@ -38,8 +38,8 @@ const ConfigurationImageFrame = ({ id }: Props) => {
           max={1}
           step={0.01}
           color="blue"
-          label={selectedShape.attrs?.fillPatternScaleX || BASE_PATTERN_SCALE.x}
-          value={selectedShape.attrs?.fillPatternScaleX || BASE_PATTERN_SCALE.x}
+          label={selectedShape.attrs?.fillPatternScale?.x || BASE_PATTERN_SCALE.x}
+          value={selectedShape.attrs?.fillPatternScale?.x || BASE_PATTERN_SCALE.x}
           onChange={(value) => {
             handleChangeShape(['fillPatternScale'], [{ x: value, y: value }]);
           }}

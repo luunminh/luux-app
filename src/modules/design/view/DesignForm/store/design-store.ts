@@ -125,7 +125,7 @@ const initialData: IDesignContent[] = [
           stroke: 'black',
           strokeWidth: 4,
           draggable: true,
-          baseNode: ShapeTypeEnum.RING,
+          baseNode: ShapeTypeEnum.RECTANGLE,
           layerIdx: 0,
           fillPatternRepeat: 'no-repeat',
         },
