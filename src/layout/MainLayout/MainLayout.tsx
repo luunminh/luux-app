@@ -1,7 +1,7 @@
 import { CustomErrorBoundary, Navbar } from '@components';
+import { AuthContainer } from '@components/startup';
 import appConfigs from '@config';
 import { LoadingGlobalContainer } from '@containers';
-import { AuthContainer } from '@core/startup';
 import { AppShell } from '@mantine/core';
 import { PropsWithChildren } from 'react';
 import useLayoutProps from './useLayoutProps';
@@ -23,11 +23,8 @@ const MainLayout = ({ children }: MainLayoutProps) => {
         <AppShell.Header>
           <Navbar />
         </AppShell.Header>
-        <AppShell.Navbar />
-
         <AppShell.Main>
           {children}
-
           <AuthContainer />
           <LoadingGlobalContainer />
         </AppShell.Main>

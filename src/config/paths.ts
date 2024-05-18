@@ -1,20 +1,18 @@
-import { uamPaths } from '@modules/uam/route';
+import { Tenant } from '@core/common';
+
+const PREFIX_ROUTE = Tenant.APP;
 
 export const PATHS = {
-  root: '',
-  templates: '/templates',
-  settings: '/settings',
-  design: '/design',
-
-  dev: '/dev',
+  root: `${PREFIX_ROUTE}`,
+  templates: `${PREFIX_ROUTE}/templates`,
+  settings: `${PREFIX_ROUTE}/settings`,
+  dev: `${PREFIX_ROUTE}/dev`,
 };
 
 // project paths
 
-// design paths
+export const HIDE_NAV_PATHS: string[] = [];
 
-export const HIDE_NAV_PATHS: string[] = [...Object.values(uamPaths)];
+export const HIDE_SIDEBAR_PATHS: string[] = [];
 
-export const HIDE_SIDEBAR_PATHS: string[] = [...Object.values(uamPaths)];
-
-export const NOT_REQUIRED_AUTH_PATHS: string[] = [...Object.values(uamPaths)];
+export const NOT_REQUIRED_AUTH_PATHS: string[] = [];
