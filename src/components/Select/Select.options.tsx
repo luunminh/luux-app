@@ -60,7 +60,14 @@ const SelectOptions = ({
 };
 
 export default memo(SelectOptions, (prevProps: any, nextProps: any) => {
-  const keys = ['data', 'hasNextPage', 'onFetchNextPage', 'allowLazyLoading', 'customOption'];
+  const keys = [
+    'data',
+    'hasNextPage',
+    'onFetchNextPage',
+    'allowLazyLoading',
+    'customOption',
+    'options',
+  ];
   return !keys.some((key) => {
     if (typeof prevProps[key] === 'object') {
       return !_.isEqual(prevProps[key], nextProps[key]);

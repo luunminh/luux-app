@@ -1,8 +1,10 @@
+import { Navigator } from '@core/common';
 import { ActionIcon, Avatar, Button, Flex, Menu, Stack, Text, Title, Tooltip } from '@mantine/core';
 
 import { IoIosAdd as AddIcon } from 'react-icons/io';
 import { IoLogOutOutline as LogoutIcon, IoSettingsOutline as SettingIcon } from 'react-icons/io5';
 import { RiLockPasswordLine as LockIcon } from 'react-icons/ri';
+import { useNavigate } from 'react-router-dom';
 
 const NavbarActions = () => {
   return (
@@ -32,7 +34,13 @@ NavbarActions.Settings = () => {
 };
 
 NavbarActions.CreateDesign = () => {
-  const handleCreateNewDesign = () => {};
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const navigate = useNavigate();
+  const portal = Navigator.getCurrentPortalUrl();
+
+  const handleCreateNewDesign = () => {
+    navigate(`${portal}/design/add`);
+  };
 
   return (
     <Button onClick={handleCreateNewDesign} leftSection={<AddIcon size={22} />} variant="gradient">

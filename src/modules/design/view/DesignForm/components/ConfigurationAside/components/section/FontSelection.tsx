@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { Select, SelectOption, SelectOptionsProps } from '@components';
-import { COLOR_CODE, isEmpty, useFonts } from '@core/common';
-import { IFont, useGetFont, useGetFonts } from '@core/queries';
+import { COLOR_CODE, isEmpty, useComponentDidMount, useFonts } from '@core/common';
+import { useGetFontLazy, useGetFonts } from '@core/queries';
 import { IShape } from '@design/types';
 import { Box, Button, Flex, InputWrapper, Skeleton, Text } from '@mantine/core';
 import { useEffect, useState } from 'react';
@@ -15,11 +15,19 @@ const DEFAULT_FONT = 'Roboto';
 
 const FontSelection = ({ onChange, selectedShape }: Props) => {
   const [value, setValue] = useState<string>(selectedShape.attrs?.fontFamily || DEFAULT_FONT);
-  const { fonts = [], isLoadingFonts } = useGetFonts();
+  // TODO: implement lazy search
+  const { fontOptions, isFetching: isFetchingFonts, fetchNextPage, hasNext } = useGetFontLazy();
+
+  const { fonts = [], isFetching: isLoadingSelectedFont, setParams } = useGetFonts();
+
+  const font = fonts[0];
+  const formattedFont = { label: font?.name, value: font?.name, font: font };
+
+  useEffect(() => {
+    setParams({ names: [value] });
+  }, [value, setParams]);
 
   const currentFontType = selectedShape.attrs?.fontStyle || '500';
-
-  const { font, isLoadingFont } = useGetFont({ fontName: value });
 
   const handleChangeFont = (_: any, font: SelectOption) => {
     setValue(font.value);
@@ -27,8 +35,10 @@ const FontSelection = ({ onChange, selectedShape }: Props) => {
   };
 
   const isEmptyFontFiles =
-    isEmpty(font?.files) ||
-    (Object.values(font?.files).length === 1 && Object.keys(font?.files)[0] === 'regular');
+    isEmpty(font?.fontUrl) ||
+    (Object.values(font?.fontUrl).length === 1 && Object.keys(font?.fontUrl)[0] === 'regular');
+
+  const isLoading = isFetchingFonts || isLoadingSelectedFont;
 
   return (
     <InputWrapper label="Font family">
@@ -45,22 +55,22 @@ const FontSelection = ({ onChange, selectedShape }: Props) => {
             border: COLOR_CODE.BORDER_DEFAULT,
           }}
         >
-          {Object.entries(font.files).map(([fontType]) => {
-            if (fontType === 'regular') return null;
+          {font.fontUrl.map(({ type, url }) => {
+            if (type === 'regular') return null;
             return (
               <Button
                 c="dark"
-                key={fontType}
+                key={type}
                 size="sm"
                 variant="subtle"
                 style={{
-                  border: fontType === currentFontType && `2px solid ${COLOR_CODE.ACTIVE}`,
+                  border: type === currentFontType && `2px solid ${COLOR_CODE.ACTIVE}`,
                 }}
                 onClick={() => {
-                  onChange('fontStyle', fontType);
+                  onChange('fontStyle', type);
                 }}
               >
-                {fontType}
+                {type}
               </Button>
             );
           })}
@@ -68,8 +78,12 @@ const FontSelection = ({ onChange, selectedShape }: Props) => {
       )}
       <Select
         value={value}
-        isLoading={isLoadingFonts || isLoadingFont}
-        options={mapFontOptions([...fonts, font])}
+        allowLazyLoading
+        isFetching={isFetchingFonts}
+        hasNextPage={hasNext}
+        onFetchNextPage={fetchNextPage}
+        isLoading={isFetchingFonts}
+        options={[formattedFont, ...fontOptions]}
         keepOptionOnChange
         onChange={handleChangeFont}
         customOptionComponent={FontSelection.Option}
@@ -78,18 +92,11 @@ const FontSelection = ({ onChange, selectedShape }: Props) => {
   );
 };
 
-const mapFontOptions = (fonts: IFont[]) =>
-  fonts.map((font) => ({
-    label: font?.family,
-    value: font?.family,
-    font: font,
-  }));
-
 FontSelection.Option = (props: SelectOptionsProps) => {
   const { createFontFaces, loadFontFace } = useFonts([], false);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+  useComponentDidMount(() => {
     if (props.data.font) {
       const fontFaces = createFontFaces(props.data.font);
 
@@ -100,12 +107,12 @@ FontSelection.Option = (props: SelectOptionsProps) => {
           setLoading(false);
         });
     }
-  }, [createFontFaces, loadFontFace, props.data]);
+  });
 
-  if (loading) return <Skeleton height={30} width="40%%" radius="md" />;
+  if (loading) return <Skeleton {...props} height={30} width="40%%" radius="md" />;
 
   return (
-    <Box>
+    <Box {...props}>
       <Text
         style={{
           fontSize: 18,

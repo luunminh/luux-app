@@ -46,7 +46,7 @@ const CustomShape = forwardRef<Konva.Image, Props>(({ colors, src, ...props }: P
 
   if (loading || !imgUrl) return null;
 
-  return <Image ref={ref} image={img} colors={colors} src={src} {...props} />;
+  return <Image ref={ref} colors={colors} src={src} {...props} image={img} />;
 });
 
 export default CustomShape;

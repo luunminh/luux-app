@@ -48,6 +48,8 @@ const AuthContainer: FC<Props> = () => {
 
       setSearchParams(searchParams);
       handleGetProfile();
+    } else {
+      handleGetProfile();
     }
   });
 
