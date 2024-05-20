@@ -1,11 +1,12 @@
 import { isEmpty } from '@core/common';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { AppShell, Stack } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { TransformComponent, TransformWrapper } from 'react-zoom-pan-pinch';
 import { IDesignForm, designFormInitialValues, designFormSchema } from './DesignForm.helpers';
-import { Board, ConfigurationAside, DesignFormHeader } from './components';
+import { Board, ConfigurationAside, DesignFormHeader, ElementSidebar } from './components';
 import { useTransformer, useWorkHistory } from './hooks';
 import { useDesignStore } from './store';
 import { IDesignContent } from './types';
@@ -18,6 +19,8 @@ const MIN_SCALE = 0.5;
 const MAX_SCALE = 5;
 
 const DesignForm = () => {
+  const [sidebarOpened, { toggle: toggledSidebar }] = useDisclosure(false);
+
   const [past, setPast] = useState<IDesignContent[][]>([]);
   const [future, setFuture] = useState<IDesignContent[][]>([]);
 
@@ -60,6 +63,11 @@ const DesignForm = () => {
         header={{
           height: HEADER_HEIGHT,
         }}
+        navbar={{
+          width: SIDEBAR_WIDTH,
+          breakpoint: 'sm',
+          collapsed: { desktop: !sidebarOpened },
+        }}
         aside={{
           breakpoint: 'md',
           width: ASIDE_WIDTH,
@@ -75,8 +83,15 @@ const DesignForm = () => {
             hasPast={hasPast}
             hasFuture={hasFuture}
             workHistory={workHistory}
+            sidebarState={{
+              opened: sidebarOpened,
+              toggle: toggledSidebar,
+            }}
           />
         </AppShell.Header>
+        <AppShell.Navbar>
+          <ElementSidebar />
+        </AppShell.Navbar>
         <AppShell.Main
           className="board-wrapper"
           style={{

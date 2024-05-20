@@ -1,7 +1,6 @@
 import { FormCore } from '@components';
-import { ActionIcon, Button, Divider, Flex, Tooltip } from '@mantine/core';
+import { ActionIcon, Burger, Button, Divider, Flex, Tooltip } from '@mantine/core';
 import { UseFormReturn } from 'react-hook-form';
-import { IoMenu as MenuIcon } from 'react-icons/io5';
 import { LuRedo2 as RedoIcon, LuUndo2 as UndoIcon } from 'react-icons/lu';
 import { IDesignForm, IDesignFormKey } from '../../DesignForm.helpers';
 import { AvatarGroup } from './components';
@@ -14,9 +13,13 @@ type Props = {
   workHistory: ReturnType<typeof useWorkHistory>;
   hasPast: boolean;
   hasFuture: boolean;
+  sidebarState: {
+    opened: boolean;
+    toggle: () => void;
+  };
 };
 
-const DesignFormHeader = ({ form, workHistory, hasPast, hasFuture }: Props) => {
+const DesignFormHeader = ({ form, workHistory, hasPast, hasFuture, sidebarState }: Props) => {
   const { goToPast, goToFuture } = workHistory;
   const { control } = form;
   return (
@@ -33,9 +36,13 @@ const DesignFormHeader = ({ form, workHistory, hasPast, hasFuture }: Props) => {
     >
       <Flex gap={16}>
         <Tooltip label="Menu">
-          <ActionIcon variant="subtle" size="xl">
-            <MenuIcon size={26} color="white" />
-          </ActionIcon>
+          <Burger
+            opened={sidebarState.opened}
+            onClick={sidebarState.toggle}
+            color="#FFF"
+            size="sm"
+            mt={8}
+          />
         </Tooltip>
         <Divider orientation="vertical" c="white" />
         <Tooltip label="Undo">
