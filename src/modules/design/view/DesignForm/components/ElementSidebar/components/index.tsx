@@ -1,38 +1,58 @@
-import { Callback } from '@core/common';
+import { getRandomId } from '@core/common';
 import { Card } from '@mantine/core';
+import { IConvertJsonState, IElement } from '@modules/design/queries';
 import { PropsWithChildren } from 'react';
+import { useShape } from '../../../hooks';
+import { IShape } from '../../../types';
 import { DrawSection } from './DrawSection';
 import { ElementSection } from './ElementSection';
-import { ShapeSection } from './ShapeSection';
 import { TemplateSection } from './TemplateSection';
-import { TextSection } from './TextSection';
 import { UploadSection } from './UploadSection';
 
 const Section = {
   Draw: DrawSection,
-  Text: TextSection,
   Upload: UploadSection,
   Element: ElementSection,
   Template: TemplateSection,
-  Shape: ShapeSection,
 };
 
 type ItemWrapperProps = PropsWithChildren & {
-  onClickItem: Callback;
+  element: IElement;
 };
 
-export const ItemWrapper = ({ children, onClickItem }: ItemWrapperProps) => {
+export const ItemWrapper = ({ children, element }: ItemWrapperProps) => {
+  const { addShapes } = useShape();
+
+  const handleAddElement = (elm: IElement) => {
+    const shapes: IShape[] = [];
+    const groupId = getRandomId();
+    const jsonStates: IConvertJsonState[] = JSON.parse(elm.jsonState);
+
+    jsonStates.forEach((shapeAttrs) => {
+      const id = getRandomId();
+      shapes.push({
+        id: id,
+        attrs: {
+          ...(shapeAttrs as any),
+          ...(jsonStates.length > 1 && { group: groupId }),
+          id,
+        },
+      });
+    });
+
+    addShapes(shapes);
+  };
+
   return (
-    <Card shadow="sm" padding="lg" radius="md" onClick={onClickItem}>
-      <Card.Section
-        display="flex"
-        style={{
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
-        {children}
-      </Card.Section>
+    <Card
+      mah={90}
+      shadow="sm"
+      padding="lg"
+      radius="md"
+      style={{ cursor: 'pointer' }}
+      onClick={() => handleAddElement(element)}
+    >
+      {children}
     </Card>
   );
 };

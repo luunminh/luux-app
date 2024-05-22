@@ -60,7 +60,7 @@ export function useGetElementsLazy(
   const elements = useMemo(() => {
     if (isEmpty(data?.pages)) return [];
     return data.pages.reduce((state, page, _pageIdx) => [...state, ...page.data], []);
-  }, [data]);
+  }, [data]) as IElement[];
 
   const handleInvalidateElements = () =>
     queryClient.invalidateQueries([DESIGN_QUERY_KEYS.ELEMENTS]);

@@ -18,18 +18,19 @@ const ElementSidebar = () => {
     switch (tab) {
       case ElementSidebarTabEnum.TEMPLATE:
         return <Section.Template />;
+
       case ElementSidebarTabEnum.ELEMENTS:
         categoryId = elementCategories.find(
           (c) => c.displayName === IBaseElementCategory.GRAPHIC,
         ).id;
-
         return <Section.Element categoryId={categoryId} />;
       case ElementSidebarTabEnum.SHAPES:
         categoryId = elementCategories.find((c) => c.displayName === IBaseElementCategory.SHAPE).id;
-
-        return <Section.Shape categoryId={categoryId} />;
+        return <Section.Element categoryId={categoryId} />;
       case ElementSidebarTabEnum.TEXT:
-        return <Section.Text />;
+        categoryId = elementCategories.find((c) => c.displayName === IBaseElementCategory.TEXT).id;
+        return <Section.Element categoryId={categoryId} />;
+
       case ElementSidebarTabEnum.UPLOAD:
         return <Section.Upload />;
       case ElementSidebarTabEnum.DRAW:

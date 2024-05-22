@@ -1,11 +1,7 @@
-import { LoadingContainer } from '@components';
-import { getRandomId, useComponentDidMount } from '@core/common';
-import { useShape } from '@design/hooks';
-import { IShape } from '@design/types';
-import { Button, Grid, Image, Stack, Text, TextInput } from '@mantine/core';
-import { IConvertJsonState, IElement, useGetElementsLazy } from '@modules/design/queries';
+import { Button, Grid, Image, Loader, Stack, Text, TextInput } from '@mantine/core';
+import { useGetElementsLazy } from '@modules/design/queries';
 import { isEmpty } from 'lodash';
-import { ChangeEvent } from 'react';
+import { ChangeEvent, useEffect } from 'react';
 import { ItemWrapper } from '..';
 
 type Props = {
@@ -13,72 +9,57 @@ type Props = {
 };
 
 const ElementSection = ({ categoryId }: Props) => {
-  const { addShapes } = useShape();
   const { elements, isFetching, setParams, inputSearch, setInputSearch, hasNext, fetchNextPage } =
     useGetElementsLazy();
 
-  useComponentDidMount(() => {
+  useEffect(() => {
     setParams((prev) => ({ ...prev, categoryIds: [categoryId] }));
-  });
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [categoryId]);
 
   const handleChangeSearch = (e: ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
     setInputSearch(val);
   };
 
-  const handleAddElement = (elm: IElement) => {
-    const shapes: IShape[] = [];
-    const groupId = getRandomId();
-    const jsonStates: IConvertJsonState[] = JSON.parse(elm.jsonState);
-
-    jsonStates.forEach((shapeAttrs) => {
-      const id = getRandomId();
-      shapes.push({
-        id: id,
-        attrs: {
-          ...(shapeAttrs as any),
-          ...(jsonStates.length > 1 && { group: groupId }),
-          id,
-        },
-      });
-    });
-
-    addShapes(shapes);
-  };
-
-  if (isFetching) {
-    return <LoadingContainer />;
-  }
-
   const renderContent = () => {
-    if (isEmpty(elements)) {
+    if (isFetching) {
       return (
-        <Text
-          style={{
-            p: 8,
-            fontWeight: 500,
-            textAlign: 'center',
-          }}
-        >
-          Sorry, we couldn’t find any results for “{inputSearch}”. Try searching something related.
-        </Text>
+        <Stack p={16} justify="center" align="center" w="100%">
+          <Loader />
+        </Stack>
+      );
+    }
+
+    if (isEmpty(elements)) {
+      const message = inputSearch
+        ? `Sorry, we couldn’t find any results for “${inputSearch}”. Try searching something related.`
+        : 'No elements found';
+      return (
+        <Stack p={16} justify="center" align="center" w="100%">
+          <Text
+            style={{
+              p: 8,
+              fontWeight: 500,
+              textAlign: 'center',
+            }}
+          >
+            {message}
+          </Text>
+        </Stack>
       );
     }
 
     return elements.map((element) => (
       <Grid.Col key={element.id} span={4}>
-        <ItemWrapper
-          onClickItem={() => {
-            handleAddElement(element);
-          }}
-        >
+        <ItemWrapper element={element}>
           <Image
             radius="md"
             loading="lazy"
             src={element.thumbnailUrl}
             alt={element.name}
-            width="90%"
-            mah={70}
+            height={80}
           />
         </ItemWrapper>
       </Grid.Col>
@@ -89,7 +70,11 @@ const ElementSection = ({ categoryId }: Props) => {
     <Stack gap={16} p={16} w="100%">
       <Grid style={{ width: '100%' }}>
         <Grid.Col span={12}>
-          <TextInput value={inputSearch} onChange={handleChangeSearch} />
+          <TextInput
+            placeholder="Search by placeholder name"
+            value={inputSearch}
+            onChange={handleChangeSearch}
+          />
         </Grid.Col>
         {renderContent()}
         {hasNext && (
