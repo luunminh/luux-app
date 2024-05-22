@@ -21,35 +21,42 @@ export const sidebarTabOptions = [
     value: ElementSidebarTabEnum.TEMPLATE,
     label: getTitleCase(ElementSidebarTabEnum.TEMPLATE),
     icon: <RiLayout2Fill size={22} />,
+    disabled: true,
   },
   {
     value: ElementSidebarTabEnum.ELEMENTS,
     label: getTitleCase(ElementSidebarTabEnum.ELEMENTS),
     icon: <MdOutlineDashboardCustomize size={22} />,
+    disabled: false,
   },
   {
     value: ElementSidebarTabEnum.SHAPES,
     label: getTitleCase(ElementSidebarTabEnum.SHAPES),
     icon: <FaShapes size={22} />,
+    disabled: false,
   },
   {
     value: ElementSidebarTabEnum.TEXT,
     label: getTitleCase(ElementSidebarTabEnum.TEXT),
     icon: <TbTextSize size={22} />,
+    disabled: false,
   },
   {
     value: ElementSidebarTabEnum.UPLOAD,
     label: getTitleCase(ElementSidebarTabEnum.UPLOAD),
     icon: <IoCloudUploadSharp size={22} />,
+    disabled: false,
   },
   {
     value: ElementSidebarTabEnum.DRAW,
     label: getTitleCase(ElementSidebarTabEnum.DRAW),
     icon: <MdDraw size={22} />,
+    disabled: true,
   },
   {
     value: ElementSidebarTabEnum.FRAME,
     label: getTitleCase(ElementSidebarTabEnum.FRAME),
     icon: <LuFrame size={22} />,
+    disabled: false,
   },
 ];

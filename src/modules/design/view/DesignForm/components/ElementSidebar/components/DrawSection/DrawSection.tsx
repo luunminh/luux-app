@@ -1,5 +1,7 @@
+import { UnderConstruction } from '@core/components';
+
 const DrawSection = () => {
-  return <div>DrawSection</div>;
+  return <UnderConstruction />;
 };
 
 export default DrawSection;

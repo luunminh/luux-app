@@ -6,7 +6,7 @@ import { ElementSidebarTabEnum, sidebarTabOptions } from './ElementSidebar.helpe
 import Section from './components';
 
 const ElementSidebar = () => {
-  const [tab, setTab] = useState<ElementSidebarTabEnum>(ElementSidebarTabEnum.TEMPLATE);
+  const [tab, setTab] = useState<ElementSidebarTabEnum>(ElementSidebarTabEnum.ELEMENTS);
 
   const { elementCategories, isFetching } = useGetElementCategories();
 
@@ -26,6 +26,9 @@ const ElementSidebar = () => {
         return <Section.Element categoryId={categoryId} />;
       case ElementSidebarTabEnum.SHAPES:
         categoryId = elementCategories.find((c) => c.displayName === IBaseElementCategory.SHAPE).id;
+        return <Section.Element categoryId={categoryId} />;
+      case ElementSidebarTabEnum.FRAME:
+        categoryId = elementCategories.find((c) => c.displayName === IBaseElementCategory.FRAME).id;
         return <Section.Element categoryId={categoryId} />;
       case ElementSidebarTabEnum.TEXT:
         categoryId = elementCategories.find((c) => c.displayName === IBaseElementCategory.TEXT).id;
@@ -50,6 +53,7 @@ const ElementSidebar = () => {
             <Tabs.Tab
               key={option.value}
               value={option.value}
+              disabled={option.disabled}
               onClick={() => setTab(option.value)}
               style={{
                 padding: 8,
