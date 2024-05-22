@@ -189,6 +189,7 @@ const Board = forwardRef(
         <Transformer
           ref={transformer.transformerRef}
           rotateEnabled
+          resizeEnabled
           borderDash={[6, 0]}
           anchorCornerRadius={10}
           shouldOverdrawWholeArea

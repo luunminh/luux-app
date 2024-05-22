@@ -5,7 +5,6 @@ import {
   Arrow,
   Circle,
   Ellipse,
-  Image,
   Label,
   Line,
   Rect,
@@ -15,6 +14,7 @@ import {
   Text,
 } from 'react-konva';
 import { CustomShape } from './CustomShape';
+import { Image } from './Image';
 import { ImageFramer } from './ImageFramer';
 import { Polygon } from './Polygon';
 import ShapeWrapper from './ShapeWrapper';
