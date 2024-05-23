@@ -1,6 +1,7 @@
 import { useShape } from '@design/hooks';
 import { IShape } from '@design/types';
 import { Grid, InputWrapper, Slider, Stack } from '@mantine/core';
+import { UploadImage } from './components/UploadImage';
 
 type Props = {
   id: string;
@@ -32,12 +33,14 @@ const ConfigurationImageFrame = ({ id }: Props) => {
 
   return (
     <Stack gap={16}>
+      <UploadImage selectedShape={selectedShape} />
       <InputWrapper label="Image size">
         <Slider
           min={0}
           max={1}
           step={0.01}
           color="blue"
+          disabled={!selectedShape.attrs?.src}
           label={selectedShape.attrs?.fillPatternScale?.x || BASE_PATTERN_SCALE.x}
           value={selectedShape.attrs?.fillPatternScale?.x || BASE_PATTERN_SCALE.x}
           onChange={(value) => {
@@ -52,6 +55,7 @@ const ConfigurationImageFrame = ({ id }: Props) => {
               color="blue"
               min={-1000}
               max={1000}
+              disabled={!selectedShape.attrs?.src}
               label={selectedShape.attrs?.fillPatternOffsetX || 0}
               value={selectedShape.attrs?.fillPatternOffsetX || 0}
               onChange={(value) => {
@@ -64,6 +68,7 @@ const ConfigurationImageFrame = ({ id }: Props) => {
               color="blue"
               min={-1000}
               max={1000}
+              disabled={!selectedShape.attrs?.src}
               label={selectedShape.attrs?.fillPatternOffsetY || 0}
               value={selectedShape.attrs?.fillPatternOffsetY || 0}
               onChange={(value) => {

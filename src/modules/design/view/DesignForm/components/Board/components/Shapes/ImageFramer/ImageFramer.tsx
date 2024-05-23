@@ -24,6 +24,7 @@ const ImageFramer = forwardRef<Konva.Shape, Props>(
         {...imgProps}
         baseNode={baseNode}
         fillPatternScale={fillPatternScale}
+        src={src}
         {...props}
       />
     );
