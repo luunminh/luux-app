@@ -2,6 +2,7 @@ import { isEmpty } from '@core/common';
 import { KonvaEventObject, Node, NodeConfig } from 'konva/lib/Node';
 import { useEffect, useState } from 'react';
 import { useDesignStore } from '../store';
+import { IShape } from '../types';
 import useTransformer from './useTransformer';
 
 const useSelection = (transformer: ReturnType<typeof useTransformer>) => {
@@ -9,7 +10,11 @@ const useSelection = (transformer: ReturnType<typeof useTransformer>) => {
   const { onSetSelectedItems } = useDesignStore();
 
   useEffect(() => {
-    onSetSelectedItems(!isEmpty(selectedItems));
+    const formattedItems = selectedItems.map((item) => ({
+      id: item.id(),
+      attrs: item.attrs,
+    })) as IShape[];
+    onSetSelectedItems(formattedItems);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedItems]);
 

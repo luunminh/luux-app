@@ -4,7 +4,7 @@ import { IShape } from '@design/types';
 import { Flex, InputWrapper, Stack, Text } from '@mantine/core';
 import { Dropzone, FileWithPath, IMAGE_MIME_TYPE } from '@mantine/dropzone';
 import { useShape } from '@modules/design/view/DesignForm/hooks';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { HiOutlinePhotograph } from 'react-icons/hi';
 import { ImagePreview } from './components';
 
@@ -14,11 +14,16 @@ export const MAX_FILE_SIZE = 5 * 1024 * 1024;
 const UploadImage = ({ selectedShape }: Props) => {
   const { updateShape } = useShape();
 
-  const [imageUrl, setImageUrl] = useState<string>(selectedShape.attrs.src);
+  const [imageUrls, setImageUrls] = useState<string[]>([selectedShape.attrs.src]);
+
+  useEffect(() => {
+    const isExist = imageUrls.some((url) => url === selectedShape.attrs.src);
+    if (!isExist) setImageUrls((prev) => [...prev, selectedShape.attrs.src]);
+  }, [selectedShape.attrs.src, imageUrls]);
 
   const { onUploadAttachment, isLoading } = useUploadAttachment({
     onSuccess({ data }) {
-      setImageUrl(data.url);
+      setImageUrls((prev) => [...prev, data.url]);
     },
     onError(error) {
       ToastService.error(error.message);
@@ -42,15 +47,20 @@ const UploadImage = ({ selectedShape }: Props) => {
     } as IShape);
   };
 
-  const handleRemoveUrl = () => {
-    setImageUrl(null);
-    updateShape(selectedShape.id, {
-      ...selectedShape,
-      attrs: {
-        ...selectedShape.attrs,
-        src: null,
-      },
-    } as IShape);
+  const isSelectedUrl = (src: string) => selectedShape.attrs.src === src;
+
+  const handleRemoveUrl = (src: string) => {
+    setImageUrls((prev) => prev.filter((url) => url !== src));
+
+    if (isSelectedUrl(src)) {
+      updateShape(selectedShape.id, {
+        ...selectedShape,
+        attrs: {
+          ...selectedShape.attrs,
+          src: null,
+        },
+      } as IShape);
+    }
   };
 
   return (
@@ -72,14 +82,17 @@ const UploadImage = ({ selectedShape }: Props) => {
             </Text>
           </Flex>
         </Dropzone>
-        {!isEmpty(imageUrl) && (
+        {!isEmpty(imageUrls) && (
           <Flex wrap="wrap" gap={24} justify="center">
-            <ImagePreview
-              onUpdateShapeUrl={handleUpdateShapeUrl}
-              onRemoveUrl={handleRemoveUrl}
-              key={imageUrl}
-              url={imageUrl}
-            />
+            {imageUrls.map((url) => (
+              <ImagePreview
+                isSelected={isSelectedUrl(url)}
+                onUpdateShapeUrl={() => handleUpdateShapeUrl(url)}
+                onRemoveUrl={() => handleRemoveUrl(url)}
+                key={url}
+                url={url}
+              />
+            ))}
           </Flex>
         )}
       </Stack>

@@ -30,7 +30,7 @@ const DesignForm = () => {
   const transformer = useTransformer();
   const workHistory = useWorkHistory({ past, future, setPast, setFuture });
 
-  const { isSelectedItems } = useDesignStore();
+  const { selectedItems } = useDesignStore();
 
   const form = useForm<IDesignForm>({
     defaultValues: designFormInitialValues,
@@ -73,7 +73,7 @@ const DesignForm = () => {
           width: ASIDE_WIDTH,
           collapsed: {
             mobile: true,
-            desktop: !isSelectedItems,
+            desktop: isEmpty(selectedItems),
           },
         }}
       >
@@ -89,7 +89,7 @@ const DesignForm = () => {
             }}
           />
         </AppShell.Header>
-        <AppShell.Navbar>
+        <AppShell.Navbar withBorder>
           <ElementSidebar />
         </AppShell.Navbar>
         <AppShell.Main

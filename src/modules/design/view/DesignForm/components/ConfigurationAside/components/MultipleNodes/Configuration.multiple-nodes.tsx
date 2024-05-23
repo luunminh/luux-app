@@ -88,7 +88,7 @@ const ConfigurationMultipleNodes = ({ transformer }: Props) => {
     );
 
     transformer.transformerRef.current.nodes([]);
-    onSetSelectedItems(false);
+    onSetSelectedItems([]);
   };
 
   return (

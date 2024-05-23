@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { IDesignContent, ShapeTypeEnum } from '../types';
+import { IDesignContent, IShape, ShapeTypeEnum } from '../types';
 
 type DesignStore = {
   selectedPage: number;
@@ -14,8 +14,8 @@ type DesignStore = {
   isDrawing: boolean;
   onSetIsDrawing: (isDrawing: boolean) => void;
 
-  isSelectedItems: boolean;
-  onSetSelectedItems: (isSelectedItems: boolean) => void;
+  selectedItems: IShape[];
+  onSetSelectedItems: (newItems: IShape[]) => void;
 };
 
 // TODO: get initData and canvasObject from liveblock and API
@@ -161,6 +161,6 @@ export const useDesignStore = create<DesignStore>((set) => ({
   isDrawing: false,
   onSetIsDrawing: (isDrawing: boolean) => set({ isDrawing }),
 
-  isSelectedItems: false,
-  onSetSelectedItems: (isSelectedItems: boolean) => set({ isSelectedItems }),
+  selectedItems: [],
+  onSetSelectedItems: (newItems: IShape[]) => set({ selectedItems: newItems }),
 }));

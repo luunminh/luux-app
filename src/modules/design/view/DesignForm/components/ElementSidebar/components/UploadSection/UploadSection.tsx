@@ -6,6 +6,7 @@ import {
   useUploadAttachment,
 } from '@core/queries';
 import { useShape } from '@design/hooks';
+import { useDesignStore } from '@design/store';
 import { IShape, ShapeTypeEnum } from '@design/types';
 import {
   ActionIcon,
@@ -14,19 +15,23 @@ import {
   Grid,
   Image,
   Loader,
+  Menu,
   Stack,
   Text,
   TextInput,
-  Tooltip,
 } from '@mantine/core';
 import { ChangeEvent, useState } from 'react';
-import { IoClose } from 'react-icons/io5';
+import { IoIosMore } from 'react-icons/io';
 
 const UploadSection = () => {
   // TODO: search by api
   const [search, setSearch] = useState('');
 
-  const { addShape } = useShape();
+  const { addShape, updateShape } = useShape();
+  const { selectedItems } = useDesignStore();
+  const isSelectedFrame =
+    selectedItems.some((item) => item.attrs.shapeType === ShapeTypeEnum.IMAGE_FRAME) &&
+    selectedItems.length === 1;
 
   const {
     attachments,
@@ -80,6 +85,22 @@ const UploadSection = () => {
     addShape(newShape);
   };
 
+  const handleAddImageToFrame = (url: string) => {
+    const currentFrame = selectedItems.find(
+      (item) => item.attrs.shapeType === ShapeTypeEnum.IMAGE_FRAME,
+    );
+
+    if (currentFrame) {
+      updateShape(currentFrame.id, {
+        id: currentFrame.id,
+        attrs: {
+          ...currentFrame.attrs,
+          src: url,
+        },
+      } as IShape);
+    }
+  };
+
   const renderContent = () => {
     if (isFetching) {
       return (
@@ -109,25 +130,32 @@ const UploadSection = () => {
     }
 
     return filterAttachments.map((img) => (
-      <Grid.Col
-        span={4}
-        key={img.asset_id}
-        style={{ position: 'relative', cursor: 'pointer' }}
-        onClick={() => {
-          handleAddImage(img);
-        }}
-      >
+      <Grid.Col span={4} key={img.asset_id} style={{ position: 'relative', cursor: 'pointer' }}>
         <Image radius="md" loading="lazy" src={img.secure_url} alt={img.public_id} h={90} />
-        <Tooltip label="Delete" withArrow>
-          <ActionIcon
-            variant="outline"
-            c="gray"
-            size="xs"
-            style={{ position: 'absolute', top: '10px', right: '10px' }}
-          >
-            <IoClose />
-          </ActionIcon>
-        </Tooltip>
+
+        <Menu width={200} position="bottom" shadow="md">
+          <Menu.Target>
+            <ActionIcon
+              variant="outline"
+              color="gray"
+              size="xs"
+              style={{ position: 'absolute', top: '12px', right: '12px' }}
+            >
+              <IoIosMore />
+            </ActionIcon>
+          </Menu.Target>
+          <Menu.Dropdown>
+            <Menu.Item onClick={() => handleAddImage(img)}>Add</Menu.Item>
+            <Menu.Item
+              disabled={!isSelectedFrame}
+              onClick={() => handleAddImageToFrame(img.secure_url)}
+            >
+              Add to frame
+            </Menu.Item>
+            {/* TODO: implement delete*/}
+            <Menu.Item disabled>Delete</Menu.Item>
+          </Menu.Dropdown>
+        </Menu>
       </Grid.Col>
     ));
   };

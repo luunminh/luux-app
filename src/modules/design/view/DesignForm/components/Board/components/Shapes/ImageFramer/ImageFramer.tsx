@@ -21,11 +21,11 @@ const ImageFramer = forwardRef<Konva.Shape, Props>(
     return (
       <ShapeCmp
         ref={ref}
-        {...imgProps}
+        {...props}
         baseNode={baseNode}
         fillPatternScale={fillPatternScale}
         src={src}
-        {...props}
+        {...imgProps}
       />
     );
   },

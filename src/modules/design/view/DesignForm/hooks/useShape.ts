@@ -29,6 +29,10 @@ const useShape = () => {
     return shapes.find((shape) => shape.id === id);
   };
 
+  const getShapesByIds = (ids: string[]) => {
+    return shapes.filter((shape) => ids.includes(shape.id));
+  };
+
   const addShape = (newShape: IShape) => {
     onSetShapes([...shapes, newShape]);
   };
@@ -40,7 +44,7 @@ const useShape = () => {
   const updateShape = (shapeId: string, newShape: IShape) => {
     const updatedShapes = shapes.map((shape) => {
       if (shape.id === shapeId) {
-        return { ...shape, ...newShape };
+        return newShape;
       }
       return shape;
     });
@@ -86,6 +90,7 @@ const useShape = () => {
     removeAllShapes,
     updateShapes,
     alterShapes,
+    getShapesByIds,
   };
 };
 
