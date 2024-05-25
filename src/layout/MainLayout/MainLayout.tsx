@@ -9,12 +9,11 @@ import useLayoutProps from './useLayoutProps';
 type MainLayoutProps = PropsWithChildren;
 
 const MainLayout = ({ children }: MainLayoutProps) => {
-  const { isHideNav, isHideSidebar } = useLayoutProps();
+  const { isHideNav } = useLayoutProps();
 
   return (
     <CustomErrorBoundary showErrorMessage>
       <AppShell
-        // padding="sm"
         header={{
           collapsed: isHideNav,
           height: appConfigs.NAVBAR_HEIGHT,

@@ -1,15 +1,13 @@
 import { LoadingContainer } from '@components';
-import { PATHS } from '@config/paths';
+import { PREFIX_ROUTE } from '@config/paths';
 import { designRoutes } from '@modules/design/route';
+import { homePaths, homeRoutes } from '@modules/home/route';
 import { FC, Suspense, lazy } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
-import Root from './Root';
 
 const NotFound = lazy(() => import('@components/NotFound'));
 
-const testRoutes = [<Route key={PATHS.root} path={PATHS.root} element={<Root />} />];
-
-const routes = [...testRoutes, ...designRoutes];
+const routes = [...homeRoutes, ...designRoutes];
 
 type RootContainerProps = {};
 
@@ -19,8 +17,9 @@ const RootContainer: FC<RootContainerProps> = () => {
       <Routes>
         {...routes}
 
-        <Route path={`/*`} element={<NotFound />} />
-        <Route path={'*'} element={<Navigate to={PATHS.root} />} />
+        <Route path={`${PREFIX_ROUTE}`} element={<Navigate to={homePaths.home} />} />
+        <Route path={`${PREFIX_ROUTE}/*`} element={<NotFound />} />
+        <Route path={`*`} element={<Navigate to={homePaths.home} />} />
       </Routes>
     </Suspense>
   );

@@ -1,4 +1,4 @@
-import { FormCore } from '@components';
+import { FormCore } from '@core/components';
 import { ActionIcon, Burger, Button, Divider, Flex, Tooltip } from '@mantine/core';
 import { UseFormReturn } from 'react-hook-form';
 import { LuRedo2 as RedoIcon, LuUndo2 as UndoIcon } from 'react-icons/lu';

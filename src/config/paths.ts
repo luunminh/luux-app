@@ -1,12 +1,12 @@
 import { Tenant } from '@core/common';
 
-const PREFIX_ROUTE = Tenant.APP;
+export const PREFIX_ROUTE = Tenant.APP;
 
 export const PATHS = {
-  root: `${PREFIX_ROUTE}`,
-  templates: `${PREFIX_ROUTE}/templates`,
-  settings: `${PREFIX_ROUTE}/settings`,
-  dev: `${PREFIX_ROUTE}/dev`,
+  root: `/${PREFIX_ROUTE}`,
+  templates: `/${PREFIX_ROUTE}/templates`,
+  settings: `/${PREFIX_ROUTE}/settings`,
+  dev: `/${PREFIX_ROUTE}/dev`,
 };
 
 // project paths

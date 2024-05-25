@@ -1,7 +1,8 @@
 import { COLOR_CODE, isEmpty } from '@core/common';
+import { IScreenSize } from '@core/queries';
 import { useMantineTheme } from '@mantine/core';
 import { KonvaEventObject } from 'konva/lib/Node';
-import { ForwardedRef, forwardRef, useEffect, useState } from 'react';
+import { ForwardedRef, forwardRef, useEffect, useMemo, useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { Group, Transformer } from 'react-konva';
 import { Html } from 'react-konva-utils';
@@ -23,12 +24,58 @@ import Shape from './components/Shapes';
 
 type Props = {
   pageNumber: number;
+  screenSize: IScreenSize;
   transformer: ReturnType<typeof useTransformer>;
   workHistory: ReturnType<typeof useWorkHistory>;
 };
 
 const Board = forwardRef(
-  ({ pageNumber, transformer, workHistory }: Props, ref: ForwardedRef<HTMLDivElement>) => {
+  (
+    { pageNumber, transformer, workHistory, screenSize }: Props,
+    ref: ForwardedRef<HTMLDivElement>,
+  ) => {
+    const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
+
+    useEffect(() => {
+      const wrapperContainer = document.querySelector('.board-wrapper');
+
+      if (wrapperContainer) {
+        const resizeObserver = new ResizeObserver((entries) => {
+          for (let entry of entries) {
+            setContainerSize({
+              width: entry.contentRect.width,
+              height: entry.contentRect.height,
+            });
+          }
+        });
+
+        resizeObserver.observe(wrapperContainer);
+
+        return () => {
+          resizeObserver.disconnect();
+        };
+      }
+    }, []);
+
+    const size = useMemo(() => {
+      const RATIO = 0.7;
+      const { width = 0, height = 0 } = screenSize;
+      const sizeRatio = width / height;
+
+      let calculatedWidth = Math.min(containerSize.width * RATIO, width);
+      let calculatedHeight = calculatedWidth / sizeRatio;
+
+      if (calculatedHeight > height) {
+        calculatedHeight = Math.min(containerSize.height * RATIO, height);
+        calculatedWidth = calculatedHeight * sizeRatio;
+      }
+
+      return {
+        width: calculatedWidth,
+        height: calculatedHeight,
+      };
+    }, [screenSize, containerSize]);
+
     const { isDragging, data } = useDesignStore();
     const { shapes } = useShape();
 
@@ -174,7 +221,7 @@ const Board = forwardRef(
     };
 
     return (
-      <Stage stage={stage} onSelect={onSelection}>
+      <Stage stage={stage} onSelect={onSelection} size={size}>
         {mapShapeByGroupAndZIndex(shapes).map(({ group, shapes, maxZIndex }) => {
           if (group === 'undefined') {
             return renderShapes(shapes);

@@ -3,20 +3,23 @@ import { COLOR_CODE } from '@core/common';
 import { useStage } from '@design/hooks';
 import { ITEMS_CONTEXT } from '@design/types';
 import { decimalUpToSeven } from '@design/utils';
-import { Box, Stack } from '@mantine/core';
+import { ActionIcon, Box, Flex, Stack, Tooltip } from '@mantine/core';
 import { KonvaEventObject, Node, NodeConfig } from 'konva/lib/Node';
 import { ForwardedRef, PropsWithChildren, forwardRef, useCallback } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
+import { CgAddR } from 'react-icons/cg';
+import { IoDuplicateOutline } from 'react-icons/io5';
 import { Stage as KonvaStage, Layer, Rect } from 'react-konva';
 import { getItemsInBoundary, getOriginFromTwoPoint, getScaledMousePosition } from './Stage.helpers';
 
 type Props = PropsWithChildren & {
+  size: { width: number; height: number };
   onSelect: ITEMS_CONTEXT['onSelect'];
   stage: ReturnType<typeof useStage>;
 };
 
 const Stage = forwardRef(
-  ({ children, stage, onSelect }: Props, ref: ForwardedRef<HTMLDivElement>) => {
+  ({ children, stage, onSelect, size }: Props, ref: ForwardedRef<HTMLDivElement>) => {
     const { stageRef, dragBackgroundOrigin } = stage;
 
     const moveStage = useCallback(() => {
@@ -159,15 +162,31 @@ const Stage = forwardRef(
           pos="relative"
           style={{
             width: 'fit-content',
+            borderRadius: '16px',
             background: COLOR_CODE.WHITE,
             border: COLOR_CODE.BORDER_DEFAULT,
           }}
         >
+          <Flex gap={8} justify="end" pos="absolute" right={0} top="-40px">
+            <Tooltip label="Duplicate page" withArrow position="top">
+              <ActionIcon variant="transparent" size="lg" c="gray">
+                <IoDuplicateOutline size={20} />
+              </ActionIcon>
+            </Tooltip>
+            <Tooltip label="Add page" withArrow position="top">
+              <ActionIcon variant="transparent" size="lg" c="gray">
+                <CgAddR size={20} />
+              </ActionIcon>
+            </Tooltip>
+          </Flex>
           <KonvaStage
+            style={{
+              borderRadius: '16px',
+            }}
             draggable={false}
             ref={stageRef}
-            width={window.innerWidth * 0.7}
-            height={window.innerHeight * 0.7}
+            width={size.width}
+            height={size.height}
             onMouseUp={onMouseUpOnStage}
             onMouseDown={onMouseDownOnStage}
             onMouseMove={onMouseMoveOnStage}

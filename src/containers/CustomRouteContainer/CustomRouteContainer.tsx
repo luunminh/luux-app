@@ -21,7 +21,7 @@ const CustomRoute: FC<PropsWithChildren<CustomRouteProps>> = ({
 
   if (isAuthenticated === null) return <SplashScreen />;
 
-  if ((isAuthenticated && pageRequiredAuth) || (!isAuthenticated && !pageRequiredAuth)) {
+  if ((isAuthenticated && pageRequiredAuth) || !pageRequiredAuth) {
     return <>{children}</>;
   }
 
