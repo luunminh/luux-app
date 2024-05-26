@@ -138,6 +138,24 @@ const initialData: IDesignContent[] = [
       },
     ],
   },
+  {
+    pageNumber: 2,
+    shapes: [
+      {
+        id: '12313123123',
+        attrs: {
+          shapeType: ShapeTypeEnum.IMAGE,
+          name: 'Image 1',
+          image: undefined,
+          width: 300,
+          height: 300,
+          x: 400,
+          y: 200,
+          src: 'https://upload.wikimedia.org/wikipedia/vi/thumb/a/a1/Man_Utd_FC_.svg/800px-Man_Utd_FC_.svg.png',
+        },
+      },
+    ],
+  },
 ];
 
 export const useDesignStore = create<DesignStore>((set) => ({

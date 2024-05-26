@@ -10,6 +10,7 @@ import { useSearchParams } from 'react-router-dom';
 import { TransformComponent, TransformWrapper } from 'react-zoom-pan-pinch';
 import { IDesignForm, designFormInitialValues, designFormSchema } from './DesignForm.helpers';
 import { Board, ConfigurationAside, DesignFormHeader, ElementSidebar } from './components';
+import { PageSelection } from './components/PageSelection';
 import { useTransformer, useWorkHistory } from './hooks';
 import { useDesignStore } from './store';
 import { IDesignContent } from './types';
@@ -122,6 +123,8 @@ const DesignForm = () => {
           className="board-wrapper"
           style={{
             padding: 0,
+            marginLeft: sidebarOpened ? -SIDEBAR_WIDTH / 2 : 0,
+            transition: 'margin-left 0.3s',
           }}
         >
           <TransformComponent
@@ -141,6 +144,7 @@ const DesignForm = () => {
               </Stack>
             </Stack>
           </TransformComponent>
+          <PageSelection.Trigger />
         </AppShell.Main>
         <AppShell.Aside withBorder>
           <DesignForm.Aside transformer={transformer} />

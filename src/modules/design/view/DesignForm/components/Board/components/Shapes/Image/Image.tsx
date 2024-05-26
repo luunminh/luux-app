@@ -15,7 +15,7 @@ const Image = forwardRef<Konva.Image, Props>(({ sides, radius, image, ...props }
   const { getShapeById, updateShape } = useShape();
 
   const selectedShape = getShapeById(props.id);
-  const crop = selectedShape.attrs.crop || {
+  const crop = selectedShape?.attrs?.crop || {
     x: 50,
     y: 50,
     width: null,
@@ -63,7 +63,7 @@ const Image = forwardRef<Konva.Image, Props>(({ sides, radius, image, ...props }
     node.crop(crop);
 
     if (end) {
-      updateShape(props.id, { ...selectedShape, attrs: { ...selectedShape.attrs, crop } } as any);
+      updateShape(props.id, { ...selectedShape, attrs: { ...selectedShape?.attrs, crop } } as any);
     }
   };
 
@@ -71,7 +71,10 @@ const Image = forwardRef<Konva.Image, Props>(({ sides, radius, image, ...props }
     <KonvaImage
       ref={ref}
       image={image}
-      crop={getCrop(crop, { width: selectedShape.attrs.width, height: selectedShape.attrs.height })}
+      crop={getCrop(crop, {
+        width: selectedShape?.attrs.width,
+        height: selectedShape?.attrs.height,
+      })}
       onTransform={(e) => {
         handleTransformImage(false);
       }}

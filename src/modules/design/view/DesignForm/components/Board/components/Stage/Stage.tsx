@@ -1,9 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { COLOR_CODE } from '@core/common';
-import { useStage } from '@design/hooks';
+import { usePage, useShape, useStage } from '@design/hooks';
 import { ITEMS_CONTEXT } from '@design/types';
 import { decimalUpToSeven } from '@design/utils';
-import { ActionIcon, Box, Flex, Stack, Tooltip } from '@mantine/core';
+import { ActionIcon, Box, Flex, Stack, Text, Tooltip } from '@mantine/core';
 import { KonvaEventObject, Node, NodeConfig } from 'konva/lib/Node';
 import { ForwardedRef, PropsWithChildren, forwardRef, useCallback } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
@@ -167,18 +167,7 @@ const Stage = forwardRef(
             border: COLOR_CODE.BORDER_DEFAULT,
           }}
         >
-          <Flex gap={8} justify="end" pos="absolute" right={0} top="-40px">
-            <Tooltip label="Duplicate page" withArrow position="top">
-              <ActionIcon variant="transparent" size="lg" c="gray">
-                <IoDuplicateOutline size={20} />
-              </ActionIcon>
-            </Tooltip>
-            <Tooltip label="Add page" withArrow position="top">
-              <ActionIcon variant="transparent" size="lg" c="gray">
-                <CgAddR size={20} />
-              </ActionIcon>
-            </Tooltip>
-          </Flex>
+          <StageAction />
           <KonvaStage
             style={{
               borderRadius: '16px',
@@ -211,5 +200,31 @@ const Stage = forwardRef(
     );
   },
 );
+
+const StageAction = () => {
+  const { shapes } = useShape();
+  const { selectedPage, addNewPage } = usePage();
+
+  const handleDuplicatePage = () => {
+    addNewPage(shapes);
+  };
+  return (
+    <Flex w="100%" align="center" justify="space-between" pos="absolute" top="-40px">
+      <Text c={COLOR_CODE.GRAY_600}>Page {selectedPage}</Text>
+      <Flex gap={8} justify="flex-end">
+        <Tooltip label="Duplicate page" withArrow position="top">
+          <ActionIcon onClick={handleDuplicatePage} variant="transparent" size="lg" c="gray">
+            <IoDuplicateOutline size={20} />
+          </ActionIcon>
+        </Tooltip>
+        <Tooltip label="Add page" withArrow position="top">
+          <ActionIcon onClick={() => addNewPage()} variant="transparent" size="lg" c="gray">
+            <CgAddR size={20} />
+          </ActionIcon>
+        </Tooltip>
+      </Flex>
+    </Flex>
+  );
+};
 
 export default Stage;

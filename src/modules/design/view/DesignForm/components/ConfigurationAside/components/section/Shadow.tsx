@@ -22,16 +22,16 @@ const ShadowConfiguration = ({ selectedShape, onChange }: Props) => {
       >
         <ColorInput
           label="Color"
-          value={(selectedShape.attrs.shadowColor as string) || '#000'}
+          value={(selectedShape.attrs?.shadowColor as string) || '#000'}
           onChange={(value) => {
             onChange(['shadowColor'], [value]);
           }}
         />
         <InputWrapper label="Blur">
           <Slider
-            label={selectedShape.attrs.shadowBlur}
+            label={selectedShape.attrs?.shadowBlur || 0}
             color="blue"
-            value={selectedShape.attrs.shadowBlur}
+            value={selectedShape.attrs?.shadowBlur || 0}
             onChange={(value) => {
               onChange(['shadowBlur'], [Number(value)]);
             }}
@@ -39,9 +39,9 @@ const ShadowConfiguration = ({ selectedShape, onChange }: Props) => {
         </InputWrapper>
         <InputWrapper label="Opacity">
           <Slider
-            label={selectedShape.attrs.shadowOpacity * 100}
+            label={selectedShape.attrs?.shadowOpacity * 100 || 100}
             color="blue"
-            value={selectedShape.attrs.shadowOpacity * 100}
+            value={selectedShape.attrs?.shadowOpacity * 100 || 100}
             onChange={(value) => {
               onChange(['shadowOpacity'], [Number(value) / 100]);
             }}
@@ -53,7 +53,7 @@ const ShadowConfiguration = ({ selectedShape, onChange }: Props) => {
               <Slider
                 min={-100}
                 max={100}
-                label={selectedShape.attrs.shadowOffsetX}
+                label={selectedShape.attrs.shadowOffsetX || 0}
                 color="blue"
                 value={selectedShape.attrs.shadowOffsetX || 0}
                 onChange={(value) => {
@@ -67,7 +67,7 @@ const ShadowConfiguration = ({ selectedShape, onChange }: Props) => {
               <Slider
                 min={-100}
                 max={100}
-                label={selectedShape.attrs.shadowOffsetY}
+                label={selectedShape.attrs.shadowOffsetY || 0}
                 color="blue"
                 value={selectedShape.attrs.shadowOffsetY || 0}
                 onChange={(value) => {
