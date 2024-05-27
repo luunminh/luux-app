@@ -21,12 +21,13 @@ const PageItem = ({ pageIdx }: PageItemProps) => {
   return (
     <Tooltip label={`Page ${pageIdx}`} withArrow>
       <Paper
-        w={100}
+        w={120}
         h={64}
         shadow="xs"
         p="md"
         component="button"
         style={{
+          flex: '0 0 120px',
           position: 'relative',
           cursor: 'pointer',
           border: isSelected ? `2px solid ${COLOR_CODE.PRIMARY}` : COLOR_CODE.BORDER_DEFAULT,
@@ -46,17 +47,18 @@ const Selection = () => {
   const pages = data.length;
 
   return (
-    <Flex gap={16}>
+    <Flex gap={16} style={{ overflowX: 'scroll' }}>
       {Array.from({ length: pages }).map((_, idx) => (
         <PageItem key={idx} pageIdx={idx + 1} />
       ))}
       <Tooltip label="Add page" withArrow>
         <Paper
-          w={90}
           h={64}
+          w={120}
           shadow="xs"
           p="md"
           component="button"
+          className="cmp-page-item"
           style={{
             cursor: 'pointer',
             border: COLOR_CODE.BORDER_DEFAULT,

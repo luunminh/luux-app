@@ -35,6 +35,7 @@ const Board = forwardRef(
     ref: ForwardedRef<HTMLDivElement>,
   ) => {
     const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
+    const { pageQueue, onSetPageQueue, onSetPageImages, pageImages } = useDesignStore();
 
     useEffect(() => {
       const wrapperContainer = document.querySelector('.board-wrapper');
@@ -58,7 +59,7 @@ const Board = forwardRef(
     }, []);
 
     const size = useMemo(() => {
-      const RATIO = 0.7;
+      const RATIO = 0.8;
       const { width = 0, height = 0 } = screenSize;
       const sizeRatio = width / height;
 
@@ -93,6 +94,32 @@ const Board = forwardRef(
       useSelection(transformer);
 
     const menuPos = getMenuAbsolutePosition(transformer.transformerRef.current);
+
+    useEffect(() => {
+      if (pageQueue > 0 && stage.stageRef) {
+        stage.stageRef.current.toBlob().then((blob: any) => {
+          const file = new File([blob], `page_${pageNumber}.png`, { type: 'image/png' });
+
+          const isExist = pageImages.some((image) => image.pageNumber === pageNumber);
+
+          const newList = isExist
+            ? pageImages.map((image) => {
+                if (image.pageNumber === pageNumber) {
+                  return {
+                    ...image,
+                    image: file,
+                  };
+                }
+                return image;
+              })
+            : [...pageImages, { pageNumber, image: file }];
+
+          console.log('stage.stageRef.current.toBlob ~ newList:', newList);
+          onSetPageImages(newList);
+          onSetPageQueue(pageQueue - 1);
+        });
+      }
+    }, [pageQueue, pageImages, pageNumber, stage]);
 
     useEffect(() => {
       recordPast(data);

@@ -1,4 +1,5 @@
-import { Navigator } from '@core/common';
+import { Navigator, getFullName } from '@core/common';
+import { useProfile } from '@core/queries';
 import { ActionIcon, Avatar, Button, Flex, Menu, Stack, Text, Title, Tooltip } from '@mantine/core';
 
 import { IoIosAdd as AddIcon } from 'react-icons/io';
@@ -50,13 +51,16 @@ NavbarActions.CreateDesign = () => {
 };
 
 NavbarActions.Menu = () => {
-  // TODO: Implement menu w user profile, settings, etc.
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const { profile } = useProfile();
+
+  const fullName = getFullName(profile);
 
   return (
     <Menu width={350} position="bottom" shadow="md">
       <Menu.Target>
         <Avatar
-          alt="minh luu"
+          alt={fullName}
           radius="xl"
           style={{
             cursor: 'pointer',
@@ -69,12 +73,12 @@ NavbarActions.Menu = () => {
       <Menu.Dropdown>
         <Menu.Item>
           <Flex gap="md" align="center">
-            <Avatar alt="minh luu" radius="xl" size="lg">
+            <Avatar alt={fullName} radius="xl" size="lg">
               ML
             </Avatar>
             <Stack gap={0}>
-              <Title order={4}>Minh Luu</Title>
-              <Text size="xs">minh_luu@datahouse.com</Text>
+              <Title order={4}>{fullName}</Title>
+              <Text size="xs">{profile?.email}</Text>
             </Stack>
           </Flex>
         </Menu.Item>

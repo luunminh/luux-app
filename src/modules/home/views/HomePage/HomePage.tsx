@@ -1,6 +1,5 @@
 import { LayoutSection } from '@core/components';
 import { Stack, Title } from '@mantine/core';
-import { motion } from 'framer-motion';
 import { PropsWithChildren } from 'react';
 import { HomePageCarousel, ScreenSizesSlide } from './components';
 
@@ -33,32 +32,23 @@ const HomePage = () => {
       <SectionWrapper>
         <Stack gap={16} mb={16}>
           <Stack>
-            <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{
-                type: 'spring',
-                damping: 20,
+            <Title
+              style={{
+                fontFamily: 'monospace',
               }}
             >
-              <Title
+              What will you{' '}
+              <span
                 style={{
-                  fontFamily: 'monospace',
+                  color: 'transparent',
+                  WebkitBackgroundClip: 'text',
+                  backgroundImage: 'linear-gradient(90deg, #00c4cc, #7d2ae8)',
                 }}
               >
-                What will you{' '}
-                <span
-                  style={{
-                    color: 'transparent',
-                    WebkitBackgroundClip: 'text',
-                    backgroundImage: 'linear-gradient(90deg, #00c4cc, #7d2ae8)',
-                  }}
-                >
-                  design
-                </span>{' '}
-                today?
-              </Title>
-            </motion.div>
+                design
+              </span>{' '}
+              today?
+            </Title>
           </Stack>
           <Stack my={15}>
             <Title order={4} style={{ fontWeight: 400, fontFamily: 'monospace' }}>

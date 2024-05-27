@@ -1,12 +1,26 @@
 import { create } from 'zustand';
 import { IDesignContent, IShape, ShapeTypeEnum } from '../types';
 
+type PageImage = {
+  pageNumber: number;
+  image: File;
+};
+
 type DesignStore = {
+  pageImages: PageImage[];
+  onSetPageImages: (images: PageImage[]) => void;
+
   selectedPage: number;
   onSetSelectedPage: (page: number) => void;
 
   data: IDesignContent[];
   onSetData: (newData: IDesignContent[]) => void;
+
+  pageQueue: number;
+  onSetPageQueue: (page: number) => void;
+
+  isExporting: boolean;
+  onSetIsExporting: (isExporting: boolean) => void;
 
   isDragging: boolean;
   onSetIsDragging: (isDragging: boolean) => void;
@@ -159,11 +173,20 @@ const initialData: IDesignContent[] = [
 ];
 
 export const useDesignStore = create<DesignStore>((set) => ({
+  pageImages: [],
+  onSetPageImages: (images: PageImage[]) => set({ pageImages: images }),
+
   selectedPage: 1,
   onSetSelectedPage: (page: number) => set({ selectedPage: page }),
 
   data: [...initialData],
   onSetData: (newData: IDesignContent[]) => set({ data: newData }),
+
+  pageQueue: 0,
+  onSetPageQueue: (page: number) => set({ pageQueue: page }),
+
+  isExporting: false,
+  onSetIsExporting: (isExporting: boolean) => set({ isExporting }),
 
   isDragging: false,
   onSetIsDragging: (isDragging: boolean) => set({ isDragging }),

@@ -3,6 +3,7 @@ import { IDesignContent, IShape } from '../types';
 
 const usePage = () => {
   const { data, onSetData, onSetSelectedPage, selectedPage } = useDesignStore();
+  const numberOfPages = data.length;
 
   const addNewPage = (shapeData?: IShape[]) => {
     const newPage: IDesignContent = {
@@ -26,7 +27,7 @@ const usePage = () => {
     onSetSelectedPage(newSelectedPageIndex);
   };
 
-  return { selectedPage, addNewPage, removePage };
+  return { selectedPage, addNewPage, removePage, numberOfPages };
 };
 
 export default usePage;

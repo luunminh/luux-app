@@ -1,9 +1,9 @@
 import { FormCore } from '@core/components';
-import { ActionIcon, Burger, Button, Divider, Flex, Tooltip } from '@mantine/core';
+import { ActionIcon, Burger, Divider, Flex, Tooltip } from '@mantine/core';
 import { UseFormReturn } from 'react-hook-form';
 import { LuRedo2 as RedoIcon, LuUndo2 as UndoIcon } from 'react-icons/lu';
 import { IDesignForm, IDesignFormKey } from '../../DesignForm.helpers';
-import { AvatarGroup } from './components';
+import { AvatarGroup, DesignMenu } from './components';
 
 import { useWorkHistory } from '../../hooks';
 import './design-form.header.styles.scss';
@@ -66,14 +66,7 @@ const DesignFormHeader = ({ form, workHistory, hasPast, hasFuture, sidebarState 
           name={IDesignFormKey.NAME}
         />
         <AvatarGroup form={form} />
-        <Button
-          style={{
-            width: 100,
-          }}
-          variant="gradient"
-        >
-          Share
-        </Button>
+        <DesignMenu />
       </Flex>
     </Flex>
   );
