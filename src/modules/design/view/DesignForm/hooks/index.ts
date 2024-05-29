@@ -1,4 +1,5 @@
 export { default as useDesignLS } from './useDesignLS';
+export { default as useDownloadDesign } from './useDownloadDesign';
 export { default as useHotkeyFunc } from './useHotkeyFunc';
 export { default as usePage } from './usePage';
 export { default as useSelection } from './useSelection';

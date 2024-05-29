@@ -1,4 +1,5 @@
 import { LoadingContainer } from '@components';
+import { LoadingGlobalContainer } from '@containers';
 import { CommonQueryKey, isEmpty, useComponentDidMount } from '@core/common';
 import { useGetScreenSizeList } from '@core/queries';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -25,6 +26,7 @@ const MAX_SCALE = 5;
 const DesignForm = () => {
   const [sidebarOpened, { toggle: toggledSidebar }] = useDisclosure(true);
   const [query] = useSearchParams();
+  const { selectedPage, isExporting } = useDesignStore();
 
   const screenSizeId = query.get(CommonQueryKey.SCREEN_SIZE_ID);
 
@@ -129,14 +131,13 @@ const DesignForm = () => {
         >
           <TransformComponent
             wrapperStyle={{
-              width: '100%',
               height: '100vh',
             }}
           >
             <Stack w="100vw" h="100%">
               <Stack align="center" justify="center" h="80vh">
                 <DesignForm.Board
-                  pageNumber={1}
+                  pageNumber={selectedPage}
                   screenSize={screenSize}
                   transformer={transformer}
                   workHistory={workHistory}
@@ -145,6 +146,8 @@ const DesignForm = () => {
             </Stack>
           </TransformComponent>
           <PageSelection.Trigger />
+
+          {isExporting && <LoadingGlobalContainer />}
         </AppShell.Main>
         <AppShell.Aside withBorder>
           <DesignForm.Aside transformer={transformer} />

@@ -42,7 +42,7 @@ const CustomShape = forwardRef<Konva.Image, Props>(({ colors, src, ...props }: P
     }
   }, [svgContent, colors]);
 
-  const [img] = useImage(imgUrl);
+  const [img] = useImage(imgUrl, 'anonymous');
 
   if (loading || !imgUrl) return null;
 

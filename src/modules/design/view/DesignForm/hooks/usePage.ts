@@ -23,7 +23,6 @@ const usePage = () => {
     onSetData(newPages);
 
     const newSelectedPageIndex = selectedPage > 1 ? selectedPage - 1 : 1;
-    console.log('removePage ~ newSelectedPageIndex:', newSelectedPageIndex);
     onSetSelectedPage(newSelectedPageIndex);
   };
 

@@ -5,7 +5,7 @@ import { FaRegImage } from 'react-icons/fa';
 import { MdOutlineVideoSettings } from 'react-icons/md';
 import { TbPresentationAnalytics } from 'react-icons/tb';
 
-enum DownloadFileTypeEnum {
+export enum DownloadFileTypeEnum {
   PDF = 'PDF',
   JPG = 'JPG',
   PNG = 'PNG',

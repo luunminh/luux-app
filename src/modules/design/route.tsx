@@ -2,6 +2,7 @@ import { CustomRoute } from '@containers';
 import { Navigator } from '@core/common';
 import { lazy } from 'react';
 import { Route } from 'react-router-dom';
+import { DesignProvider } from './view/DesignForm';
 
 const DesignForm = lazy(() => import('./view/DesignForm'));
 
@@ -19,7 +20,9 @@ export const designRoutes = [
     path={designPaths.addDesign}
     element={
       <CustomRoute>
-        <DesignForm />
+        <DesignProvider>
+          <DesignForm />
+        </DesignProvider>
       </CustomRoute>
     }
   />,

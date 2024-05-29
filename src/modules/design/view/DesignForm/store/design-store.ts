@@ -1,23 +1,12 @@
 import { create } from 'zustand';
 import { IDesignContent, IShape, ShapeTypeEnum } from '../types';
 
-type PageImage = {
-  pageNumber: number;
-  image: File;
-};
-
 type DesignStore = {
-  pageImages: PageImage[];
-  onSetPageImages: (images: PageImage[]) => void;
-
   selectedPage: number;
   onSetSelectedPage: (page: number) => void;
 
   data: IDesignContent[];
   onSetData: (newData: IDesignContent[]) => void;
-
-  pageQueue: number;
-  onSetPageQueue: (page: number) => void;
 
   isExporting: boolean;
   onSetIsExporting: (isExporting: boolean) => void;
@@ -89,7 +78,7 @@ const initialData: IDesignContent[] = [
           height: 300,
           x: 400,
           y: 200,
-          src: 'https://upload.wikimedia.org/wikipedia/vi/thumb/a/a1/Man_Utd_FC_.svg/800px-Man_Utd_FC_.svg.png',
+          src: 'http://res.cloudinary.com/dqjshrusa/image/upload/v1716974084/luux/thumbnails/c8edh4bqzju9g8h0fpws.png',
         },
       },
       {
@@ -129,7 +118,7 @@ const initialData: IDesignContent[] = [
           name: 'Custom 1',
           sides: 5,
           radius: 70,
-          src: 'https://cdn-i.vtcnews.vn/resize/th/upload/2024/05/02/ronaldo-07510494.JPG',
+          src: 'http://res.cloudinary.com/dqjshrusa/image/upload/v1716974084/luux/thumbnails/c8edh4bqzju9g8h0fpws.png',
           stroke: 'black',
           strokeWidth: 4,
           draggable: true,
@@ -146,7 +135,7 @@ const initialData: IDesignContent[] = [
           y: 100,
           shapeType: ShapeTypeEnum.CUSTOM,
           name: 'Custom',
-          src: 'https://res.cloudinary.com/dqjshrusa/image/upload/v1710061222/luux/logo_qndzbx.svg',
+          src: 'http://res.cloudinary.com/dqjshrusa/image/upload/v1716974084/luux/thumbnails/c8edh4bqzju9g8h0fpws.png',
           colors: ['#000', '#ddd', '#ddd', '#ddd', '#ddd'],
         },
       },
@@ -165,7 +154,7 @@ const initialData: IDesignContent[] = [
           height: 300,
           x: 400,
           y: 200,
-          src: 'https://upload.wikimedia.org/wikipedia/vi/thumb/a/a1/Man_Utd_FC_.svg/800px-Man_Utd_FC_.svg.png',
+          src: 'http://res.cloudinary.com/dqjshrusa/image/upload/v1716974084/luux/thumbnails/c8edh4bqzju9g8h0fpws.png',
         },
       },
     ],
@@ -173,17 +162,11 @@ const initialData: IDesignContent[] = [
 ];
 
 export const useDesignStore = create<DesignStore>((set) => ({
-  pageImages: [],
-  onSetPageImages: (images: PageImage[]) => set({ pageImages: images }),
-
   selectedPage: 1,
   onSetSelectedPage: (page: number) => set({ selectedPage: page }),
 
   data: [...initialData],
   onSetData: (newData: IDesignContent[]) => set({ data: newData }),
-
-  pageQueue: 0,
-  onSetPageQueue: (page: number) => set({ pageQueue: page }),
 
   isExporting: false,
   onSetIsExporting: (isExporting: boolean) => set({ isExporting }),

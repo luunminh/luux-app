@@ -15,7 +15,7 @@ import {
   useTransformer,
   useWorkHistory,
 } from '../../hooks';
-import { useDesignStore } from '../../store';
+import { useDesignContext, useDesignStore } from '../../store';
 import { IShape, ShapeTypeEnum } from '../../types';
 import { getMenuAbsolutePosition, mapShapeByGroupAndZIndex } from './Board.helpers';
 import BoardMenuItem from './Board.menu-item';
@@ -35,7 +35,8 @@ const Board = forwardRef(
     ref: ForwardedRef<HTMLDivElement>,
   ) => {
     const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
-    const { pageQueue, onSetPageQueue, onSetPageImages, pageImages } = useDesignStore();
+    const { addPageImage } = useDesignContext();
+    const { isExporting } = useDesignStore();
 
     useEffect(() => {
       const wrapperContainer = document.querySelector('.board-wrapper');
@@ -96,30 +97,28 @@ const Board = forwardRef(
     const menuPos = getMenuAbsolutePosition(transformer.transformerRef.current);
 
     useEffect(() => {
-      if (pageQueue > 0 && stage.stageRef) {
-        stage.stageRef.current.toBlob().then((blob: any) => {
-          const file = new File([blob], `page_${pageNumber}.png`, { type: 'image/png' });
+      if (stage.stageRef.current && isExporting) {
+        // Draw all changes to the stage
+        stage.stageRef.current.draw();
 
-          const isExist = pageImages.some((image) => image.pageNumber === pageNumber);
+        setTimeout(() => {
+          stage.stageRef.current
+            .toBlob()
+            .then((blob: any) => {
+              const file = new File([blob], `Page ${pageNumber}`, { type: 'image/png' });
 
-          const newList = isExist
-            ? pageImages.map((image) => {
-                if (image.pageNumber === pageNumber) {
-                  return {
-                    ...image,
-                    image: file,
-                  };
-                }
-                return image;
-              })
-            : [...pageImages, { pageNumber, image: file }];
-
-          console.log('stage.stageRef.current.toBlob ~ newList:', newList);
-          onSetPageImages(newList);
-          onSetPageQueue(pageQueue - 1);
-        });
+              const newPageImage = {
+                pageNumber,
+                image: file,
+              };
+              addPageImage(newPageImage);
+            })
+            .catch((err: any) => {
+              console.error('Error:', err);
+            });
+        }, 0);
       }
-    }, [pageQueue, pageImages, pageNumber, stage]);
+    }, [isExporting, stage.stageRef, pageNumber, addPageImage]);
 
     useEffect(() => {
       recordPast(data);

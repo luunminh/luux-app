@@ -24,7 +24,7 @@ const ShapeWrapper = <T extends IShape>({ children, shape, onSelect, transformer
     ?.getNodes()
     .some((node) => node.id() === shape.id);
 
-  const [img] = useImage(shape.attrs.src);
+  const [img] = useImage(shape.attrs.src, 'anonymous');
 
   const isText = shape.attrs.shapeType === ShapeTypeEnum.TEXT;
   const isImage = shape.attrs.shapeType === ShapeTypeEnum.IMAGE;

@@ -10,7 +10,7 @@ const BASE_PATTERN_SCALE = { x: 0.15, y: 0.15 };
 
 const ImageFramer = forwardRef<Konva.Shape, Props>(
   ({ src, baseNode, fillPatternScale = BASE_PATTERN_SCALE, ...props }, ref) => {
-    const [img] = useImage(src);
+    const [img] = useImage(src, 'anonymous');
 
     const ShapeCmp = ShapeMap[baseNode as ShapeTypeEnum];
 

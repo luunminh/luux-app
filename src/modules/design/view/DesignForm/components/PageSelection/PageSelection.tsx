@@ -123,6 +123,7 @@ const MenuOptions = () => {
       <Menu.Dropdown>
         <Menu.Item
           onClick={(e) => {
+            e.preventDefault();
             e.stopPropagation();
             removePage(selectedPage);
           }}
