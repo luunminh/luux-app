@@ -46,7 +46,7 @@ const ScreenSizesSlide = () => {
               <Anchor
                 c="black"
                 target="_blank"
-                href={`/${designPaths.addDesign}?${CommonQueryKey.SCREEN_SIZE_ID}=${screenSize.id}`}
+                href={`/${designPaths.design}?${CommonQueryKey.SCREEN_SIZE_ID}=${screenSize.id}`}
                 style={{ fontWeight: 600, fontFamily: 'monospace', mt: 1 }}
               >
                 {screenSize.name}

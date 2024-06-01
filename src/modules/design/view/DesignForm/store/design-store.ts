@@ -1,3 +1,4 @@
+import { IGetDesign } from '@modules/design/queries';
 import { create } from 'zustand';
 import { IDesignContent, IShape, ShapeTypeEnum } from '../types';
 
@@ -5,8 +6,8 @@ type DesignStore = {
   selectedPage: number;
   onSetSelectedPage: (page: number) => void;
 
-  data: IDesignContent[];
-  onSetData: (newData: IDesignContent[]) => void;
+  data: IGetDesign;
+  onSetData: (newData: IGetDesign) => void;
 
   isExporting: boolean;
   onSetIsExporting: (isExporting: boolean) => void;
@@ -22,7 +23,7 @@ type DesignStore = {
 };
 
 // TODO: get initData and canvasObject from liveblock and API
-const initialData: IDesignContent[] = [
+export const initialData: IDesignContent[] = [
   {
     pageNumber: 1,
     shapes: [
@@ -165,8 +166,8 @@ export const useDesignStore = create<DesignStore>((set) => ({
   selectedPage: 1,
   onSetSelectedPage: (page: number) => set({ selectedPage: page }),
 
-  data: [...initialData],
-  onSetData: (newData: IDesignContent[]) => set({ data: newData }),
+  data: null,
+  onSetData: (newData: IGetDesign) => set({ data: newData }),
 
   isExporting: false,
   onSetIsExporting: (isExporting: boolean) => set({ isExporting }),

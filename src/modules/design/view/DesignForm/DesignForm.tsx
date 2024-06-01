@@ -5,9 +5,10 @@ import { useGetScreenSizeList } from '@core/queries';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { AppShell, Stack } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { useState } from 'react';
+import { useGetDesignById } from '@modules/design/queries';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useSearchParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 import { TransformComponent, TransformWrapper } from 'react-zoom-pan-pinch';
 import { IDesignForm, designFormInitialValues, designFormSchema } from './DesignForm.helpers';
 import { Board, ConfigurationAside, DesignFormHeader, ElementSidebar } from './components';
@@ -27,6 +28,8 @@ const DesignForm = () => {
   const [sidebarOpened, { toggle: toggledSidebar }] = useDisclosure(true);
   const [query] = useSearchParams();
   const { selectedPage, isExporting } = useDesignStore();
+
+  const { data } = useDesignStore();
 
   const screenSizeId = query.get(CommonQueryKey.SCREEN_SIZE_ID);
 
@@ -154,6 +157,28 @@ const DesignForm = () => {
         </AppShell.Aside>
       </AppShell>
     </TransformWrapper>
+  );
+};
+
+export const DesignFormWrapper = () => {
+  const { id } = useParams();
+  const { designDetail, isLoadingDesignDetail } = useGetDesignById({ id });
+  const { onSetData } = useDesignStore();
+
+  useEffect(() => {
+    if (designDetail) {
+      onSetData(designDetail);
+    }
+  }, [designDetail]);
+
+  if (isLoadingDesignDetail) {
+    return <LoadingContainer />;
+  }
+
+  return (
+    <>
+      <DesignForm />
+    </>
   );
 };
 

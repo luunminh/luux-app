@@ -121,8 +121,8 @@ const Board = forwardRef(
     }, [isExporting, stage.stageRef, pageNumber, addPageImage]);
 
     useEffect(() => {
-      recordPast(data);
-    }, [data, recordPast]);
+      recordPast(data?.metadata || []);
+    }, [data?.metadata, recordPast]);
 
     // handle click outside of stage
     useEffect(() => {

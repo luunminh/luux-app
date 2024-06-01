@@ -44,7 +44,7 @@ const PageItem = ({ pageIdx }: PageItemProps) => {
 const Selection = () => {
   const { data } = useDesignStore();
   const { addNewPage } = usePage();
-  const pages = data.length;
+  const pages = data?.metadata.length;
 
   return (
     <Flex gap={16} style={{ overflowX: 'scroll' }}>

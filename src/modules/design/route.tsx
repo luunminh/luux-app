@@ -3,6 +3,7 @@ import { Navigator } from '@core/common';
 import { lazy } from 'react';
 import { Route } from 'react-router-dom';
 import { DesignProvider } from './view/DesignForm';
+import { DesignFormWrapper } from './view/DesignForm/DesignForm';
 
 const DesignForm = lazy(() => import('./view/DesignForm'));
 
@@ -10,18 +11,17 @@ const PREFIX_ROUTE = Navigator.getCurrentPortalUrl();
 
 export const designPaths = {
   listDesign: `${PREFIX_ROUTE}/design',`,
-  addDesign: `${PREFIX_ROUTE}/design/add`,
-  editDesign: `${PREFIX_ROUTE}/design/edit`,
+  design: `${PREFIX_ROUTE}/design`,
 };
 
 export const designRoutes = [
   <Route
-    key={designPaths.addDesign}
-    path={designPaths.addDesign}
+    key={`${designPaths.design}/:id`}
+    path={`${designPaths.design}/:id`}
     element={
       <CustomRoute>
         <DesignProvider>
-          <DesignForm />
+          <DesignFormWrapper />
         </DesignProvider>
       </CustomRoute>
     }

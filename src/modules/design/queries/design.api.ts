@@ -7,4 +7,8 @@ const getElements = (params: GetElementsParams) => {
   return httpService.get(`/elements?${queryString}`, {}, newCancelToken());
 };
 
-export { getElements };
+const getDesignById = (params: { id: string }) => {
+  return httpService.get(`/design/${params.id}`, {}, newCancelToken());
+};
+
+export { getDesignById, getElements };

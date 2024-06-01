@@ -1,28 +1,49 @@
+import { socketService } from '@core/common';
 import { useMemo } from 'react';
 import { useDesignStore } from '../store';
-import { IShape } from '../types';
+import { IDesignContent, IShape } from '../types';
 
 const useShape = () => {
   const { data, onSetData, selectedPage } = useDesignStore();
 
   const shapes = useMemo(
-    () => data.find((page) => page.pageNumber === selectedPage)?.shapes || [],
+    () => data?.metadata?.find((page) => page.pageNumber === selectedPage)?.shapes || [],
     [data, selectedPage],
   );
 
   const onSetShapes = (shapes: IShape[]) => {
-    const newData = data.map((page) => {
-      if (page.pageNumber === selectedPage) {
-        return {
-          ...page,
-          shapes: shapes,
-        };
-      }
+    if (data?.metadata?.length) {
+      const newContent = data.metadata.map((page) => {
+        if (page.pageNumber === selectedPage) {
+          return {
+            ...page,
+            shapes: shapes,
+          };
+        }
 
-      return page;
-    });
+        return page;
+      });
 
-    onSetData(newData);
+      const newData = {
+        ...data,
+        metadata: newContent,
+      };
+      socketService.editDesign(newData);
+      onSetData(newData);
+    } else {
+      const newPage: IDesignContent = {
+        pageNumber: 1,
+        shapes: shapes,
+      };
+
+      const newData = {
+        ...data,
+        content: [newPage],
+      };
+
+      socketService.editDesign(newData);
+      onSetData(newData);
+    }
   };
 
   const getShapeById = (id: string) => {
