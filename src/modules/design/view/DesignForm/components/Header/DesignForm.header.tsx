@@ -1,15 +1,13 @@
-import { FormCore } from '@core/components';
-import { ActionIcon, Burger, Divider, Flex, Tooltip } from '@mantine/core';
-import { UseFormReturn } from 'react-hook-form';
+import { socketService } from '@core/common';
+import { ActionIcon, Burger, Divider, Flex, TextInput, Tooltip } from '@mantine/core';
 import { LuRedo2 as RedoIcon, LuUndo2 as UndoIcon } from 'react-icons/lu';
-import { IDesignForm, IDesignFormKey } from '../../DesignForm.helpers';
+import { useWorkHistory } from '../../hooks';
+import { useDesignStore } from '../../store';
 import { AvatarGroup, DesignMenu } from './components';
 
-import { useWorkHistory } from '../../hooks';
 import './design-form.header.styles.scss';
 
 type Props = {
-  form: UseFormReturn<IDesignForm>;
   workHistory: ReturnType<typeof useWorkHistory>;
   hasPast: boolean;
   hasFuture: boolean;
@@ -19,9 +17,10 @@ type Props = {
   };
 };
 
-const DesignFormHeader = ({ form, workHistory, hasPast, hasFuture, sidebarState }: Props) => {
+const DesignFormHeader = ({ workHistory, hasPast, hasFuture, sidebarState }: Props) => {
   const { goToPast, goToFuture } = workHistory;
-  const { control } = form;
+  const { data, onSetData } = useDesignStore();
+
   return (
     <Flex
       py={12}
@@ -57,15 +56,20 @@ const DesignFormHeader = ({ form, workHistory, hasPast, hasFuture, sidebarState 
         </Tooltip>
       </Flex>
       <Flex gap={16} align="center" justify="end">
-        <FormCore.Input
+        <TextInput
           className="design-form__name"
           width="auto"
-          control={control}
+          defaultValue={data.title}
+          value={data.title}
+          onChange={(e) => onSetData({ ...data, title: e.target.value })}
+          onBlur={(e) => {
+            onSetData({ ...data, title: e.target.value });
+            socketService.editDesign({ ...data, title: e.target.value });
+          }}
           autoComplete="off"
           placeholder="Untitled design"
-          name={IDesignFormKey.NAME}
         />
-        <AvatarGroup form={form} />
+        <AvatarGroup />
         <DesignMenu />
       </Flex>
     </Flex>

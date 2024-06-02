@@ -1,8 +1,10 @@
-import { socketService } from '@core/common';
+import { ToastService, socketService } from '@core/common';
 import { ApiResponseType, getResponseData, responseWrapper } from '@core/common/services/http';
 import { useDesignStore } from '@modules/design/view/DesignForm';
+import { homePaths } from '@modules/home/route';
 import { UseQueryOptions, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { DesignApi } from '..';
 import { DESIGN_QUERY_KEYS } from '../key';
 import { IGetDesign } from './useGetDesignById.types';
@@ -12,6 +14,7 @@ export function useGetDesignById(
     id?: string;
   },
 ) {
+  const navigate = useNavigate();
   const {
     data: designDetail,
     error,
@@ -29,6 +32,14 @@ export function useGetDesignById(
       select: getResponseData,
       notifyOnChangeProps: ['data', 'refetch'],
       enabled: !!options?.id,
+      onError: (error: any) => {
+        if (error.statusCode === 403) {
+          ToastService.error(error.message);
+          setTimeout(() => {
+            navigate(homePaths.home);
+          }, 1000);
+        }
+      },
       ...options,
     },
   );

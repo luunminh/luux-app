@@ -1,16 +1,19 @@
 import { LoadingContainer } from '@components';
 import { LoadingGlobalContainer } from '@containers';
-import { CommonQueryKey, isEmpty, useComponentDidMount } from '@core/common';
+import {
+  CommonQueryKey,
+  isEmpty,
+  socketService,
+  useComponentDidMount,
+  useComponentWillUnmount,
+} from '@core/common';
 import { useGetScreenSizeList } from '@core/queries';
-import { yupResolver } from '@hookform/resolvers/yup';
 import { AppShell, Stack } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { useGetDesignById } from '@modules/design/queries';
 import { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { TransformComponent, TransformWrapper } from 'react-zoom-pan-pinch';
-import { IDesignForm, designFormInitialValues, designFormSchema } from './DesignForm.helpers';
 import { Board, ConfigurationAside, DesignFormHeader, ElementSidebar } from './components';
 import { PageSelection } from './components/PageSelection';
 import { useTransformer, useWorkHistory } from './hooks';
@@ -28,8 +31,6 @@ const DesignForm = () => {
   const [sidebarOpened, { toggle: toggledSidebar }] = useDisclosure(true);
   const [query] = useSearchParams();
   const { selectedPage, isExporting } = useDesignStore();
-
-  const { data } = useDesignStore();
 
   const screenSizeId = query.get(CommonQueryKey.SCREEN_SIZE_ID);
 
@@ -57,13 +58,6 @@ const DesignForm = () => {
   const workHistory = useWorkHistory({ past, future, setPast, setFuture });
 
   const { selectedItems } = useDesignStore();
-
-  const form = useForm<IDesignForm>({
-    defaultValues: designFormInitialValues,
-    mode: 'onChange',
-    reValidateMode: 'onChange',
-    resolver: yupResolver<any>(designFormSchema),
-  });
 
   const isLoading = isFetchingScreenSize || isEmpty(screenSize);
 
@@ -111,7 +105,6 @@ const DesignForm = () => {
       >
         <AppShell.Header>
           <DesignForm.Header
-            form={form}
             hasPast={hasPast}
             hasFuture={hasFuture}
             workHistory={workHistory}
@@ -169,17 +162,18 @@ export const DesignFormWrapper = () => {
     if (designDetail) {
       onSetData(designDetail);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [designDetail]);
+
+  useComponentWillUnmount(() => {
+    socketService.leaveDesign(id);
+  });
 
   if (isLoadingDesignDetail) {
     return <LoadingContainer />;
   }
 
-  return (
-    <>
-      <DesignForm />
-    </>
-  );
+  return <DesignForm />;
 };
 
 DesignForm.Board = Board;

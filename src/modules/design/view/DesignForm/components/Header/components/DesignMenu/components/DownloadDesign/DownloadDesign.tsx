@@ -96,7 +96,9 @@ const DownloadDesign = ({ onBack }: Props) => {
         <ActionIcon onClick={onBack} variant="transparent" c="black">
           <IoArrowBack />
         </ActionIcon>
-        <Text size="sm">Download</Text>
+        <Text style={{ fontWeight: 500 }} size="sm">
+          Download
+        </Text>
       </Flex>
       <Divider />
 

@@ -19,9 +19,10 @@ import { IoIosArrowForward } from 'react-icons/io';
 import { IoAdd, IoShareSocialSharp } from 'react-icons/io5';
 import { LuDownload } from 'react-icons/lu';
 import { MdOutlineLink } from 'react-icons/md';
-import { DownloadDesign, LinkAccess } from './components';
+import { DownloadDesign, LinkAccess, PeopleAccess } from './components';
 
 enum MenuItemOptionEnum {
+  ACCESS = 'access',
   DOWNLOAD = 'download',
   PRESENT = 'present',
   PUBLIC_LINK = 'public_link',
@@ -39,6 +40,8 @@ const DesignMenu = () => {
     switch (selectedItem) {
       case MenuItemOptionEnum.DOWNLOAD:
         return <DownloadDesign onBack={handleBackToMainMenu} />;
+      case MenuItemOptionEnum.ACCESS:
+        return <PeopleAccess onBack={handleBackToMainMenu} />;
 
       default:
         return (
@@ -55,6 +58,7 @@ const DesignMenu = () => {
                   size="xs"
                   variant="transparent"
                   c={COLOR_CODE.SUCCESS}
+                  onClick={() => setSelectedItem(MenuItemOptionEnum.ACCESS)}
                 >
                   Edit
                 </Button>

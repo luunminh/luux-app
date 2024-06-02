@@ -1,9 +1,9 @@
 import { themeConfig } from '@config/theme';
+import { socketService, useComponentDidMount } from '@core/common';
 import { MantineProvider } from '@mantine/core';
 import { ModalsProvider } from '@mantine/modals';
 import { FC, PropsWithChildren } from 'react';
 
-import { socketService, useComponentDidMount } from '@core/common';
 import '@mantine/carousel/styles.css';
 import '@mantine/code-highlight/styles.css';
 import '@mantine/core/styles.css';

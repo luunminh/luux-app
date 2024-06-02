@@ -22,7 +22,6 @@ type DesignStore = {
   onSetSelectedItems: (newItems: IShape[]) => void;
 };
 
-// TODO: get initData and canvasObject from liveblock and API
 export const initialData: IDesignContent[] = [
   {
     pageNumber: 1,
