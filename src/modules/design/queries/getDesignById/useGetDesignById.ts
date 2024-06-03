@@ -15,6 +15,7 @@ export function useGetDesignById(
   },
 ) {
   const navigate = useNavigate();
+
   const {
     data: designDetail,
     error,
@@ -44,16 +45,26 @@ export function useGetDesignById(
     },
   );
 
-  const { onSetData } = useDesignStore();
+  const { onSetData, onSetOnlineUserIds } = useDesignStore();
 
   const queryClient = useQueryClient();
 
   useEffect(() => {
     if (designDetail && isSuccess) {
       socketService.joinDesign(designDetail.id);
+
       socketService.subscribeToEditing((data) => {
         console.log('socketService.subscribeToEditing ~ data:', data);
         onSetData(data);
+      });
+
+      socketService.subscribeToJoin((newUserIds) => {
+        console.log('socketService.subscribeToJoin ~ newUserId:', newUserIds);
+        onSetOnlineUserIds(newUserIds);
+      });
+
+      socketService.subscribeToLeave((userIds) => {
+        onSetOnlineUserIds(userIds);
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

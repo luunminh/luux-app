@@ -16,7 +16,7 @@ import { useParams, useSearchParams } from 'react-router-dom';
 import { TransformComponent, TransformWrapper } from 'react-zoom-pan-pinch';
 import { Board, ConfigurationAside, DesignFormHeader, ElementSidebar } from './components';
 import { PageSelection } from './components/PageSelection';
-import { useTransformer, useWorkHistory } from './hooks';
+import { useDesignData, useTransformer, useWorkHistory } from './hooks';
 import { useDesignStore } from './store';
 import { IDesignContent } from './types';
 
@@ -28,9 +28,11 @@ const MIN_SCALE = 1;
 const MAX_SCALE = 5;
 
 const DesignForm = () => {
-  const [sidebarOpened, { toggle: toggledSidebar }] = useDisclosure(true);
+  const { hasEditingPermission } = useDesignData();
+
+  const [sidebarOpened, { toggle: toggledSidebar }] = useDisclosure(hasEditingPermission);
   const [query] = useSearchParams();
-  const { selectedPage, isExporting } = useDesignStore();
+  const { selectedPage, isExporting, onlineUserIds } = useDesignStore();
 
   const screenSizeId = query.get(CommonQueryKey.SCREEN_SIZE_ID);
 
@@ -92,7 +94,7 @@ const DesignForm = () => {
         navbar={{
           width: SIDEBAR_WIDTH,
           breakpoint: 'sm',
-          collapsed: { desktop: !sidebarOpened },
+          collapsed: { desktop: !sidebarOpened, mobile: true },
         }}
         aside={{
           breakpoint: 'md',
@@ -131,7 +133,12 @@ const DesignForm = () => {
             }}
           >
             <Stack w="100vw" h="100%">
-              <Stack align="center" justify="center" h="80vh">
+              <Stack
+                align="center"
+                justify="center"
+                h="80vh"
+                style={{ pointerEvents: isExporting || !hasEditingPermission ? 'none' : 'auto' }}
+              >
                 <DesignForm.Board
                   pageNumber={selectedPage}
                   screenSize={screenSize}

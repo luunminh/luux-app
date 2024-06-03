@@ -3,9 +3,8 @@ import { useProfile } from '@core/queries';
 import { Avatar, Flex, Group, Stack, Text, Title, Tooltip } from '@mantine/core';
 import { IGetDesignUser } from '@modules/design/queries';
 import { useDesignStore } from '@modules/design/view/DesignForm/store';
+import _ from 'lodash';
 import { GoDotFill } from 'react-icons/go';
-
-type Props = {};
 
 type AvatarItemsProps = {
   user: IGetDesignUser;
@@ -48,30 +47,43 @@ const AvatarItem = ({ user, isOnline = false }: AvatarItemsProps) => {
 };
 
 export const AvatarGroup = () => {
-  const { profile, loading } = useProfile();
   const {
     data: { users = [] },
+    onlineUserIds,
   } = useDesignStore();
 
-  if (loading) return null;
+  const { profile } = useProfile();
+
+  const isOnline = (id: string) => onlineUserIds?.includes(id);
+  const sortedUsers = _.orderBy(
+    users,
+    [(user) => user.id === profile?.id, (user) => onlineUserIds.includes(user.id)],
+    ['desc', 'desc'],
+  );
+
+  const showingUsers = sortedUsers.slice(0, 4);
+  const hiddenUsers = sortedUsers.slice(4);
 
   return (
     <Tooltip.Group openDelay={300} closeDelay={100}>
       <Avatar.Group spacing="sm">
-        {users.map((user) => (
-          <AvatarItem key={user.id} user={user} />
+        {showingUsers.map((user) => (
+          <AvatarItem key={user.id} user={user} isOnline={isOnline(user.id)} />
         ))}
-        <Tooltip
-          label={
-            <>
-              <div>John Outcast</div>
-              <div>Levi Capitan</div>
-            </>
-          }
-          withArrow
-        >
-          <Avatar radius="xl">+5</Avatar>
-        </Tooltip>
+        {hiddenUsers.length > 0 && (
+          <Tooltip
+            label={
+              <>
+                {hiddenUsers.map((user) => (
+                  <div key={user.id}>{getFullName(user)} </div>
+                ))}
+              </>
+            }
+            withArrow
+          >
+            <Avatar radius="xl">+{hiddenUsers.length}</Avatar>
+          </Tooltip>
+        )}
       </Avatar.Group>
     </Tooltip.Group>
   );

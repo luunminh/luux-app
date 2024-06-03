@@ -1,7 +1,8 @@
 import { socketService } from '@core/common';
 import { ActionIcon, Burger, Divider, Flex, TextInput, Tooltip } from '@mantine/core';
+import classNames from 'classnames';
 import { LuRedo2 as RedoIcon, LuUndo2 as UndoIcon } from 'react-icons/lu';
-import { useWorkHistory } from '../../hooks';
+import { useDesignData, useWorkHistory } from '../../hooks';
 import { useDesignStore } from '../../store';
 import { AvatarGroup, DesignMenu } from './components';
 
@@ -21,6 +22,8 @@ const DesignFormHeader = ({ workHistory, hasPast, hasFuture, sidebarState }: Pro
   const { goToPast, goToFuture } = workHistory;
   const { data, onSetData } = useDesignStore();
 
+  const { hasEditingPermission } = useDesignData();
+
   return (
     <Flex
       py={12}
@@ -36,7 +39,12 @@ const DesignFormHeader = ({ workHistory, hasPast, hasFuture, sidebarState }: Pro
       <Flex gap={16}>
         <Tooltip label="Menu">
           <Burger
+            disabled={!hasEditingPermission}
             opened={sidebarState.opened}
+            variant="subtle"
+            className={classNames({
+              'design-form__burger--disabled': !hasEditingPermission,
+            })}
             onClick={sidebarState.toggle}
             color="#FFF"
             size="sm"

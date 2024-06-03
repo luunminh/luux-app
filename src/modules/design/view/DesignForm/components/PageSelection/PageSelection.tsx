@@ -3,7 +3,7 @@ import { ActionIcon, Drawer, Flex, Menu, Paper, Text, Tooltip } from '@mantine/c
 import { useDisclosure } from '@mantine/hooks';
 import { IoIosArrowUp, IoIosMore } from 'react-icons/io';
 import { IoAddOutline } from 'react-icons/io5';
-import { usePage } from '../../hooks';
+import { useDesignData, usePage } from '../../hooks';
 import { useDesignStore } from '../../store';
 
 type PageItemProps = {
@@ -108,6 +108,8 @@ const Trigger = () => {
 
 const MenuOptions = () => {
   const { removePage, selectedPage } = usePage();
+  const { notHavePermission } = useDesignData();
+
   return (
     <Menu width={100} position="bottom" shadow="md">
       <Menu.Target>
@@ -122,6 +124,7 @@ const MenuOptions = () => {
       </Menu.Target>
       <Menu.Dropdown>
         <Menu.Item
+          disabled={notHavePermission}
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();

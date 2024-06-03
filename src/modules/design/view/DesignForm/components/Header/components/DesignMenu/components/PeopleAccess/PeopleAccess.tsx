@@ -7,6 +7,7 @@ import {
   isValidEmail,
 } from '@core/common';
 import { Select as ReactSelect, SelectOptionsProps } from '@core/components';
+import { useProfile } from '@core/queries';
 import { useGetUsers } from '@core/queries/users';
 import {
   ActionIcon,
@@ -23,9 +24,11 @@ import {
   Title,
 } from '@mantine/core';
 import { IGetDesignUser, useCreateDesignPermission } from '@modules/design/queries';
+import { useDesignData } from '@modules/design/view/DesignForm/hooks';
 import { useDesignStore } from '@modules/design/view/DesignForm/store';
 import { useMemo, useState } from 'react';
 import { IoArrowBack } from 'react-icons/io5';
+import './styles.scss';
 
 type Props = {
   onBack: Callback;
@@ -61,6 +64,8 @@ const PeopleAccess = ({ onBack }: Props) => {
 
   const { users, setParams, isFetching: isFetchingUsers } = useGetUsers({});
 
+  const { addDesignPermission } = useDesignData();
+
   const userOptions = useMemo(
     () =>
       users.map((user) => ({
@@ -79,7 +84,16 @@ const PeopleAccess = ({ onBack }: Props) => {
   );
 
   const { onCreateDesignPermission, isLoading: isAddingPermission } = useCreateDesignPermission({
-    onSuccess: (data, payload) => {},
+    onSuccess: (data, payload) => {
+      const user = users.find((u) => u.id === payload.userId);
+      addDesignPermission({
+        ...user,
+        canEdit: payload.canEdit,
+        canView: true,
+      } as any);
+      setSelectedUserId(null);
+      setParams((prev) => ({ ...prev, emails: [] }));
+    },
     onError: () => {
       ToastService.error('Failed to add permission');
     },
@@ -153,7 +167,7 @@ const PeopleAccess = ({ onBack }: Props) => {
 
       <Stack mah={200} style={{ overflowY: 'auto' }}>
         <Menu>
-          {data.users.map((user) => (
+          {data?.users?.map((user) => (
             <AccessUserItem key={user.id} isOwner={user.id === data.createdByUserId} user={user} />
           ))}
         </Menu>
@@ -171,6 +185,20 @@ const AccessUserItem = ({ user, isOwner = false }: AccessUserItemProps) => {
   const [selectedPermission, setSelectedPermission] = useState<UserPermission | null>(
     isOwner ? UserPermission.OWNER : user.canEdit ? UserPermission.EDIT : UserPermission.VIEW,
   );
+  const { profile } = useProfile();
+
+  const isProfile = user.id === profile?.id;
+
+  const { handleUpdateDesignPermission: onUpdatePermission, handleRemoveDesignPermission } =
+    useDesignData();
+
+  const handleUpdateDesignPermission = (permission: UserPermission | 'remove') => {
+    if (permission === 'remove') {
+      handleRemoveDesignPermission(user.id);
+    } else {
+      onUpdatePermission(user.id, permission === UserPermission.EDIT);
+    }
+  };
 
   return (
     <Menu.Item
@@ -183,11 +211,11 @@ const AccessUserItem = ({ user, isOwner = false }: AccessUserItemProps) => {
         <Select
           size="xs"
           withCheckIcon
+          className="w-20 permission-select"
           style={{
             border: 'none',
-            width: '90px !important',
           }}
-          disabled={isOwner}
+          disabled={isOwner || isProfile}
           value={selectedPermission}
           data={[
             ...permissionOptions,
@@ -196,9 +224,14 @@ const AccessUserItem = ({ user, isOwner = false }: AccessUserItemProps) => {
               label: 'Owner',
               disabled: true,
             },
+            {
+              value: 'remove',
+              label: 'Remove',
+            },
           ]}
           onChange={(value) => {
             setSelectedPermission(value as any);
+            handleUpdateDesignPermission(value as any);
           }}
         />
       }

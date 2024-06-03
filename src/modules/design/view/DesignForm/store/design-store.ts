@@ -9,6 +9,9 @@ type DesignStore = {
   data: IGetDesign;
   onSetData: (newData: IGetDesign) => void;
 
+  onlineUserIds: string[];
+  onSetOnlineUserIds: (ids: string[]) => void;
+
   isExporting: boolean;
   onSetIsExporting: (isExporting: boolean) => void;
 
@@ -167,6 +170,9 @@ export const useDesignStore = create<DesignStore>((set) => ({
 
   data: null,
   onSetData: (newData: IGetDesign) => set({ data: newData }),
+
+  onlineUserIds: [],
+  onSetOnlineUserIds: (ids: string[]) => set({ onlineUserIds: ids }),
 
   isExporting: false,
   onSetIsExporting: (isExporting: boolean) => set({ isExporting }),
