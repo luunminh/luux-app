@@ -1,24 +1,13 @@
 import { ShapeTypeEnum } from '@design/types';
 import { FC } from 'react';
-import {
-  Arc,
-  Arrow,
-  Circle,
-  Ellipse,
-  Label,
-  Line,
-  Rect,
-  Ring,
-  Sprite,
-  Tag,
-  Text,
-} from 'react-konva';
+import { Arc, Arrow, Circle, Ellipse, Label, Line, Rect, Ring, Sprite, Tag } from 'react-konva';
 import { CustomShape } from './CustomShape';
 import { Image } from './Image';
 import { ImageFramer } from './ImageFramer';
 import { Polygon } from './Polygon';
 import ShapeWrapper from './ShapeWrapper';
 import { Star } from './Star';
+import { Text } from './Text';
 
 const Shape = {
   Wrapper: ShapeWrapper,

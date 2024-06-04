@@ -108,7 +108,7 @@ const Trigger = () => {
 
 const MenuOptions = () => {
   const { removePage, selectedPage } = usePage();
-  const { notHavePermission } = useDesignData();
+  const { hasEditingPermission } = useDesignData();
 
   return (
     <Menu width={100} position="bottom" shadow="md">
@@ -124,7 +124,7 @@ const MenuOptions = () => {
       </Menu.Target>
       <Menu.Dropdown>
         <Menu.Item
-          disabled={notHavePermission}
+          disabled={!hasEditingPermission}
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();

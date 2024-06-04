@@ -36,7 +36,7 @@ const AvatarItem = ({ user, isOnline = false }: AvatarItemsProps) => {
         radius="xl"
         style={
           isOnline && {
-            boxShadow: `0 0 0 5px ${COLOR_CODE.PRIMARY}`,
+            boxShadow: `0 0 0 4px ${COLOR_CODE.PRIMARY}`,
           }
         }
       >
