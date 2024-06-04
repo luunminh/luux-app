@@ -1,7 +1,6 @@
 import { LoadingContainer } from '@components';
 import { LoadingGlobalContainer } from '@containers';
 import {
-  CommonQueryKey,
   isEmpty,
   socketService,
   useComponentDidMount,
@@ -12,7 +11,7 @@ import { AppShell, Stack } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { useGetDesignById } from '@modules/design/queries';
 import { useEffect, useState } from 'react';
-import { useParams, useSearchParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { TransformComponent, TransformWrapper } from 'react-zoom-pan-pinch';
 import { Board, ConfigurationAside, DesignFormHeader, ElementSidebar } from './components';
 import { PageSelection } from './components/PageSelection';
@@ -27,14 +26,13 @@ export const SIDEBAR_WIDTH = 430;
 const MIN_SCALE = 1;
 const MAX_SCALE = 5;
 
-const DesignForm = () => {
+type Props = { screenSizeId: string };
+
+const DesignForm = ({ screenSizeId }: Props) => {
   const { hasEditingPermission } = useDesignData();
 
   const [sidebarOpened, { toggle: toggledSidebar }] = useDisclosure(hasEditingPermission);
-  const [query] = useSearchParams();
-  const { selectedPage, isExporting, onlineUserIds } = useDesignStore();
-
-  const screenSizeId = query.get(CommonQueryKey.SCREEN_SIZE_ID);
+  const { selectedPage, isExporting } = useDesignStore();
 
   const {
     screenSizeList,
@@ -180,7 +178,7 @@ export const DesignFormWrapper = () => {
     return <LoadingContainer />;
   }
 
-  return <DesignForm />;
+  return <DesignForm screenSizeId={designDetail.screenSizeId} />;
 };
 
 DesignForm.Board = Board;

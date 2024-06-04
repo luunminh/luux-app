@@ -2,6 +2,7 @@ export * from './createDesignPermission';
 export * from './deleteDesignPermission';
 export * from './updateDesignPermission';
 
+export * from './createDesign';
 export * from './getDesignById';
 export * from './getElements';
 

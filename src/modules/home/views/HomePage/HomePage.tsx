@@ -12,6 +12,7 @@ const SectionWrapper = ({ children }: PropsWithChildren) => {
         backgroundColor: 'rgba(255, 255, 255, 0.2)',
         border: 'none',
         width: '100%',
+        minHeight: '40vh',
       }}
     >
       {children}
@@ -30,39 +31,22 @@ const HomePage = () => {
       }}
     >
       <SectionWrapper>
-        <Stack gap={16} mb={16}>
-          <Stack>
-            <Title
+        <Stack gap={16}>
+          <Title
+            style={{
+              fontFamily: 'monospace',
+            }}
+            order={3}
+          >
+            <span
               style={{
-                fontFamily: 'monospace',
+                color: 'transparent',
+                WebkitBackgroundClip: 'text',
+                backgroundImage: 'linear-gradient(90deg, #00c4cc, #7d2ae8)',
               }}
             >
-              What will you{' '}
-              <span
-                style={{
-                  color: 'transparent',
-                  WebkitBackgroundClip: 'text',
-                  backgroundImage: 'linear-gradient(90deg, #00c4cc, #7d2ae8)',
-                }}
-              >
-                design
-              </span>{' '}
-              today?
-            </Title>
-          </Stack>
-          <Stack my={15}>
-            <Title order={4} style={{ fontWeight: 400, fontFamily: 'monospace' }}>
-              LUUX makes it easy to create professional designs and to share or print them.
-            </Title>
-          </Stack>
-          <HomePage.Carousel />
-        </Stack>
-      </SectionWrapper>
-
-      <SectionWrapper>
-        <Stack gap={16}>
-          <Title order={4} style={{ fontWeight: 400, fontFamily: 'monospace' }}>
-            You might want to try...
+              Common screen sizes
+            </span>{' '}
           </Title>
           <HomePage.ScreenSizesSlide />
         </Stack>

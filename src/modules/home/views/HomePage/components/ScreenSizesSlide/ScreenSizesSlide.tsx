@@ -1,15 +1,32 @@
-import { CommonQueryKey, useComponentDidMount } from '@core/common';
-import { useGetScreenSizeList } from '@core/queries';
+import { useComponentDidMount } from '@core/common';
+import { useGetScreenSizeList, useProfile } from '@core/queries';
 import { Carousel } from '@mantine/carousel';
-import { Anchor, Box, Image, Skeleton, Tooltip } from '@mantine/core';
+import { Box, Image, Skeleton, Title, Tooltip } from '@mantine/core';
+import { useCreateDesign } from '@modules/design/queries';
 import { designPaths } from '@modules/design/route';
+import { DEFAULT_DESIGN } from '@modules/design/view/DesignForm';
 
 const ScreenSizesSlide = () => {
   const { screenSizeList, setParams, isFetching } = useGetScreenSizeList();
 
+  const { profile } = useProfile();
+  const { id } = profile || {};
+
   useComponentDidMount(() => {
     setParams({ take: 50 });
   });
+
+  const { onCreateDesign } = useCreateDesign({
+    onSuccess: ({ data }, payload) => {
+      window.open(`/${designPaths.design}/${data}`, '_blank');
+    },
+  });
+
+  const handleCreateDesign = (screenSizeId: string) => {
+    const data = DEFAULT_DESIGN({ screenSizeId, userId: id });
+
+    onCreateDesign({ ...data, metadata: data.metadata });
+  };
 
   if (isFetching) {
     return (
@@ -34,7 +51,7 @@ const ScreenSizesSlide = () => {
     <Carousel height={170} loop slideSize={{ base: '20%' }} initialSlide={1} slideGap={16}>
       {screenSizeList.map((screenSize, idx) => (
         <Carousel.Slide key={idx}>
-          <Box>
+          <Box onClick={() => handleCreateDesign(screenSize.id)} style={{ cursor: 'pointer' }}>
             <Image
               h={150}
               loading="lazy"
@@ -43,14 +60,7 @@ const ScreenSizesSlide = () => {
               style={{ borderRadius: 12 }}
             />
             <Tooltip label={screenSize.name}>
-              <Anchor
-                c="black"
-                target="_blank"
-                href={`/${designPaths.design}?${CommonQueryKey.SCREEN_SIZE_ID}=${screenSize.id}`}
-                style={{ fontWeight: 600, fontFamily: 'monospace', mt: 1 }}
-              >
-                {screenSize.name}
-              </Anchor>
+              <Title order={4}>{screenSize.name}</Title>
             </Tooltip>
           </Box>
         </Carousel.Slide>

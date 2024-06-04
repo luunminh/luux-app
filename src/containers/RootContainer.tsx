@@ -17,9 +17,9 @@ const RootContainer: FC<RootContainerProps> = () => {
       <Routes>
         {...routes}
 
-        <Route path={`${PREFIX_ROUTE}`} element={<Navigate to={homePaths.home} />} />
+        <Route path={`${PREFIX_ROUTE}`} element={<Navigate to={homePaths.landingPage} />} />
         <Route path={`${PREFIX_ROUTE}/*`} element={<NotFound />} />
-        <Route path={`*`} element={<Navigate to={homePaths.home} />} />
+        <Route path={`*`} element={<Navigate to={homePaths.landingPage} />} />
       </Routes>
     </Suspense>
   );

@@ -1,5 +1,6 @@
 import { newCancelToken, stringify } from '@core/common';
 import { httpService } from '@core/common/services/http';
+import { CreateDesignPayload } from './createDesign';
 import { CreateDesignPermissionPayload } from './createDesignPermission';
 import { DeleteDesignPermissionPayload } from './deleteDesignPermission';
 import { GetElementsParams } from './getElements';
@@ -12,6 +13,10 @@ const getElements = (params: GetElementsParams) => {
 
 const getDesignById = (params: { id: string }) => {
   return httpService.get(`/design/${params.id}`, {}, newCancelToken());
+};
+
+const createDesign = (payload: CreateDesignPayload) => {
+  return httpService.post('/design', payload, newCancelToken());
 };
 
 const createDesignPermission = (payload: CreateDesignPermissionPayload) => {
@@ -32,6 +37,7 @@ const deleteDesignPermission = (payload: DeleteDesignPermissionPayload) => {
 };
 
 export {
+  createDesign,
   createDesignPermission,
   deleteDesignPermission,
   getDesignById,
