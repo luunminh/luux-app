@@ -19,7 +19,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
           height: appConfigs.NAVBAR_HEIGHT,
         }}
       >
-        <AppShell.Header>
+        <AppShell.Header zIndex={9999}>
           <Navbar />
         </AppShell.Header>
         <AppShell.Main>

@@ -3,12 +3,18 @@ import { httpService } from '@core/common/services/http';
 import { CreateDesignPayload } from './createDesign';
 import { CreateDesignPermissionPayload } from './createDesignPermission';
 import { DeleteDesignPermissionPayload } from './deleteDesignPermission';
+import { GetDesignsParams } from './getDesignsLazy';
 import { GetElementsParams } from './getElements';
 import { UpdateDesignPermissionPayload } from './updateDesignPermission';
 
 const getElements = (params: GetElementsParams) => {
   const queryString = stringify(params);
   return httpService.get(`/elements?${queryString}`, {}, newCancelToken());
+};
+
+const getDesigns = (params: GetDesignsParams) => {
+  const queryString = stringify(params);
+  return httpService.get(`/designs?${queryString}`, {}, newCancelToken());
 };
 
 const getDesignById = (params: { id: string }) => {
@@ -41,6 +47,7 @@ export {
   createDesignPermission,
   deleteDesignPermission,
   getDesignById,
+  getDesigns,
   getElements,
   updateDesignPermission,
 };

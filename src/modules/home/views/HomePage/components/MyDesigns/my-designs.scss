@@ -1,0 +1,64 @@
+.navbar {
+  background-color: #f5f5f5; // replaced var(--mantine-color-body)
+  height: 840px; // replaced rem(840px)
+  width: 300px; // replaced rem(300px)
+  padding: 16px; // replaced var(--mantine-spacing-md)
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid #ccc; // replaced light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4))
+}
+
+.navbarMain {
+  flex: 1;
+  margin-top: 32px; // replaced var(--mantine-spacing-xl)
+}
+
+.title {
+  text-transform: uppercase;
+  letter-spacing: -0.25px; // replaced rem(-0.25px)
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  font-size: 14px; // replaced var(--mantine-font-size-sm)
+  color: #666; // replaced light-dark(var(--mantine-color-gray-7), var(--mantine-color-dark-1))
+  padding: 8px 12px; // replaced var(--mantine-spacing-xs) var(--mantine-spacing-sm)
+  border-radius: 4px; // replaced var(--mantine-radius-sm)
+  font-weight: 500;
+
+  &:hover {
+    background-color: #fff; // replaced light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-6))
+    color: #000; // replaced light-dark(var(--mantine-color-black), var(--mantine-color-white))
+
+    & .linkIcon {
+      color: #000; // replaced light-dark(var(--mantine-color-black), var(--mantine-color-white))
+    }
+  }
+
+  &[data-active] {
+
+    &,
+    &:hover {
+      background-color: #007bff; // replaced var(--mantine-color-blue-light)
+      color: #fff; // replaced var(--mantine-color-blue-light-color)
+
+      & .linkIcon {
+        color: #fff; // replaced var(--mantine-color-blue-light-color)
+      }
+    }
+  }
+}
+
+.linkIcon {
+  color: #999; // replaced light-dark(var(--mantine-color-gray-6), var(--mantine-color-dark-2))
+  margin-right: 12px; // replaced var(--mantine-spacing-sm)
+  width: 25px; // replaced rem(25px)
+  height: 25px; // replaced rem(25px)
+}
+
+.footer {
+  border-top: 1px solid #ccc; // replaced light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4))
+  padding-top: 16px; // replaced var(--mantine-spacing-md)
+}
