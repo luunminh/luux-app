@@ -59,8 +59,4 @@ export const ItemWrapper = ({ children, element }: ItemWrapperProps) => {
   );
 };
 
-type SectionPaginationProps = {};
-
-export const SectionPagination = ({}: SectionPaginationProps) => {};
-
 export default Section;

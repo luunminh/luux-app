@@ -2,7 +2,7 @@ import { LayoutSection } from '@core/components';
 import { Button } from '@mantine/core';
 import { homePaths } from '@modules/home/route';
 import { useNavigate } from 'react-router-dom';
-import { HomePageCarousel } from '../HomePage/components';
+import { LandingPageCarousel } from './Carousel';
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -209,7 +209,7 @@ const LandingPage = () => {
 
       <section className="relative">
         <LayoutSection>
-          <HomePageCarousel />
+          <LandingPageCarousel />
         </LayoutSection>
       </section>
 

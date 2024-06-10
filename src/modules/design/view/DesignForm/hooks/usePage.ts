@@ -19,6 +19,31 @@ const usePage = () => {
     onSetSelectedPage(newPage.pageNumber);
   };
 
+  const insertPages = (contents: IDesignContent[]) => {
+    const createPage = (content: IDesignContent, pageNumber: number) => ({
+      ...content,
+      pageNumber,
+    });
+
+    const startContents =
+      selectedPage === 1 ? data.metadata.slice(0, 1) : data.metadata.slice(0, selectedPage - 1);
+    const endContents = data.metadata
+      .slice(selectedPage)
+      .map((page, idx) => createPage(page, idx + selectedPage + contents.length + 1));
+
+    const formattedContents = contents.map((content, idx) =>
+      createPage(content, selectedPage + idx + 1),
+    );
+
+    const newData = {
+      ...data,
+      metadata: [...startContents, ...formattedContents, ...endContents],
+    };
+    socketService.editDesign(newData);
+    onSetSelectedPage(selectedPage + 1);
+    onSetData(newData);
+  };
+
   const removePage = (pageIdx: number) => {
     const newPages = data.metadata
       .filter((page) => page.pageNumber !== pageIdx)
@@ -33,7 +58,7 @@ const usePage = () => {
     onSetSelectedPage(newSelectedPageIndex);
   };
 
-  return { selectedPage, addNewPage, removePage, numberOfPages };
+  return { selectedPage, insertPages, addNewPage, removePage, numberOfPages };
 };
 
 export default usePage;

@@ -1,7 +1,7 @@
 import { responseWrapper } from '@core/common/services/http';
 import { useMutation, UseMutationOptions } from '@tanstack/react-query';
 import { UpdateDesignPermissionPayload } from '.';
-import { DesignApi } from '..';
+import { DesignApi } from '../../';
 
 export function useUpdateDesignPermission(
   options?: UseMutationOptions<any, Error, UpdateDesignPermissionPayload>,

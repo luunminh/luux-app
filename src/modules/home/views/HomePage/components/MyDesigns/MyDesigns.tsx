@@ -1,8 +1,16 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { LoadingContainer, TableSearch } from '@components';
-import { TableQueryParams, formatDate, getFullName, getStandForName, isEmpty } from '@core/common';
+import {
+  CommonQueryKey,
+  TableQueryParams,
+  formatDate,
+  getFullName,
+  getStandForName,
+  isEmpty,
+} from '@core/common';
 import { useGetScreenSizeList } from '@core/queries';
 import {
+  ActionIcon,
   Avatar,
   AvatarGroup,
   Badge,
@@ -11,6 +19,7 @@ import {
   Flex,
   Grid,
   Group,
+  Loader,
   Select,
   SelectProps,
   Stack,
@@ -28,18 +37,21 @@ import {
 import { designPaths } from '@modules/design/route';
 import { useCallback, useEffect, useMemo } from 'react';
 import { IoIosAddCircle } from 'react-icons/io';
-import { IoFolder, IoTimeOutline } from 'react-icons/io5';
+import { IoFolder, IoRefresh, IoTimeOutline } from 'react-icons/io5';
 import { MdArrowUpward, MdOutlineArrowDownward } from 'react-icons/md';
 import { useSearchParams } from 'react-router-dom';
+import { HomePageTabEnum } from '../../HomePage.helpers';
 import CustomSidebar, { MenuItemType } from '../SideBar';
+
 import './my-designs.scss';
 
 type Props = {
   designsHook: ReturnType<typeof useGetDesignsLazy>;
 };
 
-const MyDesigns = ({ designsHook }: Props) => {
-  const { hasNext, fetchNextPage, designs } = designsHook;
+const MyDesigns = () => {
+  const designsHook = useGetDesignsLazy();
+  const { hasNext, fetchNextPage, designs, isFetching } = designsHook;
 
   const renderContent = useCallback(() => {
     if (isEmpty(designs)) {
@@ -56,6 +68,14 @@ const MyDesigns = ({ designsHook }: Props) => {
       </Grid.Col>
     ));
   }, [designs]);
+
+  if (isFetching) {
+    return (
+      <Stack p={16} justify="center" align="center" w="100%">
+        <Loader />
+      </Stack>
+    );
+  }
 
   return (
     <Stack gap="md">
@@ -134,7 +154,7 @@ const MyDesignsActions = ({ designsHook }: Props) => {
     enabled: true,
   });
 
-  const { setParams, params } = designsHook;
+  const { setParams, params, handleInvalidateDesigns } = designsHook;
 
   const { search, sort, screenSizeId, owner } = useMemo(
     () => ({
@@ -206,30 +226,54 @@ const MyDesignsActions = ({ designsHook }: Props) => {
           onChange={(value) => handleSortChange(value)}
         />
       </Flex>
-      <TableSearch placeholder="Search by name" />
+      <Flex gap={8} align="center" justify="end">
+        <ActionIcon
+          variant="outline"
+          c="gray"
+          size="lg"
+          radius="lg"
+          onClick={handleInvalidateDesigns}
+        >
+          <IoRefresh size={20} />
+        </ActionIcon>
+        <TableSearch placeholder="Search by name" />
+      </Flex>
     </Flex>
   );
 };
 
-const MyDesignsSidebar = ({ designsHook }: Props) => {
-  const [searchParams, setSearchParams] = useSearchParams();
+export const MyDesignsSidebar = () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_, setSearchParams] = useSearchParams();
   const [query] = useSearchParams();
+
+  const currentTab = query.get(CommonQueryKey.TAB) || HomePageTabEnum.DESIGNS;
+  const isDesignTab = currentTab === HomePageTabEnum.DESIGNS;
+  const isTemplateTab = currentTab === HomePageTabEnum.TEMPLATES;
 
   const ownerType = query.get(DesignQueryKeys.OWNER_TYPE) || DesignUserType.OWNER;
 
   const handleChangeOwnerType = (type: DesignUserType) => {
-    searchParams.set(DesignQueryKeys.OWNER_TYPE, type);
-    setSearchParams(searchParams);
+    let newSearchParams = new URLSearchParams();
+    newSearchParams.set(CommonQueryKey.TAB, HomePageTabEnum.DESIGNS);
+    newSearchParams.set(DesignQueryKeys.OWNER_TYPE, type);
+    setSearchParams(newSearchParams);
+  };
+
+  const handleMoveToTemplate = () => {
+    let newSearchParams = new URLSearchParams();
+    newSearchParams.set(CommonQueryKey.TAB, HomePageTabEnum.TEMPLATES);
+    setSearchParams(newSearchParams);
   };
 
   const MenuItems: MenuItemType[] = [
     {
       label: 'MY DESIGNS',
-      isActive: true,
+      isActive: false,
       subItems: [
         {
           label: 'All Designs',
-          isActive: ownerType === DesignUserType.OWNER,
+          isActive: isDesignTab && ownerType === DesignUserType.OWNER,
           icon: <IoFolder size={14} />,
           onClick: () => handleChangeOwnerType(DesignUserType.OWNER),
         },
@@ -254,8 +298,13 @@ const MyDesignsSidebar = ({ designsHook }: Props) => {
       ],
     },
     {
+      label: 'TEMPLATES',
+      isActive: isTemplateTab,
+      onClick: () => handleMoveToTemplate(),
+    },
+    {
       label: 'SHARED WITH ME',
-      isActive: ownerType === DesignUserType.SHARED,
+      isActive: isDesignTab && ownerType === DesignUserType.SHARED,
       onClick: () => handleChangeOwnerType(DesignUserType.SHARED),
     },
     {
@@ -268,9 +317,4 @@ const MyDesignsSidebar = ({ designsHook }: Props) => {
   return <CustomSidebar menuItems={MenuItems} />;
 };
 
-export default {
-  Item: DesignItem,
-  Wrapper: MyDesigns,
-  Actions: MyDesignsActions,
-  Sidebar: MyDesignsSidebar,
-};
+export default MyDesigns;

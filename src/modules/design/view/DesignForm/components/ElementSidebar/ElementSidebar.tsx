@@ -6,7 +6,7 @@ import { ElementSidebarTabEnum, sidebarTabOptions } from './ElementSidebar.helpe
 import Section from './components';
 
 const ElementSidebar = () => {
-  const [tab, setTab] = useState<ElementSidebarTabEnum>(ElementSidebarTabEnum.ELEMENTS);
+  const [tab, setTab] = useState<ElementSidebarTabEnum>(ElementSidebarTabEnum.TEMPLATE);
 
   const { elementCategories, isFetching } = useGetElementCategories();
 

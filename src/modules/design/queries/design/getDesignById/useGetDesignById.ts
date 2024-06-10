@@ -5,8 +5,8 @@ import { homePaths } from '@modules/home/route';
 import { UseQueryOptions, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { DesignApi } from '..';
-import { DESIGN_QUERY_KEYS } from '../key';
+import { DesignApi } from '../..';
+import { DESIGN_QUERY_KEYS } from '../../key';
 import { IGetDesign } from './useGetDesignById.types';
 
 export function useGetDesignById(

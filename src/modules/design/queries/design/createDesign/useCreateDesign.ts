@@ -1,6 +1,6 @@
 import { ApiResponseType, responseWrapper } from '@core/common/services/http';
 import { UseMutationOptions, useMutation } from '@tanstack/react-query';
-import { DesignApi } from '..';
+import { DesignApi } from '../../';
 import { CreateDesignPayload } from './useCreateDesign.types';
 
 export function useCreateDesign(

@@ -3,21 +3,23 @@ import { PaginationResponseType, responseWrapper } from '@core/common/services/h
 import { UseInfiniteQueryOptions, useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 import { isEmpty } from 'lodash';
 import { useMemo, useState } from 'react';
-import { DesignApi } from '..';
-import { DESIGN_QUERY_KEYS } from '../key';
-import { DesignUserType, GetDesignsParams, IGetDesigns } from './useGetDesignLazy.types';
+import { GetTemplatesApi } from '../../';
+import { GetTemplatesLazyParams, GetTemplatesLazyResponse } from './getTemplatesLazy.types';
 
 const defaultSearch = {
   take: 10,
   skip: 0,
-  type: DesignUserType.OWNER,
 };
 
-export function useGetDesignsLazy(
-  options?: UseInfiniteQueryOptions<PaginationResponseType<IGetDesigns>, Error>,
+const QUERY_KEY = {
+  GET_TEMPLATES: '/template',
+};
+
+export function useGetTemplatesLazy(
+  options?: UseInfiniteQueryOptions<PaginationResponseType<GetTemplatesLazyResponse>, Error>,
 ) {
   const [inputSearch, setInputSearch] = useState<string>('');
-  const [params, setParams] = useState<GetDesignsParams>(defaultSearch);
+  const [params, setParams] = useState<GetTemplatesLazyParams>(defaultSearch);
   const debounceSearch = useDebounce(inputSearch, 300);
 
   const {
@@ -25,16 +27,17 @@ export function useGetDesignsLazy(
     error,
     isError,
     isFetching,
-    refetch: onGetDesigns,
+    refetch: onGetTemplates,
     fetchNextPage,
-  } = useInfiniteQuery<PaginationResponseType<IGetDesigns>, Error>(
-    [DESIGN_QUERY_KEYS.DESIGNS, params, debounceSearch, { type: 'lazy' }],
-    (props): Promise<PaginationResponseType<IGetDesigns>> => {
+  } = useInfiniteQuery<PaginationResponseType<GetTemplatesLazyResponse>, Error>(
+    [QUERY_KEY.GET_TEMPLATES, params, debounceSearch, { type: 'lazy' }],
+    (props): Promise<PaginationResponseType<GetTemplatesLazyResponse>> => {
       const { pageParam = defaultSearch } = props;
 
-      return responseWrapper<PaginationResponseType<IGetDesigns>>(DesignApi.getDesigns, [
-        { ...pageParam, ...params },
-      ]);
+      return responseWrapper<PaginationResponseType<GetTemplatesLazyResponse>>(
+        GetTemplatesApi.getTemplates,
+        [{ ...pageParam, ...params }],
+      );
     },
     {
       keepPreviousData: true,
@@ -58,15 +61,15 @@ export function useGetDesignsLazy(
 
   const queryClient = useQueryClient();
 
-  const designs = useMemo(() => {
+  const templates = useMemo(() => {
     if (isEmpty(data?.pages)) return [];
     return data.pages.reduce((state, page, _pageIdx) => [...state, ...page.data], []);
-  }, [data]) as IGetDesigns[];
+  }, [data]) as GetTemplatesLazyResponse[];
 
-  const handleInvalidateDesigns = () => queryClient.invalidateQueries([DESIGN_QUERY_KEYS.DESIGNS]);
+  const handleInvalidateTemplates = () => queryClient.invalidateQueries([QUERY_KEY.GET_TEMPLATES]);
 
   return {
-    designs,
+    templates,
     hasNext,
     error,
     isError,
@@ -74,8 +77,8 @@ export function useGetDesignsLazy(
     params,
     fetchNextPage,
     setParams,
-    onGetDesigns,
-    handleInvalidateDesigns,
+    onGetTemplates,
+    handleInvalidateTemplates,
     inputSearch,
     setInputSearch,
   };

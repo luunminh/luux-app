@@ -4,7 +4,7 @@ import { Image } from '@mantine/core';
 import Autoplay from 'embla-carousel-autoplay';
 import { useRef } from 'react';
 
-const HomePageCarousel = () => {
+const LandingPageCarousel = () => {
   const autoplay = useRef(Autoplay({ delay: 2000 }));
 
   return (
@@ -25,4 +25,4 @@ const HomePageCarousel = () => {
   );
 };
 
-export default HomePageCarousel;
+export default LandingPageCarousel;

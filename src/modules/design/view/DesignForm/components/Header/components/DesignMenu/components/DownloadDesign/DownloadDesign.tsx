@@ -1,11 +1,14 @@
+import { Callback } from '@core/common';
 import { FormCore } from '@core/components';
 import { useDownloadDesign, usePage } from '@design/hooks';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { ActionIcon, Button, Divider, Flex, MultiSelect, Stack, Text } from '@mantine/core';
+import { ActionIcon, Button, Divider, Flex, MultiSelect, Stack, Text, Title } from '@mantine/core';
+import { modals } from '@mantine/modals';
 import { PageImage, useDesignContext, useDesignStore } from '@modules/design/view/DesignForm/store';
 import { useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { IoArrowBack } from 'react-icons/io5';
+import { PublicTemplate } from '../PublicTemplate';
 import {
   DownloadFileFormKey,
   DownloadFileFormTypes,
@@ -37,17 +40,48 @@ const DownloadDesign = ({ onBack }: Props) => {
     };
   }, [numberOfPages]);
 
-  const { control, handleSubmit, watch, reset, setValue } = useForm<DownloadFileFormTypes>({
-    defaultValues,
-    mode: 'onChange',
-    reValidateMode: 'onChange',
-    shouldFocusError: true,
-    resolver: yupResolver<any>(downloadFileFormSchema),
-  });
+  const { control, handleSubmit, watch, reset, setValue, getValues } =
+    useForm<DownloadFileFormTypes>({
+      defaultValues,
+      mode: 'onChange',
+      reValidateMode: 'onChange',
+      shouldFocusError: true,
+      resolver: yupResolver<any>(downloadFileFormSchema),
+    });
 
   const fileTypeVal = watch(DownloadFileFormKey.FILE_TYPE);
 
   const onValidSubmit = (formValues: DownloadFileFormTypes) => {
+    handleExportDesign(formValues, handleExportFiles);
+  };
+
+  const handleExportFiles = (pages: PageImage[]) => {
+    switch (fileTypeVal) {
+      case DownloadFileTypeEnum.JPG:
+      case DownloadFileTypeEnum.PNG:
+        exportImages(pages);
+        break;
+      case DownloadFileTypeEnum.PDF:
+        // TODO: support export more types
+        exportPdf(
+          pages,
+          getValues(DownloadFileFormKey.FILE_TYPE) === DownloadFileTypeEnum.PDF ? 'doc' : 'slide',
+        );
+        break;
+    }
+  };
+
+  const handleOpenPublicTemplateModals = (pageImages: PageImage[]) => {
+    modals.open({
+      title: <Title order={4}>Create Template</Title>,
+      size: 'xl',
+      withCloseButton: true,
+      children: <PublicTemplate pageImages={pageImages} />,
+      overlayProps: { backgroundOpacity: 0.5, blur: 4 },
+    });
+  };
+
+  const handleExportDesign = (formValues: DownloadFileFormTypes, callBack: Callback) => {
     const pages = formValues.pages.map((page) => Number(page));
     onSetIsExporting(true);
     const currentPage = selectedPage;
@@ -58,7 +92,7 @@ const DownloadDesign = ({ onBack }: Props) => {
         onSetIsExporting(false);
         onSetSelectedPage(currentPage);
 
-        handleExportFiles(pageImages);
+        callBack(pageImages);
 
         subscription.unsubscribe();
       } else {
@@ -74,16 +108,8 @@ const DownloadDesign = ({ onBack }: Props) => {
     });
   };
 
-  const handleExportFiles = (pages: PageImage[]) => {
-    switch (fileTypeVal) {
-      case DownloadFileTypeEnum.JPG:
-      case DownloadFileTypeEnum.PNG:
-        exportImages(pages);
-        break;
-      case DownloadFileTypeEnum.PDF:
-        exportPdf(pages);
-        break;
-    }
+  const handlePublicTemplate = (formValues: DownloadFileFormTypes) => {
+    handleExportDesign(formValues, handleOpenPublicTemplateModals);
   };
 
   useEffect(() => {
@@ -128,6 +154,11 @@ const DownloadDesign = ({ onBack }: Props) => {
 
       <Button onClick={handleSubmit(onValidSubmit)} fullWidth>
         Download
+      </Button>
+
+      <Divider />
+      <Button onClick={handleSubmit(handlePublicTemplate)} variant="gradient" mt={16} fullWidth>
+        Public as a template
       </Button>
     </Stack>
   );

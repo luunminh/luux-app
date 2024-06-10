@@ -4,8 +4,8 @@ import { isEmpty } from '@core/common/utils';
 import { UseInfiniteQueryOptions, useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 import { useMemo, useState } from 'react';
 import { GetElementsParams, IElement } from '.';
-import { DesignApi } from '..';
-import { DESIGN_QUERY_KEYS } from '../key';
+import { DesignApi } from '../../';
+import { DESIGN_QUERY_KEYS } from '../../key';
 
 const defaultPageParams = {
   skip: 0,

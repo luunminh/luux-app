@@ -21,7 +21,7 @@ export const sidebarTabOptions = [
     value: ElementSidebarTabEnum.TEMPLATE,
     label: getTitleCase(ElementSidebarTabEnum.TEMPLATE),
     icon: <RiLayout2Fill size={22} />,
-    disabled: true,
+    disabled: false,
   },
   {
     value: ElementSidebarTabEnum.ELEMENTS,

@@ -1,11 +1,12 @@
 import { newCancelToken, stringify } from '@core/common';
 import { httpService } from '@core/common/services/http';
-import { CreateDesignPayload } from './createDesign';
-import { CreateDesignPermissionPayload } from './createDesignPermission';
-import { DeleteDesignPermissionPayload } from './deleteDesignPermission';
-import { GetDesignsParams } from './getDesignsLazy';
-import { GetElementsParams } from './getElements';
-import { UpdateDesignPermissionPayload } from './updateDesignPermission';
+import { CreateDesignPayload, GetDesignsParams } from './design';
+import {
+  CreateDesignPermissionPayload,
+  DeleteDesignPermissionPayload,
+  UpdateDesignPermissionPayload,
+} from './designPermission';
+import { GetElementsParams } from './element';
 
 const getElements = (params: GetElementsParams) => {
   const queryString = stringify(params);

@@ -103,6 +103,7 @@ const PeopleWithAccess = ({ onOpenAccessMenu }: { onOpenAccessMenu: Callback }) 
     data: { users = [] },
     onlineUserIds,
   } = useDesignStore();
+  console.log('PeopleWithAccess ~ onlineUserIds:', onlineUserIds);
 
   const { hasEditingPermission } = useDesignData();
 
@@ -140,7 +141,7 @@ const PeopleWithAccess = ({ onOpenAccessMenu }: { onOpenAccessMenu: Callback }) 
         {showingUsers.map((user) => (
           <Tooltip key={user.id} label={getFullName(user)}>
             <Avatar
-              style={isOnline && { boxShadow: `0 0 0 2px ${COLOR_CODE.PRIMARY}` }}
+              style={isOnline(user.id) && { boxShadow: `0 0 0 2px ${COLOR_CODE.PRIMARY}` }}
               src="image.png"
             >
               {getStandForName(user)}

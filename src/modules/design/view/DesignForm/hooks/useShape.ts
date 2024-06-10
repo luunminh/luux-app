@@ -6,7 +6,6 @@ import { IDesignContent, IShape } from '../types';
 const useShape = () => {
   const { data, onSetData, selectedPage } = useDesignStore();
 
-  console.log('ScreenSizesSlide ~ data:', data?.metadata);
   const shapes = useMemo(
     () => data?.metadata?.find((page) => page.pageNumber === selectedPage)?.shapes || [],
     [data, selectedPage],
