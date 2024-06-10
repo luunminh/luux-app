@@ -26,6 +26,11 @@ const ThemeProvider: FC<Props> = ({ children }) => {
         modalProps={{
           centered: true,
           padding: 24,
+          overlayProps: {
+            backgroundOpacity: 0.5,
+            zIndex: 999999,
+            blur: 4,
+          },
         }}
       >
         {children}

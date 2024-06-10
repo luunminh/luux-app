@@ -60,3 +60,15 @@ input[type='password']::-ms-clear {
 .ck-balloon-panel {
   display: none !important;
 }
+
+.mantine-Modal-overlay {
+  z-index: 2000;
+}
+
+.mantine-Modal-inner {
+  z-index: 3000;
+}
+
+.mantine-Popover-dropdown {
+  z-index: 4000 !important;
+}

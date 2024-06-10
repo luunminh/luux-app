@@ -1,11 +1,25 @@
-import { Navigator, getFullName } from '@core/common';
-import { useProfile } from '@core/queries';
-import { ActionIcon, Avatar, Button, Flex, Menu, Stack, Text, Title, Tooltip } from '@mantine/core';
+import { getFullName, isEmpty } from '@core/common';
+import { useGetScreenSizeList, useProfile } from '@core/queries';
+import {
+  ActionIcon,
+  Avatar,
+  Button,
+  Flex,
+  Menu,
+  Select,
+  Stack,
+  Text,
+  Title,
+  Tooltip,
+} from '@mantine/core';
+import { modals } from '@mantine/modals';
+import { useCreateDesign } from '@modules/design/queries';
+import { DEFAULT_DESIGN } from '@modules/design/view/DesignForm';
+import { useState } from 'react';
 
 import { IoIosAdd as AddIcon } from 'react-icons/io';
 import { IoLogOutOutline as LogoutIcon, IoSettingsOutline as SettingIcon } from 'react-icons/io5';
 import { RiLockPasswordLine as LockIcon } from 'react-icons/ri';
-import { useNavigate } from 'react-router-dom';
 
 const NavbarActions = () => {
   return (
@@ -35,18 +49,73 @@ NavbarActions.Settings = () => {
 };
 
 NavbarActions.CreateDesign = () => {
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const navigate = useNavigate();
-  const portal = Navigator.getCurrentPortalUrl();
-
-  const handleCreateNewDesign = () => {
-    navigate(`${portal}/design/add`);
+  const handleAddNewDesign = () => {
+    modals.open({
+      title: <Title order={4}>Create New Design</Title>,
+      size: 'md',
+      withCloseButton: true,
+      children: <AddDesignModal />,
+      overlayProps: { backgroundOpacity: 0.5, blur: 4 },
+    });
   };
 
   return (
-    <Button onClick={handleCreateNewDesign} leftSection={<AddIcon size={22} />} variant="gradient">
+    <Button onClick={handleAddNewDesign} leftSection={<AddIcon size={22} />} variant="gradient">
       Create new design
     </Button>
+  );
+};
+
+const AddDesignModal = () => {
+  const {
+    profile: { id },
+  } = useProfile();
+  const [screenSize, setScreenSize] = useState('');
+
+  const { screenSizeList, isFetching: isFetchingScreenSize } = useGetScreenSizeList({
+    enabled: true,
+  });
+
+  const { onCreateDesign, isLoading: isCreatingDesign } = useCreateDesign({
+    onSuccess: ({ data }) => {
+      window.open(`/app/design/${data}`, '_blank');
+    },
+  });
+
+  const handleCreateDesign = () => {
+    const data = DEFAULT_DESIGN({ screenSizeId: screenSize, userId: id });
+
+    onCreateDesign({ ...data, metadata: data.metadata });
+  };
+
+  return (
+    <Stack gap={16}>
+      <Select
+        clearable
+        label="Select Screen Size"
+        placeholder="Screen size"
+        value={screenSize}
+        disabled={isFetchingScreenSize}
+        data={screenSizeList.map((item) => ({
+          label: item.name,
+          value: item.id,
+        }))}
+        onChange={(value) => setScreenSize(value)}
+      />
+      <Flex justify="end" gap={16} mt={16}>
+        <Button variant="outline" disabled={isCreatingDesign} onClick={modals.closeAll}>
+          Cancel
+        </Button>
+        <Button
+          loading={isCreatingDesign}
+          onClick={handleCreateDesign}
+          disabled={isEmpty(screenSize)}
+          variant="gradient"
+        >
+          Create
+        </Button>
+      </Flex>
+    </Stack>
   );
 };
 

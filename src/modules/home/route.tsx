@@ -1,5 +1,4 @@
 import { PREFIX_ROUTE } from '@config/paths';
-import { CustomRoute } from '@containers';
 import { lazy } from 'react';
 import { Route } from 'react-router-dom';
 
@@ -11,22 +10,6 @@ export const homePaths = {
 };
 
 export const homeRoutes = [
-  <Route
-    key={homePaths.home}
-    path={homePaths.home}
-    element={
-      <CustomRoute>
-        <HomePage />
-      </CustomRoute>
-    }
-  />,
-  <Route
-    key={homePaths.landingPage}
-    path={homePaths.landingPage}
-    element={
-      <CustomRoute pageRequiredAuth={false}>
-        <LandingPage />
-      </CustomRoute>
-    }
-  />,
+  <Route key={homePaths.home} path={homePaths.home} element={<HomePage />} />,
+  <Route key={homePaths.landingPage} path={homePaths.landingPage} element={<LandingPage />} />,
 ];

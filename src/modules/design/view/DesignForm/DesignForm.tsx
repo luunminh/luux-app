@@ -103,7 +103,7 @@ const DesignForm = ({ screenSizeId }: Props) => {
           },
         }}
       >
-        <AppShell.Header zIndex={1000000}>
+        <AppShell.Header zIndex={1300}>
           <DesignForm.Header
             hasPast={hasPast}
             hasFuture={hasFuture}
