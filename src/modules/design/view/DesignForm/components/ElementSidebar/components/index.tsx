@@ -35,6 +35,8 @@ export const ItemWrapper = ({ children, element }: ItemWrapperProps) => {
         attrs: {
           ...(shapeAttrs as any),
           ...(jsonStates.length > 1 && { group: groupId }),
+          //@ts-ignore
+          layerIdx: shapeAttrs?.layerIdx || 0,
           id,
         },
       });

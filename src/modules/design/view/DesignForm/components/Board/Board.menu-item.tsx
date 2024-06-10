@@ -3,6 +3,7 @@ import { ActionIcon, Button, Menu, Tooltip } from '@mantine/core';
 import { Group } from 'konva/lib/Group';
 import { Layer } from 'konva/lib/Layer';
 import { Node, NodeConfig } from 'konva/lib/Node';
+import { useState } from 'react';
 import { BiDuplicate } from 'react-icons/bi';
 import { BsLayerBackward, BsLayerForward } from 'react-icons/bs';
 import {
@@ -15,7 +16,8 @@ import { HiMenu } from 'react-icons/hi';
 import { IoCopyOutline, IoTrash } from 'react-icons/io5';
 import { LuClipboardPaste } from 'react-icons/lu';
 import { TbArrowsDown, TbArrowsUp } from 'react-icons/tb';
-import { useShape, useStage } from '../../hooks';
+import { useDesignLS, useHotkeyFunc, useShape, useStage } from '../../hooks';
+import { IShape } from '../../types';
 type Props = {
   stage: ReturnType<typeof useStage>;
   selectedItems: Node<NodeConfig>[];
@@ -25,6 +27,11 @@ type Props = {
 const BoardMenuItem = ({ selectedItems, clearSelection, stage }: Props) => {
   const { removeShapes, updateShapes, shapes } = useShape();
   const { stageRef } = stage;
+
+  const { copyItems, pasteItems, duplicateItems } = useHotkeyFunc();
+
+  const { getClipboard } = useDesignLS();
+  const [clipboard, setClipboard] = useState<IShape[]>(getClipboard() || []);
 
   const isShowLockButton = selectedItems.length === 1;
   const isLocked = selectedItems[0]?.attrs.locked;
@@ -44,12 +51,12 @@ const BoardMenuItem = ({ selectedItems, clearSelection, stage }: Props) => {
   };
 
   const handleBringFrontShapes = () => {
-    updateLayerIndex(1);
+    updateLayerIndex(1, true);
     moveShapes('up');
   };
 
   const handleBringBackShapes = () => {
-    updateLayerIndex(-1);
+    updateLayerIndex(-1, true);
     moveShapes('down');
   };
 
@@ -65,7 +72,6 @@ const BoardMenuItem = ({ selectedItems, clearSelection, stage }: Props) => {
 
   const toggleLockStatus = () => {
     const updatedShapes = selectedItems.map((item) => ({
-      ...item,
       id: item.id(),
       attrs: {
         ...item.attrs,
@@ -79,13 +85,12 @@ const BoardMenuItem = ({ selectedItems, clearSelection, stage }: Props) => {
     );
   };
 
-  const updateLayerIndex = (newIndex: number) => {
+  const updateLayerIndex = (newIndex: number, isAdd = false) => {
     const updatedShapes = selectedItems.map((item) => ({
-      ...item,
       id: item.id(),
       attrs: {
         ...item.attrs,
-        layerIdx: newIndex,
+        layerIdx: isAdd ? item.attrs?.layerIdx || 0 + newIndex : newIndex,
       },
     }));
 
@@ -146,7 +151,6 @@ const BoardMenuItem = ({ selectedItems, clearSelection, stage }: Props) => {
   const handleGroupShapes = () => {
     const groupIds = getRandomId();
     const groupShapes = selectedItems.map((item) => ({
-      ...item,
       id: item.id(),
       attrs: {
         ...item.attrs,
@@ -164,7 +168,6 @@ const BoardMenuItem = ({ selectedItems, clearSelection, stage }: Props) => {
 
   const handleUnGroupShapes = () => {
     const unGroupShapes = selectedItems.map((item) => ({
-      ...item,
       id: item.id(),
       attrs: {
         ...item.attrs,
@@ -206,13 +209,28 @@ const BoardMenuItem = ({ selectedItems, clearSelection, stage }: Props) => {
         <Menu.Dropdown>
           <Menu.Label c="blue">Actions</Menu.Label>
           <Menu.Divider />
-          <Menu.Item color="blue" c={COLOR_CODE.TEXT_CONTROL} leftSection={<IoCopyOutline />}>
+          <Menu.Item
+            color="blue"
+            c={COLOR_CODE.TEXT_CONTROL}
+            onClick={() => copyItems(selectedItems, setClipboard)}
+            leftSection={<IoCopyOutline />}
+          >
             Copy
           </Menu.Item>
-          <Menu.Item color="blue" c={COLOR_CODE.TEXT_CONTROL} leftSection={<LuClipboardPaste />}>
+          <Menu.Item
+            color="blue"
+            c={COLOR_CODE.TEXT_CONTROL}
+            onClick={() => pasteItems(clipboard, setClipboard)}
+            leftSection={<LuClipboardPaste />}
+          >
             Paste
           </Menu.Item>
-          <Menu.Item color="blue" c={COLOR_CODE.TEXT_CONTROL} leftSection={<BiDuplicate />}>
+          <Menu.Item
+            color="blue"
+            c={COLOR_CODE.TEXT_CONTROL}
+            onClick={() => duplicateItems(selectedItems)}
+            leftSection={<BiDuplicate />}
+          >
             Duplicate
           </Menu.Item>
           <Menu.Divider />
