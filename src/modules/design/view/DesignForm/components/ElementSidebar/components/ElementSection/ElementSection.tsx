@@ -1,4 +1,4 @@
-import { Button, Grid, Image, Loader, Stack, Text, TextInput } from '@mantine/core';
+import { Button, Grid, Loader, Stack, Text, TextInput, Tooltip } from '@mantine/core';
 import { useGetElementsLazy } from '@modules/design/queries';
 import { isEmpty } from 'lodash';
 import { ChangeEvent, useEffect } from 'react';
@@ -54,13 +54,15 @@ const ElementSection = ({ categoryId }: Props) => {
     return elements.map((element) => (
       <Grid.Col key={element.id} span={4}>
         <ItemWrapper element={element}>
-          <Image
-            radius="md"
-            loading="lazy"
-            src={element.thumbnailUrl}
-            alt={element.name}
-            height={80}
-          />
+          <Tooltip label="Insert this element" withArrow>
+            <img
+              loading="lazy"
+              src={element.thumbnailUrl}
+              alt={element.name}
+              className="w-auto h-36 h-full object-contain"
+              style={{ width: '-webkit-fill-available' }}
+            />
+          </Tooltip>
         </ItemWrapper>
       </Grid.Col>
     ));

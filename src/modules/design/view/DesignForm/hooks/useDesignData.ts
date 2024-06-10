@@ -21,12 +21,14 @@ const useDesignData = () => {
   const { data, onSetData } = useDesignStore();
   const { profile } = useProfile();
 
+  const isOwner = useMemo(() => data?.createdByUserId === profile?.id, [data, profile]);
+
   const hasEditingPermission = useMemo(
     () => data?.users?.some((u) => u?.id === profile?.id && u?.canEdit === true),
     [data, profile],
   );
   const notHavePermission = useMemo(
-    () => data?.users?.every((user) => user.id !== profile?.id),
+    () => data?.users?.every((user) => user.id !== profile?.id) && data.privacy === 'PRIVATE',
     [data, profile],
   );
 
@@ -111,6 +113,7 @@ const useDesignData = () => {
   };
 
   return {
+    isOwner,
     hasEditingPermission,
     notHavePermission,
     addDesignPermission,

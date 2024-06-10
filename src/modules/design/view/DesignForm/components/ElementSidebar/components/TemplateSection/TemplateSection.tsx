@@ -54,17 +54,17 @@ const TemplateSection = () => {
 
     return templates.map((template) => (
       <Grid.Col key={template.id} span={6}>
-        <Tooltip label="Insert this template">
-          <TemplateWrapper template={template}>
+        <TemplateWrapper template={template}>
+          <Tooltip label="Insert this template" withArrow>
             <img
               src={template.thumbnailUrl}
               alt={template.name}
               loading="lazy"
               className="w-auto max-h-64 h-full object-contain"
-              style={{ borderRadius: 20, width: '-webkit-fill-available' }}
+              style={{ width: '-webkit-fill-available' }}
             />
-          </TemplateWrapper>
-        </Tooltip>
+          </Tooltip>
+        </TemplateWrapper>
       </Grid.Col>
     ));
   };
@@ -102,9 +102,9 @@ const TemplateWrapper = ({ template, children }: TemplateWrapperProps) => {
 
   return (
     <Card
-      mah={90}
+      className="max-h-64"
       shadow="sm"
-      radius="md"
+      radius="sm"
       padding={0}
       style={{ cursor: 'pointer' }}
       onClick={handleInsertTemplate}

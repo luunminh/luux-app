@@ -36,7 +36,6 @@ const DesignMenu = () => {
   const { profile } = useProfile();
 
   const [selectedItem, setSelectedItem] = useState<MenuItemOptionEnum>(null);
-
   const handleBackToMainMenu = () => setSelectedItem(null);
 
   const renderMenuContent = useMemo(() => {
@@ -103,7 +102,6 @@ const PeopleWithAccess = ({ onOpenAccessMenu }: { onOpenAccessMenu: Callback }) 
     data: { users = [] },
     onlineUserIds,
   } = useDesignStore();
-  console.log('PeopleWithAccess ~ onlineUserIds:', onlineUserIds);
 
   const { hasEditingPermission } = useDesignData();
 
