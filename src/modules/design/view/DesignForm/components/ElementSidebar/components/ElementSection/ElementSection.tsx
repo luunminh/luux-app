@@ -54,7 +54,7 @@ const ElementSection = ({ categoryId }: Props) => {
     return elements.map((element) => (
       <Grid.Col key={element.id} span={4}>
         <ItemWrapper element={element}>
-          <Tooltip label="Insert this element" withArrow>
+          <Tooltip label={`Insert ${element.name}`} withArrow>
             <img
               loading="lazy"
               src={element.thumbnailUrl}

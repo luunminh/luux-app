@@ -10,27 +10,18 @@ type Props = {
   onChange: (key: string, value: any) => void;
 };
 
-const BASE_FONT_SIZE = 16;
+const BASE_FONT_SIZE = 12;
 
 const FontSizeConfiguration = ({ selectedShape, onChange }: Props) => {
-  const [fontSize, setFontSize] = useState<number>(
-    BASE_FONT_SIZE * (selectedShape.attrs.scaleX || 1),
-  );
+  const [fontSize, setFontSize] = useState<number>(selectedShape.attrs.fontSize || BASE_FONT_SIZE);
 
   useEffect(() => {
-    onChange('scale', {
-      x: 1 * (fontSize / BASE_FONT_SIZE),
-      y: 1 * (fontSize / BASE_FONT_SIZE),
-    });
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    onChange('fontSize', fontSize);
   }, [fontSize]);
 
   useEffect(() => {
-    setFontSize(
-      parseFloat((BASE_FONT_SIZE * selectedShape.attrs?.scaleX || BASE_FONT_SIZE).toFixed()),
-    );
-  }, [selectedShape.attrs.scaleX]);
+    setFontSize(selectedShape.attrs?.fontSize || BASE_FONT_SIZE);
+  }, [selectedShape.attrs.fontSize]);
 
   return (
     <InputWrapper label="Font Size">

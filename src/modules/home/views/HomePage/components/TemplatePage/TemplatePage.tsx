@@ -1,5 +1,5 @@
 import { LoadingContainer, TableSearch } from '@components';
-import { TableQueryParams, isEmpty } from '@core/common';
+import { TableQueryParams, ToastService, isEmpty } from '@core/common';
 import { useGetScreenSizeList, useProfile } from '@core/queries';
 import {
   ActionIcon,
@@ -10,6 +10,7 @@ import {
   Grid,
   Group,
   Loader,
+  Menu,
   Select,
   Stack,
   Switch,
@@ -21,11 +22,13 @@ import {
   GetTemplatesLazyParams,
   TemplateQueryKeys,
   useCreateDesign,
+  useDeleteTemplate,
   useGetTemplatesLazy,
 } from '@modules/design/queries';
 import { designPaths } from '@modules/design/route';
 import { DEFAULT_DESIGN, IDesignContent } from '@modules/design/view/DesignForm';
 import { useCallback, useEffect, useMemo } from 'react';
+import { IoIosMore } from 'react-icons/io';
 import { IoRefresh } from 'react-icons/io5';
 import { useSearchParams } from 'react-router-dom';
 
@@ -38,6 +41,16 @@ const TemplateContent = ({ templatesHook }: Props) => {
   const { onCreateDesign } = useCreateDesign({
     onSuccess: ({ data }) => {
       window.open(`/${designPaths.design}/${data}`, '_blank');
+    },
+  });
+
+  const { onDeleteTemplate, isLoading: isDeletingTemplate } = useDeleteTemplate({
+    onSuccess: () => {
+      ToastService.success('Template deleted successfully');
+      templatesHook.handleInvalidateTemplates();
+    },
+    onError: () => {
+      ToastService.error('Failed to delete template');
     },
   });
 
@@ -79,15 +92,36 @@ const TemplateContent = ({ templatesHook }: Props) => {
             <Badge color="cyan">{template.screenSize.name}</Badge>
           </Group>
 
-          <Button
-            onClick={() => handleCreateDesign(template.screenSize.id, template.jsonState)}
-            variant="gradient"
-            fullWidth
-            mt="md"
-            radius="md"
-          >
-            Try it now
-          </Button>
+          <Grid>
+            <Grid.Col span={10}>
+              <Button
+                onClick={() => handleCreateDesign(template.screenSize.id, template.jsonState)}
+                variant="gradient"
+                fullWidth
+                mt="md"
+                radius="md"
+              >
+                Try it now
+              </Button>
+            </Grid.Col>
+            <Grid.Col span={2} className="flex justify-center items-center">
+              <Menu width={150}>
+                <Menu.Target>
+                  <ActionIcon variant="outline" radius="lg" mt="md">
+                    <IoIosMore size={18} />
+                  </ActionIcon>
+                </Menu.Target>
+                <Menu.Dropdown>
+                  <Menu.Item
+                    onClick={() => onDeleteTemplate({ id: template.id })}
+                    disabled={!(template.createdByUser.id === id) || isDeletingTemplate}
+                  >
+                    Delete
+                  </Menu.Item>
+                </Menu.Dropdown>
+              </Menu>
+            </Grid.Col>
+          </Grid>
         </Card>
       </Grid.Col>
     ));

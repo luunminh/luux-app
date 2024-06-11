@@ -1,4 +1,4 @@
-import { getFullName, isEmpty } from '@core/common';
+import { getFullName, getStandForName, isEmpty } from '@core/common';
 import { useGetScreenSizeList, useProfile } from '@core/queries';
 import {
   ActionIcon,
@@ -135,7 +135,7 @@ NavbarActions.Menu = () => {
             cursor: 'pointer',
           }}
         >
-          ML
+          {getStandForName(profile)}
         </Avatar>
       </Menu.Target>
 

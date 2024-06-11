@@ -53,7 +53,7 @@ const useSelection = (transformer: ReturnType<typeof useTransformer>) => {
         ? e.target.getParent().getParent().findOne('.label-target')
         : e.target;
 
-    if (!e.evt.ctrlKey) {
+    if (!e.evt?.ctrlKey) {
       newItemList = [targetItem];
     } else if (selectedItems.find((item) => item.id() === targetItem.id())) {
       newItemList = selectedItems.filter((item) => item.id() !== targetItem.id());

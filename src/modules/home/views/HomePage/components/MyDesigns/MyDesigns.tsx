@@ -3,12 +3,13 @@ import { LoadingContainer, TableSearch } from '@components';
 import {
   CommonQueryKey,
   TableQueryParams,
+  ToastService,
   formatDate,
   getFullName,
   getStandForName,
   isEmpty,
 } from '@core/common';
-import { useGetScreenSizeList } from '@core/queries';
+import { useGetScreenSizeList, useProfile } from '@core/queries';
 import {
   ActionIcon,
   Avatar,
@@ -20,6 +21,7 @@ import {
   Grid,
   Group,
   Loader,
+  Menu,
   Select,
   SelectProps,
   Stack,
@@ -32,11 +34,12 @@ import {
   DesignUserType,
   GetDesignsParams,
   IGetDesigns,
+  useDeleteDesign,
   useGetDesignsLazy,
 } from '@modules/design/queries';
 import { designPaths } from '@modules/design/route';
 import { useCallback, useEffect, useMemo } from 'react';
-import { IoIosAddCircle } from 'react-icons/io';
+import { IoIosAddCircle, IoIosMore } from 'react-icons/io';
 import { IoFolder, IoRefresh, IoTimeOutline } from 'react-icons/io5';
 import { MdArrowUpward, MdOutlineArrowDownward } from 'react-icons/md';
 import { useSearchParams } from 'react-router-dom';
@@ -93,6 +96,24 @@ const MyDesigns = () => {
 const DesignItem = ({ design }: { design: IGetDesigns }) => {
   const users = [design.createdByUser, ...design.sharedUsers];
 
+  const { handleInvalidateDesigns } = useGetDesignsLazy();
+
+  const { onDeleteDesign, isLoading: isDeletingDesign } = useDeleteDesign({
+    onSuccess: () => {
+      ToastService.success('Design deleted successfully!');
+      handleInvalidateDesigns();
+    },
+    onError: () => {
+      ToastService.error('Failed to delete design');
+    },
+  });
+
+  const {
+    profile: { id },
+  } = useProfile();
+
+  const isOwner = id === design.createdByUser.id;
+
   const previewUsers = users.slice(0, 3);
   const restUserNames = users.slice(3).map((user) => <p key={user.id}>{getFullName(user)}</p>);
 
@@ -125,9 +146,37 @@ const DesignItem = ({ design }: { design: IGetDesigns }) => {
         </Text>
       </Group>
 
-      <Button onClick={navigateToEdit} variant="gradient" fullWidth mt="md" radius="md">
-        Explore
-      </Button>
+      <Grid>
+        <Grid.Col span={10}>
+          <Button
+            disabled={isDeletingDesign}
+            onClick={navigateToEdit}
+            variant="gradient"
+            fullWidth
+            mt="md"
+            radius="md"
+          >
+            Explore
+          </Button>
+        </Grid.Col>
+        <Grid.Col span={2} className="flex justify-center items-center">
+          <Menu width={150}>
+            <Menu.Target>
+              <ActionIcon variant="outline" radius="lg" mt="md">
+                <IoIosMore size={18} />
+              </ActionIcon>
+            </Menu.Target>
+            <Menu.Dropdown>
+              <Menu.Item
+                onClick={() => onDeleteDesign({ id: design.id })}
+                disabled={!isOwner || isDeletingDesign}
+              >
+                Delete
+              </Menu.Item>
+            </Menu.Dropdown>
+          </Menu>
+        </Grid.Col>
+      </Grid>
     </Card>
   );
 };
