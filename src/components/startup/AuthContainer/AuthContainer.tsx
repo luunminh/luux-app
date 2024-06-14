@@ -47,6 +47,7 @@ const AuthContainer: FC<Props> = () => {
       searchParams.delete(TokenService.REFRESH_TOKEN);
 
       setSearchParams(searchParams);
+      window.location.reload();
       handleGetProfile();
     } else {
       handleGetProfile();
