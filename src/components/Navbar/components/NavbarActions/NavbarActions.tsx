@@ -1,5 +1,5 @@
 import { getFullName, getStandForName, isEmpty } from '@core/common';
-import { useGetScreenSizeList, useProfile } from '@core/queries';
+import { useGetScreenSizeList, useLogout, useProfile } from '@core/queries';
 import {
   ActionIcon,
   Avatar,
@@ -20,6 +20,8 @@ import { useState } from 'react';
 import { IoIosAdd as AddIcon } from 'react-icons/io';
 import { IoLogOutOutline as LogoutIcon, IoSettingsOutline as SettingIcon } from 'react-icons/io5';
 import { RiLockPasswordLine as LockIcon } from 'react-icons/ri';
+import ChangePasswordModal from './NavbarActions.password';
+import UpdateUserModal from './NavbarActions.update-profile';
 
 const NavbarActions = () => {
   return (
@@ -125,6 +127,29 @@ NavbarActions.Menu = () => {
 
   const fullName = getFullName(profile);
 
+  const handleChangePassword = () => {
+    modals.open({
+      title: <Title order={4}>Change Password</Title>,
+      size: 'md',
+      withCloseButton: true,
+      children: <NavbarActions.ChangePassword />,
+      overlayProps: { backgroundOpacity: 0.5, blur: 4 },
+    });
+  };
+
+  const handleUpdateProfile = () => {
+    modals.open({
+      title: <Title order={4}>Update Profile</Title>,
+      size: 'lg',
+      withCloseButton: true,
+      children: <NavbarActions.UpdateProfile />,
+      overlayProps: { backgroundOpacity: 0.5, blur: 4 },
+    });
+  };
+
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const { onLogout } = useLogout();
+
   return (
     <Menu width={350} position="bottom" shadow="md">
       <Menu.Target>
@@ -152,12 +177,20 @@ NavbarActions.Menu = () => {
           </Flex>
         </Menu.Item>
         <Menu.Divider />
-        <Menu.Item leftSection={<SettingIcon />}>Settings</Menu.Item>
-        <Menu.Item leftSection={<LockIcon />}>Change password</Menu.Item>
-        <Menu.Item leftSection={<LogoutIcon />}>Log out</Menu.Item>
+        <Menu.Item leftSection={<SettingIcon />} onClick={handleUpdateProfile}>
+          Update Profile
+        </Menu.Item>
+        <Menu.Item leftSection={<LockIcon />} onClick={handleChangePassword}>
+          Change password
+        </Menu.Item>
+        <Menu.Item leftSection={<LogoutIcon />} onClick={onLogout}>
+          Log out
+        </Menu.Item>
       </Menu.Dropdown>
     </Menu>
   );
 };
 
+NavbarActions.ChangePassword = ChangePasswordModal;
+NavbarActions.UpdateProfile = UpdateUserModal;
 export default NavbarActions;
