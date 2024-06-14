@@ -60,7 +60,9 @@ const Selection = () => {
           component="button"
           className="cmp-page-item"
           style={{
+            display: 'flex',
             cursor: 'pointer',
+            justifyContent: 'center',
             border: COLOR_CODE.BORDER_DEFAULT,
           }}
           onClick={() => addNewPage()}

@@ -82,7 +82,7 @@ const TemplateContent = ({ templatesHook }: Props) => {
         <Card shadow="lg">
           <Card.Section>
             <img
-              className="object-cover max-h-56 w-full"
+              className="object-contain max-h-56 w-full"
               src={template.thumbnailUrl}
               alt={template.thumbnailUrl}
             />

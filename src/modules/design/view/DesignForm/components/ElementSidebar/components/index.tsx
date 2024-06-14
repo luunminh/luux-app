@@ -47,7 +47,7 @@ export const ItemWrapper = ({ children, element }: ItemWrapperProps) => {
 
   return (
     <Card
-      mah={90}
+      mah={136}
       shadow="sm"
       padding="lg"
       radius="md"

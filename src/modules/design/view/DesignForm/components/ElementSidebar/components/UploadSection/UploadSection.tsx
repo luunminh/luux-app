@@ -1,4 +1,4 @@
-import { ToastService, getRandomId, isEmpty } from '@core/common';
+import { COLOR_CODE, ToastService, getRandomId, isEmpty } from '@core/common';
 import {
   IAttachment,
   UploadFileTypeEnum,
@@ -13,7 +13,6 @@ import {
   Button,
   FileButton,
   Grid,
-  Image,
   Loader,
   Menu,
   Stack,
@@ -130,8 +129,23 @@ const UploadSection = () => {
     }
 
     return filterAttachments.map((img) => (
-      <Grid.Col span={4} key={img.asset_id} style={{ position: 'relative', cursor: 'pointer' }}>
-        <Image radius="md" loading="lazy" src={img.secure_url} alt={img.public_id} h={90} />
+      <Grid.Col
+        span={6}
+        key={img.asset_id}
+        className="flex justify-center"
+        style={{
+          position: 'relative',
+          cursor: 'pointer',
+          border: COLOR_CODE.BORDER_DEFAULT,
+          borderRadius: 12,
+        }}
+      >
+        <img
+          loading="lazy"
+          className="object-contain h-32"
+          src={img.secure_url}
+          alt={img.public_id}
+        />
 
         <Menu width={200} position="bottom" shadow="md">
           <Menu.Target>
@@ -162,7 +176,7 @@ const UploadSection = () => {
 
   return (
     <Stack gap={16} p={16} w="100%">
-      <Grid style={{ width: '100%' }}>
+      <Grid style={{ width: '100%' }} gutter={8}>
         <Grid.Col span={12}>
           <TextInput
             value={search}

@@ -131,7 +131,7 @@ const DesignItem = ({ design }: { design: IGetDesigns }) => {
               <Avatar size="md">{getStandForName(user)}</Avatar>
             </Tooltip>
           ))}
-          {!isEmpty(restUserNames) && (
+          {!isEmpty(restUserNames) && users.length - 4 > 0 && (
             <Tooltip label={restUserNames}>
               <Avatar size="md">+{users.length - 4}</Avatar>
             </Tooltip>

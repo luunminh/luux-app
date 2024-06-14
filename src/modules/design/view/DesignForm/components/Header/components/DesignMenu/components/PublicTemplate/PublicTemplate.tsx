@@ -80,7 +80,12 @@ const PublicTemplate = ({ pageImages }: Props) => {
     <>
       <Grid>
         <Grid.Col span={6}>
-          <TextInput value={name} label="Template Name" onChange={(e) => setName(e.target.value)} />
+          <TextInput
+            required
+            value={name}
+            label="Template Name"
+            onChange={(e) => setName(e.target.value)}
+          />
         </Grid.Col>
         <Grid.Col span={6}>
           <TextInput readOnly value={screenSize?.name} label="Type" />
@@ -89,13 +94,13 @@ const PublicTemplate = ({ pageImages }: Props) => {
           <InputWrapper label="Preview">
             <Carousel withIndicators>
               {pageImages.map((page) => (
-                <Carousel.Slide key={page.pageNumber}>
+                <Carousel.Slide key={page.pageNumber} className="flex justify-center">
                   <img
                     loading="lazy"
                     alt={`preview-page ${page.pageNumber}`}
                     className="w-auto max-h-64 h-full object-contain"
                     src={URL.createObjectURL(page.image)}
-                    style={{ borderRadius: 20, width: '-webkit-fill-available' }}
+                    style={{ borderRadius: 10, width: '-webkit-fill-available' }}
                   />
                 </Carousel.Slide>
               ))}
