@@ -1,6 +1,6 @@
 import { useShape } from '@design/hooks';
 import { IShape } from '@design/types';
-import { Stack } from '@mantine/core';
+import { InputWrapper, Slider, Stack } from '@mantine/core';
 import { useCallback } from 'react';
 import { FontSelection, FontSizeConfiguration } from '../section';
 
@@ -34,6 +34,18 @@ const ConfigurationText = ({ id }: Props) => {
     <Stack gap={16}>
       <FontSizeConfiguration selectedShape={selectedShape} onChange={handleChangeShape} />
       <FontSelection selectedShape={selectedShape} onChange={handleChangeShape} />
+      <InputWrapper label="Letter spacing">
+        <Slider
+          label={selectedShape?.attrs?.letterSpacing || 0}
+          color="blue"
+          min={0}
+          max={100}
+          value={selectedShape?.attrs?.letterSpacing || 0}
+          onChange={(value) => {
+            handleChangeShape('letterSpacing', value);
+          }}
+        />
+      </InputWrapper>
     </Stack>
   );
 };

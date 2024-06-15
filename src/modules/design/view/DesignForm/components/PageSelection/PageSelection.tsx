@@ -14,7 +14,8 @@ const PageItem = ({ pageIdx }: PageItemProps) => {
 
   const isSelected = selectedPage === pageIdx;
 
-  const handleSelectPage = () => {
+  const handleSelectPage: React.MouseEventHandler<HTMLButtonElement> = (e) => {
+    e.stopPropagation();
     if (!isSelected) onSetSelectedPage(pageIdx);
   };
 

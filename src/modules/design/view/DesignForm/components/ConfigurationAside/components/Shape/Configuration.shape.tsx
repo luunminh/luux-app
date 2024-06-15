@@ -13,7 +13,7 @@ const ConfigurationShape = ({ id }: Props) => {
 
   const selectedShape = getShapeById(id);
 
-  const colorValue = selectedShape.attrs.fill
+  const colorValue = selectedShape?.attrs?.fill
     ? selectedShape.attrs.fill === 'black'
       ? '#000'
       : selectedShape.attrs.fill
@@ -41,15 +41,15 @@ const ConfigurationShape = ({ id }: Props) => {
     <Stack>
       <InputWrapper label="Transparent">
         <Slider
-          label={selectedShape.attrs.opacity * 100 || 100}
+          label={selectedShape?.attrs?.opacity * 100 || 100}
           color="blue"
-          value={selectedShape.attrs.opacity * 100 || 100}
+          value={selectedShape?.attrs?.opacity * 100 || 100}
           onChange={(value) => {
             handleChangeShape(['opacity'], [Number(value) / 100]);
           }}
         />
       </InputWrapper>
-      {!LINE_TYPES.includes(selectedShape.attrs.shapeType) && (
+      {!LINE_TYPES.includes(selectedShape?.attrs?.shapeType) && (
         <ColorInput
           label="Color"
           value={colorValue}

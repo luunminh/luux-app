@@ -17,6 +17,7 @@ const FontSizeConfiguration = ({ selectedShape, onChange }: Props) => {
 
   useEffect(() => {
     onChange('fontSize', fontSize);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fontSize]);
 
   useEffect(() => {

@@ -23,16 +23,16 @@ const ElementSidebar = () => {
         categoryId = elementCategories.find(
           (c) => c.displayName === IBaseElementCategory.GRAPHIC,
         ).id;
-        return <Section.Element categoryId={categoryId} />;
+        return <Section.Element type={ElementSidebarTabEnum.ELEMENTS} categoryId={categoryId} />;
       case ElementSidebarTabEnum.SHAPES:
         categoryId = elementCategories.find((c) => c.displayName === IBaseElementCategory.SHAPE).id;
-        return <Section.Element categoryId={categoryId} />;
+        return <Section.Element type={ElementSidebarTabEnum.SHAPES} categoryId={categoryId} />;
       case ElementSidebarTabEnum.FRAME:
         categoryId = elementCategories.find((c) => c.displayName === IBaseElementCategory.FRAME).id;
-        return <Section.Element categoryId={categoryId} />;
+        return <Section.Element type={ElementSidebarTabEnum.FRAME} categoryId={categoryId} />;
       case ElementSidebarTabEnum.TEXT:
         categoryId = elementCategories.find((c) => c.displayName === IBaseElementCategory.TEXT).id;
-        return <Section.Element categoryId={categoryId} />;
+        return <Section.Element type={ElementSidebarTabEnum.TEXT} categoryId={categoryId} />;
 
       case ElementSidebarTabEnum.UPLOAD:
         return <Section.Upload />;

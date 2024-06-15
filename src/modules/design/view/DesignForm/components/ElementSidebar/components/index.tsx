@@ -36,7 +36,7 @@ export const ItemWrapper = ({ children, element }: ItemWrapperProps) => {
           ...(shapeAttrs as any),
           ...(jsonStates.length > 1 && { group: groupId }),
           //@ts-ignore
-          layerIdx: shapeAttrs?.layerIdx || 0,
+          // layerIdx: shapeAttrs?.layerIdx || 0,
           id,
         },
       });
@@ -47,7 +47,8 @@ export const ItemWrapper = ({ children, element }: ItemWrapperProps) => {
 
   return (
     <Card
-      mah={136}
+      mah={144}
+      h="100%"
       shadow="sm"
       padding="lg"
       radius="md"

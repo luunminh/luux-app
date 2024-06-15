@@ -8,8 +8,10 @@
   "author": "minh_luu@datahouse.com",
   "scripts": {
     "dev": "vite",
-    "init:modules": "bash bin/init-modules.sh",
-    "build": "pnpm init:modules && pnpm run build-app",
+    "build-app": "tsc && vite build",
+    "init:modules": "bash init-modules.sh",
+    "cpindex": "cp dist/index.html dist/app/index.html",
+    "build": "pnpm init:modules && pnpm run build-app && pnpm run cpindex",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },

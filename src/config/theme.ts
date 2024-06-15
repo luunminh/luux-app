@@ -2,9 +2,9 @@ import { COLOR_CODE } from '@core/common';
 import { Button, InputLabel, MenuItem, PasswordInput, TextInput, createTheme } from '@mantine/core';
 
 export const themeConfig = createTheme({
-  fontFamily: 'Roboto, sans-serif',
-  fontFamilyMonospace: 'Roboto, sans-serif',
-  headings: { fontFamily: 'Roboto, sans-serif' },
+  fontFamily: 'Arial',
+  fontFamilyMonospace: 'Arial',
+  headings: { fontFamily: 'Arial' },
 
   defaultRadius: 'md',
 
