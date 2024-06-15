@@ -1,5 +1,5 @@
-import { socketService } from '@core/common';
 import { useMemo } from 'react';
+import { socketService } from 'src/service';
 import { useDesignStore } from '../store';
 import { IDesignContent, IShape } from '../types';
 

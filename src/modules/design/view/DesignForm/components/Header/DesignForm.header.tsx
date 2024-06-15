@@ -1,4 +1,3 @@
-import { socketService } from '@core/common';
 import { ActionIcon, Burger, Divider, Flex, TextInput, Tooltip } from '@mantine/core';
 import classNames from 'classnames';
 import { LuRedo2 as RedoIcon, LuUndo2 as UndoIcon } from 'react-icons/lu';
@@ -6,6 +5,7 @@ import { useDesignData, useWorkHistory } from '../../hooks';
 import { useDesignStore } from '../../store';
 import { AvatarGroup, DesignMenu } from './components';
 
+import { socketService } from 'src/service';
 import './design-form.header.styles.scss';
 
 type Props = {

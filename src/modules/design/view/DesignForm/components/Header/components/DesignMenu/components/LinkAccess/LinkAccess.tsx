@@ -1,4 +1,4 @@
-import { COLOR_CODE, socketService } from '@core/common';
+import { COLOR_CODE } from '@core/common';
 import {
   Button,
   CopyButton,
@@ -15,6 +15,7 @@ import { useDesignStore } from '@modules/design/view/DesignForm/store';
 import { useState } from 'react';
 import { IoLockClosed } from 'react-icons/io5';
 import { TfiWorld } from 'react-icons/tfi';
+import { socketService } from 'src/service';
 
 interface ExtendedSelectOption {
   value: string;

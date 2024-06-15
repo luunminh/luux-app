@@ -1,11 +1,6 @@
 import { LoadingContainer } from '@components';
 import { LoadingGlobalContainer } from '@containers';
-import {
-  isEmpty,
-  socketService,
-  useComponentDidMount,
-  useComponentWillUnmount,
-} from '@core/common';
+import { isEmpty, useComponentDidMount, useComponentWillUnmount } from '@core/common';
 import { useGetScreenSizeList } from '@core/queries';
 import { AppShell, Stack } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
@@ -13,6 +8,7 @@ import { useGetDesignById } from '@modules/design/queries';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { TransformComponent, TransformWrapper } from 'react-zoom-pan-pinch';
+import { socketService } from 'src/service';
 import { Board, ConfigurationAside, DesignFormHeader, ElementSidebar } from './components';
 import { PageSelection } from './components/PageSelection';
 import { useDesignData, useTransformer, useWorkHistory } from './hooks';

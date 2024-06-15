@@ -1,4 +1,4 @@
-import { ToastService, socketService } from '@core/common';
+import { ToastService } from '@core/common';
 import { useProfile } from '@core/queries';
 import {
   IGetDesignUser,
@@ -8,6 +8,7 @@ import {
 import { homePaths } from '@modules/home/route';
 import { useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { socketService } from 'src/service';
 import { useDesignStore } from '../store';
 
 enum UserPermission {
