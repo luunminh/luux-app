@@ -1,6 +1,4 @@
-[submodule "shared"]
-	path = modules/shared
-	url = https://github.com/cp-luux/web-modules
 [submodule "src/modules/shared"]
 	path = src/modules/shared
-	url = https://github.com/cp-luux/web-modules
+	url = https://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@github.com/cp-luux/web-modules
+# https://github.com/beeinger/vercel-private-submodule
