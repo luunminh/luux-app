@@ -26,7 +26,7 @@ import UpdateUserModal from './NavbarActions.update-profile';
 const NavbarActions = () => {
   return (
     <Flex align="center" h="100%" gap="md">
-      <NavbarActions.Settings />
+      {/* <NavbarActions.Settings /> */}
       <NavbarActions.CreateDesign />
       <NavbarActions.Menu />
     </Flex>

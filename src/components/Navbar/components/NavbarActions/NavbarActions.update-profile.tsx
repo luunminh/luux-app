@@ -1,10 +1,11 @@
 import { ToastService, Yup } from '@core/common';
 import { FormCore } from '@core/components';
-import { useProfile, useUpdateUser } from '@core/queries';
+import { useProfile } from '@core/queries';
+import { useUpdateProfile } from '@core/queries/profile/updateProfile';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Flex, Grid, TextInput } from '@mantine/core';
 import { modals } from '@mantine/modals';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 
 type UpdateUserFormValues = {
@@ -19,7 +20,7 @@ enum UpdateUserFormKey {
   MIDDLE_NAME = 'middleName',
 }
 
-const UpdateUserFormInitialValues: UpdateUserFormValues = {
+const updateUserFormInitialValues: UpdateUserFormValues = {
   firstName: '',
   lastName: '',
   middleName: '',
@@ -28,23 +29,34 @@ const UpdateUserFormInitialValues: UpdateUserFormValues = {
 const UpdateUserFormValidationSchema = Yup.object().shape({
   [UpdateUserFormKey.FIRST_NAME]: Yup.string().required(),
   [UpdateUserFormKey.LAST_NAME]: Yup.string().required(),
-  [UpdateUserFormKey.MIDDLE_NAME]: Yup.string(),
+  [UpdateUserFormKey.MIDDLE_NAME]: Yup.string().nullable(),
 });
 
 const UpdateUserModal = () => {
-  const { profile } = useProfile();
+  const { profile, handleInvalidateProfile } = useProfile();
 
-  const { onUpdateUser, isLoading } = useUpdateUser({
+  const { onUpdateProfile, isLoading } = useUpdateProfile({
     onSuccess: () => {
       ToastService.success('Profile updated successfully');
+      handleInvalidateProfile();
+      modals.closeAll();
     },
     onError: (error) => {
       ToastService.error(error.message);
     },
   });
 
+  const defaultValues = useMemo(() => {
+    return {
+      ...updateUserFormInitialValues,
+      firstName: profile.firstName,
+      lastName: profile.lastName,
+      middleName: profile.middleName,
+    };
+  }, [profile]);
+
   const { control, handleSubmit, reset } = useForm<UpdateUserFormValues>({
-    defaultValues: UpdateUserFormInitialValues,
+    defaultValues,
     mode: 'onChange',
     reValidateMode: 'onChange',
     shouldFocusError: true,
@@ -53,15 +65,15 @@ const UpdateUserModal = () => {
 
   const onValidSubmit = (formValues: UpdateUserFormValues) => {
     console.log(formValues);
-    onUpdateUser({ id: profile.id, ...formValues });
+    onUpdateProfile({ id: profile.id, ...formValues });
   };
 
   useEffect(() => {
-    reset(UpdateUserFormInitialValues);
-  }, [reset]);
+    reset(defaultValues);
+  }, [reset, defaultValues]);
 
   return (
-    <FormCore.Wrapper onSubmit={handleSubmit(onValidSubmit)}>
+    <FormCore.Wrapper customSubmit={handleSubmit(onValidSubmit)}>
       <Grid>
         <Grid.Col span={12}>
           <TextInput label="Email" disabled value={profile.email} />

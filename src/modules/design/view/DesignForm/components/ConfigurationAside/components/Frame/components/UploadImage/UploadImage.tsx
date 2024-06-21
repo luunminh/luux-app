@@ -23,7 +23,7 @@ const UploadImage = ({ selectedShape }: Props) => {
 
   const { onUploadAttachment, isLoading } = useUploadAttachment({
     onSuccess({ data }) {
-      setImageUrls((prev) => [...prev, data.url]);
+      setImageUrls((prev) => [...prev, data.secure_url]);
     },
     onError(error) {
       ToastService.error(error.message);

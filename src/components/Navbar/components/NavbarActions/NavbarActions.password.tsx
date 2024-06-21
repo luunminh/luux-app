@@ -1,6 +1,6 @@
 import { ToastService, Yup } from '@core/common';
 import { FormCore } from '@core/components';
-import { useChangePassword, useProfile } from '@core/queries';
+import { useChangePassword } from '@core/queries';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Flex, Grid } from '@mantine/core';
 import { modals } from '@mantine/modals';
@@ -8,33 +8,36 @@ import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
 type ChangePasswordFormValues = {
+  password: string;
   newPassword: string;
   confirmPassword: string;
 };
 
 enum ChangePasswordFormKey {
+  PASSWORD = 'password',
   NEW_PASSWORD = 'newPassword',
   CONFIRM_PASSWORD = 'confirmPassword',
 }
 
 const changePasswordFormInitialValues: ChangePasswordFormValues = {
+  password: '',
   newPassword: '',
   confirmPassword: '',
 };
 
 const changePasswordFormValidationSchema = Yup.object().shape({
-  [ChangePasswordFormKey.NEW_PASSWORD]: Yup.string().required('Password is required'),
+  [ChangePasswordFormKey.PASSWORD]: Yup.string().required(),
+  [ChangePasswordFormKey.NEW_PASSWORD]: Yup.string().required(),
   [ChangePasswordFormKey.CONFIRM_PASSWORD]: Yup.string()
-    .required('Confirm password is required')
-    .oneOf([Yup.ref(ChangePasswordFormKey.NEW_PASSWORD)], 'Passwords must match'),
+    .required()
+    .oneOf([Yup.ref(ChangePasswordFormKey.NEW_PASSWORD)]),
 });
 
 const ChangePasswordModal = () => {
-  const { profile } = useProfile();
-
   const { onChangePassword, isLoading } = useChangePassword({
     onSuccess: () => {
       ToastService.success('Password changed successfully');
+      modals.closeAll();
     },
     onError: (error) => {
       ToastService.error(error.message);
@@ -51,7 +54,7 @@ const ChangePasswordModal = () => {
 
   const onValidSubmit = (formValues: ChangePasswordFormValues) => {
     console.log(formValues);
-    onChangePassword({ newPassword: formValues.newPassword });
+    onChangePassword({ password: formValues.password, newPassword: formValues.newPassword });
   };
 
   useEffect(() => {
@@ -59,8 +62,15 @@ const ChangePasswordModal = () => {
   }, [reset]);
 
   return (
-    <FormCore.Wrapper onSubmit={handleSubmit(onValidSubmit)}>
+    <FormCore.Wrapper customSubmit={handleSubmit(onValidSubmit)}>
       <Grid>
+        <Grid.Col span={12}>
+          <FormCore.InputPassword
+            control={control}
+            name={ChangePasswordFormKey.PASSWORD}
+            label="Old password"
+          />
+        </Grid.Col>
         <Grid.Col span={12}>
           <FormCore.InputPassword
             control={control}
