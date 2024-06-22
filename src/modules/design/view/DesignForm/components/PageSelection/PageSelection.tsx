@@ -1,10 +1,27 @@
-import { COLOR_CODE } from '@core/common';
-import { ActionIcon, Drawer, Flex, Menu, Paper, Text, Tooltip } from '@mantine/core';
+import { Lightbox } from '@components';
+import { COLOR_CODE, Callback } from '@core/common';
+import {
+  ActionIcon,
+  Box,
+  Button,
+  Drawer,
+  Flex,
+  Menu,
+  Paper,
+  Slider,
+  Text,
+  Title,
+  Tooltip,
+} from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
+import { useState } from 'react';
+import { FaRegCirclePlay } from 'react-icons/fa6';
 import { IoIosArrowUp, IoIosMore } from 'react-icons/io';
 import { IoAddOutline } from 'react-icons/io5';
+import { useControls } from 'react-zoom-pan-pinch';
 import { useDesignData, usePage } from '../../hooks';
-import { useDesignStore } from '../../store';
+import { PageImage, useDesignContext, useDesignStore } from '../../store';
+import { getArrayOfPages } from './PageSelection.helpers';
 
 type PageItemProps = {
   pageIdx: number;
@@ -81,7 +98,7 @@ const Trigger = () => {
   return (
     <>
       <Drawer
-        size="10%"
+        size="100px"
         opened={opened}
         onClose={close}
         withCloseButton={false}
@@ -141,7 +158,100 @@ const MenuOptions = () => {
   );
 };
 
+const DesignFooter = () => {
+  const { zoomIn, zoomOut, instance } = useControls();
+  const [zoom, setZoom] = useState(1);
+  const [openPreview, setOpenPreview] = useState(false);
+  const [slides, setSlides] = useState<any>([]);
+
+  const { numberOfPages } = usePage();
+  const { onSetIsExporting, onSetSelectedPage, selectedPage } = useDesignStore();
+  const { pageImagesStateChange, updatePageImages } = useDesignContext();
+
+  const handleExportDesign = (callBack: Callback) => {
+    const pages = getArrayOfPages(numberOfPages);
+    onSetIsExporting(true);
+    const currentPage = selectedPage;
+
+    const subscription = pageImagesStateChange.subscribe((pageImages) => {
+      if (pageImages.length === pages.length) {
+        updatePageImages([]);
+        onSetIsExporting(false);
+        onSetSelectedPage(currentPage);
+
+        callBack(pageImages);
+
+        subscription.unsubscribe();
+      } else {
+        const nextSelectedPage = pages.find(
+          (page) => !pageImages.some((pageImage) => pageImage.pageNumber === page),
+        );
+
+        // Delay to prevent flickering
+        // TODO: fix bugs delay
+        setTimeout(() => {
+          onSetSelectedPage(nextSelectedPage);
+        }, 200);
+      }
+    });
+  };
+
+  const handlePreview = () => {
+    handleExportDesign(async (pageImages: PageImage[]) => {
+      Promise.all(
+        pageImages.map(
+          (pageImage) =>
+            new Promise((resolve, reject) => {
+              const reader = new FileReader();
+              reader.onload = () =>
+                resolve({
+                  src: reader.result as string,
+                  title: `Page ${pageImage.pageNumber}`,
+                  type: 'image',
+                });
+              reader.onerror = reject;
+              reader.readAsDataURL(pageImage.image);
+            }),
+        ),
+      ).then((images) => {
+        setSlides(images);
+        setOpenPreview(true);
+      });
+    });
+  };
+
+  const handleZoom = (value: number) => {
+    if (value < zoom) {
+      zoomOut();
+    }
+    if (value > zoom) {
+      zoomIn();
+    }
+    setZoom(value);
+  };
+
+  return (
+    <Flex p={16} align="center" justify="space-between">
+      <Title order={4} style={{ fontWeight: 500 }}>
+        Page {selectedPage}
+      </Title>
+      <Flex align="center" gap={16}>
+        <Box w={200}>
+          <Slider min={1} value={zoom} onChange={handleZoom} />
+        </Box>
+        <Title order={4}>{zoom}%</Title>
+        <Button leftSection={<FaRegCirclePlay />} onClick={handlePreview} variant="outline">
+          Preview
+        </Button>
+        <Lightbox open={openPreview} slides={slides} close={() => setOpenPreview(false)} />
+      </Flex>
+      <Trigger />
+    </Flex>
+  );
+};
+
 export default {
   Selection,
   Trigger,
+  Footer: DesignFooter,
 };

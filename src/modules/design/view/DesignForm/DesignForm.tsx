@@ -110,7 +110,7 @@ const DesignForm = ({ screenSizeId }: Props) => {
             }}
           />
         </AppShell.Header>
-        <AppShell.Navbar withBorder>
+        <AppShell.Navbar withBorder className="cmp-design-form__sidebar">
           <ElementSidebar />
         </AppShell.Navbar>
         <AppShell.Main
@@ -142,13 +142,15 @@ const DesignForm = ({ screenSizeId }: Props) => {
               </Stack>
             </Stack>
           </TransformComponent>
-          <PageSelection.Trigger />
 
           {isExporting && <LoadingGlobalContainer />}
         </AppShell.Main>
-        <AppShell.Aside withBorder>
+        <AppShell.Aside withBorder className="cmp-design-form__aside">
           <DesignForm.Aside transformer={transformer} />
         </AppShell.Aside>
+        <AppShell.Footer withBorder className="cmp-design-form__footer">
+          <PageSelection.Footer />
+        </AppShell.Footer>
       </AppShell>
     </TransformWrapper>
   );

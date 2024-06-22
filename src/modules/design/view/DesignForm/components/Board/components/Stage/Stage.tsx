@@ -13,13 +13,14 @@ import { Stage as KonvaStage, Layer, Rect } from 'react-konva';
 import { getItemsInBoundary, getOriginFromTwoPoint, getScaledMousePosition } from './Stage.helpers';
 
 type Props = PropsWithChildren & {
-  size: { width: number; height: number };
+  size: { width: number; height: number; scale: number };
   onSelect: ITEMS_CONTEXT['onSelect'];
   stage: ReturnType<typeof useStage>;
 };
 
 const Stage = forwardRef(
   ({ children, stage, onSelect, size }: Props, ref: ForwardedRef<HTMLDivElement>) => {
+    const { width, height, scale } = size;
     const { stageRef, dragBackgroundOrigin } = stage;
 
     const moveStage = useCallback(() => {
@@ -171,11 +172,14 @@ const Stage = forwardRef(
           <KonvaStage
             style={{
               borderRadius: '16px',
+              backgroundColor: 'white',
             }}
+            width={width * scale}
+            height={height * scale}
+            scaleX={scale}
+            scaleY={scale}
             draggable={false}
             ref={stageRef}
-            width={size.width}
-            height={size.height}
             onMouseUp={onMouseUpOnStage}
             onMouseDown={onMouseDownOnStage}
             onMouseMove={onMouseMoveOnStage}

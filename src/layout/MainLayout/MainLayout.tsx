@@ -14,6 +14,9 @@ const MainLayout = ({ children }: MainLayoutProps) => {
   return (
     <CustomErrorBoundary showErrorMessage>
       <AppShell
+        style={{
+          overflowX: 'hidden',
+        }}
         header={{
           collapsed: isHideNav,
           height: appConfigs.NAVBAR_HEIGHT,

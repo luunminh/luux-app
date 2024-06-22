@@ -2,7 +2,7 @@ import { COLOR_CODE, isEmpty } from '@core/common';
 import { IScreenSize } from '@core/queries';
 import { useMantineTheme } from '@mantine/core';
 import { KonvaEventObject } from 'konva/lib/Node';
-import { ForwardedRef, forwardRef, useEffect, useMemo, useState } from 'react';
+import { ForwardedRef, forwardRef, useEffect, useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { Group, Transformer } from 'react-konva';
 import { Html } from 'react-konva-utils';
@@ -17,6 +17,7 @@ import {
 } from '../../hooks';
 import { useDesignContext, useDesignStore } from '../../store';
 import { IShape, ShapeTypeEnum } from '../../types';
+import useResize from '../ElementSidebar/components/UploadSection/useResize';
 import { getMenuAbsolutePosition, mapShapeByGroupAndZIndex } from './Board.helpers';
 import BoardMenuItem from './Board.menu-item';
 import { ShapeMap, Stage } from './components';
@@ -34,49 +35,8 @@ const Board = forwardRef(
     { pageNumber, transformer, workHistory, screenSize }: Props,
     ref: ForwardedRef<HTMLDivElement>,
   ) => {
-    const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
     const { addPageImage } = useDesignContext();
     const { isExporting } = useDesignStore();
-
-    useEffect(() => {
-      const wrapperContainer = document.querySelector('.board-wrapper');
-
-      if (wrapperContainer) {
-        const resizeObserver = new ResizeObserver((entries) => {
-          for (let entry of entries) {
-            setContainerSize({
-              width: entry.contentRect.width,
-              height: entry.contentRect.height,
-            });
-          }
-        });
-
-        resizeObserver.observe(wrapperContainer);
-
-        return () => {
-          resizeObserver.disconnect();
-        };
-      }
-    }, []);
-
-    const size = useMemo(() => {
-      const RATIO = 0.8;
-      const { width = 0, height = 0 } = screenSize;
-      const sizeRatio = width / height;
-
-      let calculatedWidth = Math.min(containerSize.width * RATIO, width);
-      let calculatedHeight = calculatedWidth / sizeRatio;
-
-      if (calculatedHeight > height) {
-        calculatedHeight = Math.min(containerSize.height * RATIO, height);
-        calculatedWidth = calculatedHeight * sizeRatio;
-      }
-
-      return {
-        width: calculatedWidth,
-        height: calculatedHeight,
-      };
-    }, [screenSize, containerSize]);
 
     const { isDragging, data } = useDesignStore();
     const { shapes } = useShape();
@@ -93,6 +53,8 @@ const Board = forwardRef(
     const { selectAll, copyItems, pasteItems, duplicateItems, deleteItems } = useHotkeyFunc();
     const { selectedItems, onSelection, clearSelection, setSelectedItems } =
       useSelection(transformer);
+
+    const { scale } = useResize({ hasAside: isEmpty(selectedItems), screenSize });
 
     const menuPos = getMenuAbsolutePosition(transformer.transformerRef.current);
 
@@ -247,7 +209,15 @@ const Board = forwardRef(
     };
 
     return (
-      <Stage stage={stage} onSelect={onSelection} size={size}>
+      <Stage
+        stage={stage}
+        onSelect={onSelection}
+        size={{
+          scale,
+          width: screenSize.width,
+          height: screenSize.height,
+        }}
+      >
         {mapShapeByGroupAndZIndex(shapes).map(({ group, shapes, maxZIndex }) => {
           if (group === 'undefined') {
             return renderShapes(shapes);
