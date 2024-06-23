@@ -3,6 +3,7 @@ import { Card } from '@mantine/core';
 import { IConvertJsonState, IElement } from '@modules/design/queries';
 import { PropsWithChildren } from 'react';
 import { useShape } from '../../../hooks';
+import { useDesignStore } from '../../../store';
 import { IShape } from '../../../types';
 import { DrawSection } from './DrawSection';
 import { ElementSection } from './ElementSection';
@@ -22,6 +23,7 @@ type ItemWrapperProps = PropsWithChildren & {
 
 export const ItemWrapper = ({ children, element }: ItemWrapperProps) => {
   const { addShapes } = useShape();
+  const { scale } = useDesignStore();
 
   const handleAddElement = (elm: IElement) => {
     const shapes: IShape[] = [];
@@ -35,6 +37,8 @@ export const ItemWrapper = ({ children, element }: ItemWrapperProps) => {
         attrs: {
           ...(shapeAttrs as any),
           ...(jsonStates.length > 1 && { group: groupId }),
+          scaleX: 1 / scale,
+          scaleY: 1 / scale,
           //@ts-ignore
           // layerIdx: shapeAttrs?.layerIdx || 0,
           id,

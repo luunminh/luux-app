@@ -1,5 +1,6 @@
 import { IScreenSize } from '@core/queries';
 import { ASIDE_WIDTH, SIDEBAR_WIDTH } from '@modules/design/view/DesignForm/DesignForm';
+import { useDesignStore } from '@modules/design/view/DesignForm/store';
 import { useEffect, useState } from 'react';
 
 type Props = {
@@ -13,6 +14,7 @@ const FOOTER_MENU_HEIGHT = 60;
 
 const useResize = ({ screenSize, hasAside }: Props) => {
   const [scale, setScale] = useState(1);
+  const { onSetScale } = useDesignStore();
 
   useEffect(() => {
     const hasSidebar = document.querySelector('.cmp-design-form__sidebar');
@@ -27,6 +29,11 @@ const useResize = ({ screenSize, hasAside }: Props) => {
       setScale(hScale);
     }
   }, [screenSize.width, screenSize.height, hasAside]);
+
+  useEffect(() => {
+    onSetScale(scale);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [scale]);
 
   return { scale };
 };

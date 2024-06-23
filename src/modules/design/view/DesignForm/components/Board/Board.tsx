@@ -246,8 +246,10 @@ const Board = forwardRef(
         {!isEmpty(selectedItems) && !isDragging && (
           <Html
             groupProps={{
-              x: menuPos.x,
-              y: menuPos.y,
+              x: menuPos.x / scale,
+              y: menuPos.y / scale,
+              scaleX: 1 / scale,
+              scaleY: 1 / scale,
             }}
           >
             <BoardMenuItem

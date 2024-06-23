@@ -25,6 +25,9 @@ export const DEFAULT_DESIGN = ({
 };
 
 type DesignStore = {
+  scale: number;
+  onSetScale: (scale: number) => void;
+
   selectedPage: number;
   onSetSelectedPage: (page: number) => void;
 
@@ -48,6 +51,9 @@ type DesignStore = {
 };
 
 export const useDesignStore = create<DesignStore>((set) => ({
+  scale: 1,
+  onSetScale: (scale: number) => set({ scale }),
+
   selectedPage: 1,
   onSetSelectedPage: (page: number) => set({ selectedPage: page }),
 

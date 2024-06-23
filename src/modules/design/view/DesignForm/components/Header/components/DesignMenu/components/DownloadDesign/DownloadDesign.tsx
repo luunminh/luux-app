@@ -63,10 +63,7 @@ const DownloadDesign = ({ onBack }: Props) => {
         break;
       case DownloadFileTypeEnum.PDF:
         // TODO: support export more types
-        exportPdf(
-          pages,
-          getValues(DownloadFileFormKey.FILE_TYPE) === DownloadFileTypeEnum.PDF ? 'doc' : 'slide',
-        );
+        exportPdf(pages);
         break;
     }
   };

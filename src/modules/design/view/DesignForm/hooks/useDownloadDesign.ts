@@ -42,7 +42,7 @@ const useDownloadDesign = () => {
   );
 
   const exportPdf = useCallback(
-    async (pages: PageImage[], type: 'slide' | 'doc' = 'doc') => {
+    async (pages: PageImage[]) => {
       if (isLoading) return;
 
       // const { width, height } = type === 'slide' ? POWER_POINT_SIZE : A4_SIZE;
