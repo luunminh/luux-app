@@ -159,7 +159,7 @@ const MenuOptions = () => {
 };
 
 const DesignFooter = () => {
-  const { zoomIn, zoomOut, instance } = useControls();
+  const { zoomIn, zoomOut } = useControls();
   const [zoom, setZoom] = useState(1);
   const [openPreview, setOpenPreview] = useState(false);
   const [slides, setSlides] = useState<any>([]);

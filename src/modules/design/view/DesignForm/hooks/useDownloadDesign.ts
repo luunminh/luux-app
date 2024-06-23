@@ -1,23 +1,31 @@
+import { useGetScreenSizeById } from '@core/queries';
 import { saveAs } from 'file-saver';
 import jsPDF from 'jspdf';
 import JsZip from 'jszip';
 import { useCallback } from 'react';
 import { PageImage, useDesignStore } from '../store';
 
-const A4_SIZE = {
-  width: 210,
-  height: 297,
-};
-
-const POWER_POINT_SIZE = {
-  width: 254,
-  height: 190.5,
-};
+/**
+ * Converts a size from pixels to millimeters based on the DPI.
+ * @param sizeInPixels The size in pixels.
+ * @param dpi The dots per inch (DPI) for the conversion.
+ * @returns The size in millimeters.
+ */
+function convertPxToMm(sizeInPixels: number, dpi: number = 300): number {
+  return (sizeInPixels / dpi) * 25.4;
+}
 
 const useDownloadDesign = () => {
   const {
-    data: { title },
+    data: { title, screenSizeId },
   } = useDesignStore();
+
+  const { data: screenSize, isLoading } = useGetScreenSizeById({
+    params: {
+      id: screenSizeId,
+    },
+  });
+
   const exportImages = useCallback(
     async (pages: PageImage[]) => {
       const zip = new JsZip();
@@ -35,9 +43,17 @@ const useDownloadDesign = () => {
 
   const exportPdf = useCallback(
     async (pages: PageImage[], type: 'slide' | 'doc' = 'doc') => {
-      const doc = new jsPDF();
+      if (isLoading) return;
 
-      const { width, height } = type === 'slide' ? POWER_POINT_SIZE : A4_SIZE;
+      // const { width, height } = type === 'slide' ? POWER_POINT_SIZE : A4_SIZE;
+      const width = convertPxToMm(screenSize?.width ?? 0);
+      const height = convertPxToMm(screenSize?.height ?? 0);
+
+      const doc = new jsPDF({
+        orientation: width > height ? 'landscape' : 'portrait',
+        unit: 'mm',
+        format: [width, height],
+      });
 
       const imgDataPromises = pages.map(
         (page) =>
@@ -61,7 +77,7 @@ const useDownloadDesign = () => {
 
       doc.save(`${title}.pdf`);
     },
-    [title],
+    [title, screenSize, isLoading],
   );
 
   return { exportImages, exportPdf };

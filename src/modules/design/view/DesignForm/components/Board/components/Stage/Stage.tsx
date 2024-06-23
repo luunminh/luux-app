@@ -173,6 +173,7 @@ const Stage = forwardRef(
             style={{
               borderRadius: '16px',
               backgroundColor: 'white',
+              overflow: 'hidden',
             }}
             width={width * scale}
             height={height * scale}
