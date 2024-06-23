@@ -78,7 +78,7 @@ const Board = forwardRef(
             .catch((err: any) => {
               console.error('Error:', err);
             });
-        }, 0);
+        }, 3000);
       }
     }, [isExporting, stage.stageRef, pageNumber, addPageImage]);
 

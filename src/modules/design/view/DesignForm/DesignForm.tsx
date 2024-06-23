@@ -1,5 +1,4 @@
 import { LoadingContainer } from '@components';
-import { LoadingGlobalContainer } from '@containers';
 import { isEmpty, useComponentDidMount, useComponentWillUnmount } from '@core/common';
 import { useGetScreenSizeList } from '@core/queries';
 import { AppShell, Stack } from '@mantine/core';
@@ -143,7 +142,7 @@ const DesignForm = ({ screenSizeId }: Props) => {
             </Stack>
           </TransformComponent>
 
-          {isExporting && <LoadingGlobalContainer />}
+          {isExporting && <LoadingContainer />}
         </AppShell.Main>
         <AppShell.Aside withBorder className="cmp-design-form__aside">
           <DesignForm.Aside transformer={transformer} />

@@ -191,7 +191,7 @@ const DesignFooter = () => {
         // TODO: fix bugs delay
         setTimeout(() => {
           onSetSelectedPage(nextSelectedPage);
-        }, 200);
+        }, 3000);
       }
     });
   };

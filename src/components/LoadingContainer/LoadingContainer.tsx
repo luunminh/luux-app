@@ -6,6 +6,8 @@ const LoadingContainer: FC = () => (
   <Overlay
     zIndex={9999}
     display="flex"
+    blur={4}
+    backgroundOpacity={0.5}
     style={{
       alignItems: 'center',
       justifyContent: 'center',

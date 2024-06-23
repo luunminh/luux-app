@@ -100,7 +100,7 @@ const DownloadDesign = ({ onBack }: Props) => {
         // Delay to prevent flickering
         setTimeout(() => {
           onSetSelectedPage(nextSelectedPage);
-        }, 100);
+        }, 3000);
       }
     });
   };

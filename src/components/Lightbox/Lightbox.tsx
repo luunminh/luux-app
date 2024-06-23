@@ -5,7 +5,6 @@ import {
 } from 'yet-another-react-lightbox';
 import Download from 'yet-another-react-lightbox/plugins/download';
 import Fullscreen from 'yet-another-react-lightbox/plugins/fullscreen';
-import Thumbnails from 'yet-another-react-lightbox/plugins/thumbnails';
 import 'yet-another-react-lightbox/plugins/thumbnails.css';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 import 'yet-another-react-lightbox/styles.css';
@@ -19,11 +18,7 @@ The `LightboxMedia` component is designed to display various media types, includ
  */
 const LightboxMedia = ({ onDownload, ...props }: LightboxMediaProps) => {
   return (
-    <YetLightbox
-      data-name="light-box__media"
-      {...props}
-      plugins={[Fullscreen, Thumbnails, Zoom, Download]}
-    />
+    <YetLightbox data-name="light-box__media" {...props} plugins={[Fullscreen, Zoom, Download]} />
   );
 };
 
