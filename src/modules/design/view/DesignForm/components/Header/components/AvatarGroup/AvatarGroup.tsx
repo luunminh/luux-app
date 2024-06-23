@@ -49,8 +49,10 @@ const AvatarItem = ({ user, isOnline = false }: AvatarItemsProps) => {
 export const AvatarGroup = () => {
   const {
     data: { users = [] },
-    onlineUserIds,
+    onlineUsers,
   } = useDesignStore();
+
+  const onlineUserIds = onlineUsers.map((user) => user.id);
 
   const { profile } = useProfile();
 

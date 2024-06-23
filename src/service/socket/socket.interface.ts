@@ -1,13 +1,25 @@
 import { IGetDesign } from '@modules/design/queries';
 
+export type IDesignUser = {
+  id: string;
+  name: string;
+  x?: number;
+  y?: number;
+};
+
+export type IDesignPayload = {
+  designId: string;
+  x?: number;
+  y?: number;
+};
 export interface ServerToClientEvents {
   editing: (data: IGetDesign) => void;
-  join: (userId: string[]) => void;
-  leave: (userId: string[]) => void;
+  join: (users: IDesignUser[]) => void;
+  leave: (users: IDesignUser[]) => void;
 }
 
 export interface ClientToServerEvents {
-  join: (designId: string) => void;
-  leave: (designId: string) => void;
+  join: (payload: IDesignPayload) => void;
+  leave: (payload: IDesignPayload) => void;
   editing: (data: IGetDesign) => void;
 }

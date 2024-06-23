@@ -2,7 +2,7 @@ import configs from '@config';
 import { TokenService } from '@core/common';
 import { IGetDesign } from '@modules/design/queries';
 import { io, Socket } from 'socket.io-client';
-import { ClientToServerEvents, ServerToClientEvents } from './socket.interface';
+import { ClientToServerEvents, IDesignPayload, ServerToClientEvents } from './socket.interface';
 
 enum DesignEventEnum {
   JOIN = 'join',
@@ -45,9 +45,9 @@ class SocketService {
     this.socket.on(DesignEventEnum.JOIN, joinHandler);
   }
 
-  joinDesign(designId: string) {
+  joinDesign(payload: IDesignPayload) {
     if (this.socket.connected) {
-      this.socket.emit(DesignEventEnum.JOIN, designId);
+      this.socket.emit(DesignEventEnum.JOIN, payload);
     }
   }
 
@@ -57,9 +57,9 @@ class SocketService {
     }
   }
 
-  leaveDesign(designId: string) {
+  leaveDesign(payload: IDesignPayload) {
     if (this.socket.connected) {
-      this.socket.emit(DesignEventEnum.LEAVE, designId);
+      this.socket.emit(DesignEventEnum.LEAVE, payload);
     }
   }
 }

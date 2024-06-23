@@ -1,5 +1,6 @@
 import { ToastService } from '@core/common';
 import { ApiResponseType, getResponseData, responseWrapper } from '@core/common/services/http';
+import { useProfile } from '@core/queries';
 import { useDesignStore } from '@modules/design/view/DesignForm';
 import { homePaths } from '@modules/home/route';
 import { UseQueryOptions, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -16,6 +17,9 @@ export function useGetDesignById(
   },
 ) {
   const navigate = useNavigate();
+  const {
+    profile: { id },
+  } = useProfile();
 
   const {
     data: designDetail,
@@ -46,30 +50,32 @@ export function useGetDesignById(
     },
   );
 
-  const { onSetData, onSetOnlineUserIds } = useDesignStore();
+  const { onSetData, onSetOnlineUsers } = useDesignStore();
 
   const queryClient = useQueryClient();
 
   useEffect(() => {
     if (designDetail && isSuccess) {
-      socketService.joinDesign(designDetail.id);
+      socketService.joinDesign({
+        designId: designDetail.id,
+      });
 
       socketService.subscribeToEditing((data) => {
         console.log('socketService.subscribeToEditing ~ data:', data);
         onSetData(data);
       });
 
-      socketService.subscribeToJoin((newUserIds) => {
-        console.log('socketService.subscribeToJoin ~ newUserId:', newUserIds);
-        onSetOnlineUserIds(newUserIds);
+      socketService.subscribeToJoin((newUsers) => {
+        console.log('socketService.subscribeToJoin ~ newUserId:', newUsers);
+        onSetOnlineUsers(newUsers);
       });
 
-      socketService.subscribeToLeave((userIds) => {
-        onSetOnlineUserIds(userIds);
+      socketService.subscribeToLeave((users) => {
+        onSetOnlineUsers(users);
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [designDetail, isSuccess]);
+  }, [designDetail, isSuccess, id]);
 
   const handleInvalidateDesignDetail = (id: string) => {
     return queryClient.invalidateQueries([DESIGN_QUERY_KEYS.DESIGN, { id }]);

@@ -1,4 +1,5 @@
 import { IDesignPrivacy, IGetDesign } from '@modules/design/queries';
+import { IDesignUser } from 'src/service';
 import { create } from 'zustand';
 import { IDesignContent, IShape } from '../types';
 
@@ -34,8 +35,8 @@ type DesignStore = {
   data: IGetDesign;
   onSetData: (newData: IGetDesign) => void;
 
-  onlineUserIds: string[];
-  onSetOnlineUserIds: (ids: string[]) => void;
+  onlineUsers: IDesignUser[];
+  onSetOnlineUsers: (users: IDesignUser[]) => void;
 
   isExporting: boolean;
   onSetIsExporting: (isExporting: boolean) => void;
@@ -60,8 +61,8 @@ export const useDesignStore = create<DesignStore>((set) => ({
   data: null,
   onSetData: (newData: IGetDesign) => set({ data: newData }),
 
-  onlineUserIds: [],
-  onSetOnlineUserIds: (ids: string[]) => set({ onlineUserIds: ids }),
+  onlineUsers: [],
+  onSetOnlineUsers: (users: IDesignUser[]) => set({ onlineUsers: users }),
 
   isExporting: false,
   onSetIsExporting: (isExporting: boolean) => set({ isExporting }),

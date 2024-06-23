@@ -10,6 +10,7 @@ import { useHotkeys } from 'react-hotkeys-hook';
 import { CgAddR } from 'react-icons/cg';
 import { IoDuplicateOutline } from 'react-icons/io5';
 import { Stage as KonvaStage, Layer, Rect } from 'react-konva';
+import Cursors from '../../../Cursor';
 import { getItemsInBoundary, getOriginFromTwoPoint, getScaledMousePosition } from './Stage.helpers';
 
 type Props = PropsWithChildren & {
@@ -169,37 +170,39 @@ const Stage = forwardRef(
           }}
         >
           <StageAction />
-          <KonvaStage
-            style={{
-              borderRadius: '16px',
-              backgroundColor: 'white',
-              overflow: 'hidden',
-            }}
-            width={width * scale}
-            height={height * scale}
-            scaleX={scale}
-            scaleY={scale}
-            draggable={false}
-            ref={stageRef}
-            onMouseUp={onMouseUpOnStage}
-            onMouseDown={onMouseDownOnStage}
-            onMouseMove={onMouseMoveOnStage}
-          >
-            <Layer>
-              {children}
-              <Rect
-                id="select-box"
-                name="select-box"
-                x={0}
-                y={0}
-                width={0}
-                height={0}
-                fill="skyblue"
-                opacity={0.4}
-                visible={false}
-              />
-            </Layer>
-          </KonvaStage>
+          <Cursors.Wrapper>
+            <KonvaStage
+              style={{
+                borderRadius: '16px',
+                backgroundColor: 'white',
+                overflow: 'hidden',
+              }}
+              width={width * scale}
+              height={height * scale}
+              scaleX={scale}
+              scaleY={scale}
+              draggable={false}
+              ref={stageRef}
+              onMouseUp={onMouseUpOnStage}
+              onMouseDown={onMouseDownOnStage}
+              onMouseMove={onMouseMoveOnStage}
+            >
+              <Layer>
+                {children}
+                <Rect
+                  id="select-box"
+                  name="select-box"
+                  x={0}
+                  y={0}
+                  width={0}
+                  height={0}
+                  fill="skyblue"
+                  opacity={0.4}
+                  visible={false}
+                />
+              </Layer>
+            </KonvaStage>
+          </Cursors.Wrapper>
         </Box>
       </Stack>
     );

@@ -1,3 +1,4 @@
+import CursorSVG from '@assets/images/CursorSVG';
 import carousel1 from '@assets/images/carousel/carousel1.webp';
 import carousel2 from '@assets/images/carousel/carousel2.webp';
 import carousel3 from '@assets/images/carousel/carousel3.webp';
@@ -9,6 +10,7 @@ import logo from '@assets/images/logo/logo.svg';
 export const IMAGES = {
   logo,
   loginBg,
+  CursorSVG,
 };
 
 export const CAROUSEL_IMAGES = {

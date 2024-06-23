@@ -100,8 +100,9 @@ const DesignMenu = () => {
 const PeopleWithAccess = ({ onOpenAccessMenu }: { onOpenAccessMenu: Callback }) => {
   const {
     data: { users = [] },
-    onlineUserIds,
+    onlineUsers,
   } = useDesignStore();
+  const onlineUserIds = onlineUsers.map((user) => user.id);
 
   const { hasEditingPermission } = useDesignData();
 

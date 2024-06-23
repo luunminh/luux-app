@@ -169,7 +169,9 @@ export const DesignFormWrapper = () => {
   }, [designDetail]);
 
   useComponentWillUnmount(() => {
-    socketService.leaveDesign(id);
+    socketService.leaveDesign({
+      designId: id,
+    });
   });
 
   if (isLoadingDesignDetail) {
