@@ -11,7 +11,7 @@ type Props = {
   onChange: (key: string, value: any) => void;
 };
 
-const DEFAULT_FONT = 'Roboto';
+const DEFAULT_FONT = 'Open Sans';
 
 const FontSelection = ({ onChange, selectedShape }: Props) => {
   const [value, setValue] = useState<string>(selectedShape.attrs?.fontFamily || DEFAULT_FONT);

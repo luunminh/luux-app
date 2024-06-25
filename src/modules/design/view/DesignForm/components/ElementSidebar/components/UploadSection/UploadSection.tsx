@@ -175,7 +175,7 @@ const UploadSection = () => {
   };
 
   return (
-    <Stack gap={16} p={16} w="100%">
+    <Stack gap={16} p={16} w="100%" mah="90vh" style={{ overflowY: 'auto' }}>
       <Grid style={{ width: '100%' }} gutter={8}>
         <Grid.Col span={12}>
           <TextInput

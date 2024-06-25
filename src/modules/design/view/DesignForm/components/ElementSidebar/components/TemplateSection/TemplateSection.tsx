@@ -70,7 +70,7 @@ const TemplateSection = () => {
   };
 
   return (
-    <Stack gap={16} p={16} w="100%">
+    <Stack gap={16} p={16} w="100%" mah="90vh" style={{ overflowY: 'auto' }}>
       <Grid style={{ width: '100%' }}>
         <Grid.Col span={12}>
           <TextInput

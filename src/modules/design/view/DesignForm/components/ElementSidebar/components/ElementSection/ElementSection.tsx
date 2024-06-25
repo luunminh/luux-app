@@ -26,7 +26,7 @@ const DEFAULT_TEXTS: { label: ReactElement; metadata: IShape['attrs'] }[] = [
       x: 300,
       width: 600,
       fontSize: 90,
-      fontFamily: 'Roboto',
+      fontFamily: 'Open Sans',
       scale: { x: 1, y: 1 },
       text: 'Add a heading',
     },
@@ -43,7 +43,7 @@ const DEFAULT_TEXTS: { label: ReactElement; metadata: IShape['attrs'] }[] = [
       x: 300,
       width: 400,
       fontSize: 50,
-      fontFamily: 'Roboto',
+      fontFamily: 'Open Sans',
       scale: { x: 1, y: 1 },
       text: 'Add a subheading',
     },
@@ -138,7 +138,7 @@ const ElementSection = ({ categoryId, type }: Props) => {
   };
 
   return (
-    <Stack gap={16} p={16} w="100%">
+    <Stack gap={16} p={16} w="100%" mah="90vh" style={{ overflowY: 'auto' }}>
       <Grid style={{ width: '100%' }}>
         <Grid.Col span={12}>
           <TextInput
