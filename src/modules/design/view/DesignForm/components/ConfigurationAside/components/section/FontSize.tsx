@@ -1,6 +1,6 @@
 import { COLOR_CODE } from '@core/common';
 import { IShape } from '@design/types';
-import { ActionIcon, Flex, InputWrapper } from '@mantine/core';
+import { ActionIcon, Flex, Input, InputWrapper } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { IoIosAdd as IncreaseIcon } from 'react-icons/io';
 import { RiSubtractFill as DecreaseIcon } from 'react-icons/ri';
@@ -51,7 +51,14 @@ const FontSizeConfiguration = ({ selectedShape, onChange }: Props) => {
             fontWeight: '500',
           }}
         >
-          {fontSize}
+          <Input
+            value={fontSize}
+            onChange={(e) => {
+              if (Number(e.target.value) > 0) {
+                setFontSize(Number(e.target.value));
+              }
+            }}
+          />
         </Flex>
         <ActionIcon
           variant="subtle"
