@@ -11,7 +11,7 @@ const ConfigurationCustomShape = ({ id }: Props) => {
   const { getShapeById, updateShape } = useShape();
 
   const selectedShape = getShapeById(id);
-  const [colors, setColors] = useState<string[]>(selectedShape.attrs.colors || []);
+  const [colors, setColors] = useState<string[]>(selectedShape?.attrs?.colors || []);
 
   const handleChangeShape = (
     key: keyof typeof selectedShape,
@@ -20,7 +20,7 @@ const ConfigurationCustomShape = ({ id }: Props) => {
     const updatedShape = {
       ...selectedShape,
       attrs: {
-        ...selectedShape.attrs,
+        ...selectedShape?.attrs,
         [key]: value,
       },
     } as IShape;

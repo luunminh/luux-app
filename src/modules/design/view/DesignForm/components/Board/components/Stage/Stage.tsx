@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { COLOR_CODE } from '@core/common';
+import { COLOR_CODE, ToastService } from '@core/common';
 import { usePage, useShape, useStage } from '@design/hooks';
 import { ITEMS_CONTEXT } from '@design/types';
 import { decimalUpToSeven } from '@design/utils';
@@ -215,6 +215,9 @@ const StageAction = () => {
 
   const handleDuplicatePage = () => {
     addNewPage(shapes);
+    ToastService.success('Page duplicated', {
+      position: 'top-center',
+    });
   };
   return (
     <Flex w="100%" align="center" justify="space-between" pos="absolute" top="-40px">

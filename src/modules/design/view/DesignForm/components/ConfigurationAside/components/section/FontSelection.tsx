@@ -19,7 +19,6 @@ const FontSelection = ({ onChange, selectedShape }: Props) => {
   const { fontOptions, isFetching: isFetchingFonts, fetchNextPage, hasNext } = useGetFontLazy();
 
   const { fonts = [], isFetching: isLoadingSelectedFont, setParams } = useGetFonts();
-  console.log('FontSelection ~ fonts:', fonts);
 
   const font = fonts.find((font) => font.name === value);
   const formattedFonts = fonts?.map((font) => ({

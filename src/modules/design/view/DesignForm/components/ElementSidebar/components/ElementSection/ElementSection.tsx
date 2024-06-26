@@ -25,7 +25,7 @@ const DEFAULT_TEXTS: { label: ReactElement; metadata: IShape['attrs'] }[] = [
       shapeType: ShapeTypeEnum.TEXT,
       y: 100,
       x: 100,
-      width: 600,
+      width: 1000,
       fontSize: 90,
       fontFamily: 'Montserrat',
       scaleX: 1,
@@ -43,7 +43,7 @@ const DEFAULT_TEXTS: { label: ReactElement; metadata: IShape['attrs'] }[] = [
       shapeType: ShapeTypeEnum.TEXT,
       y: 100,
       x: 100,
-      width: 400,
+      width: 1000,
       fontSize: 50,
       fontFamily: 'Montserrat',
       scaleX: 1,
@@ -61,7 +61,7 @@ const DEFAULT_TEXTS: { label: ReactElement; metadata: IShape['attrs'] }[] = [
       shapeType: ShapeTypeEnum.TEXT,
       y: 100,
       x: 100,
-      width: 360,
+      width: 1000,
       fontSize: 30,
       fontFamily: 'Montserrat',
       fontStyle: 'normal',
@@ -95,8 +95,8 @@ const ElementSection = ({ categoryId, type }: Props) => {
       id: getRandomId(),
       attrs: {
         ...element,
-        scaleX: 1 / scale,
-        scaleY: 1 / scale,
+        layerIdx: 0,
+        fontSize: Math.floor(element.fontSize / scale),
       },
     } as IShape);
   };

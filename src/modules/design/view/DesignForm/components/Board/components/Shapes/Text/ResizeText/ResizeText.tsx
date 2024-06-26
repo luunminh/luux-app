@@ -1,4 +1,3 @@
-import { useDesignStore } from '@modules/design/view/DesignForm/store';
 import { BaseShape, ShapeTypeEnum } from '@modules/design/view/DesignForm/types';
 import Konva from 'konva';
 import { forwardRef } from 'react';
@@ -7,7 +6,6 @@ import { Text as KonvaText } from 'react-konva';
 type Props = BaseShape[ShapeTypeEnum.TEXT];
 
 const ResizeText = forwardRef<Konva.Text, Props>(({ fontFamily, height, ...props }: Props, ref) => {
-  const { scale } = useDesignStore();
   const handleResize = () => {
     //@ts-ignore
     if (ref.current) {
@@ -17,7 +15,7 @@ const ResizeText = forwardRef<Konva.Text, Props>(({ fontFamily, height, ...props
 
       textNode.setAttrs({
         width: newWidth,
-        scaleX: 1 / scale,
+        scaleX: 1,
       });
     }
   };

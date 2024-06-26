@@ -1,10 +1,10 @@
 import { getRandomId } from '@core/common';
 import { Card } from '@mantine/core';
-import { IConvertJsonState, IElement } from '@modules/design/queries';
+import { IElement } from '@modules/design/queries';
 import { PropsWithChildren } from 'react';
 import { useShape } from '../../../hooks';
 import { useDesignStore } from '../../../store';
-import { IShape } from '../../../types';
+import { IShape, ShapeTypeEnum } from '../../../types';
 import { DrawSection } from './DrawSection';
 import { ElementSection } from './ElementSection';
 import { TemplateSection } from './TemplateSection';
@@ -28,22 +28,31 @@ export const ItemWrapper = ({ children, element }: ItemWrapperProps) => {
   const handleAddElement = (elm: IElement) => {
     const shapes: IShape[] = [];
     const groupId = getRandomId();
-    const jsonStates: IConvertJsonState[] = JSON.parse(elm.jsonState);
+    const jsonStates: any[] = JSON.parse(elm.jsonState);
 
     jsonStates.forEach((shapeAttrs) => {
       const id = getRandomId();
-      shapes.push({
+
+      const newShape = {
         id: id,
         attrs: {
           ...(shapeAttrs as any),
           ...(jsonStates.length > 1 && { group: groupId }),
           scaleX: 1 / scale,
           scaleY: 1 / scale,
+          ...((shapeAttrs?.fontSize || shapeAttrs?.shapeType === ShapeTypeEnum.TEXT) && {
+            fontSize: Math.floor((shapeAttrs?.fontSize || 50) / scale),
+            width: Math.floor(shapeAttrs?.width / scale),
+            height: Math.floor(shapeAttrs?.height / scale),
+            scaleX: 1,
+            scaleY: 1,
+          }),
           //@ts-ignore
           // layerIdx: shapeAttrs?.layerIdx || 0,
           id,
         },
-      });
+      };
+      shapes.push(newShape);
     });
 
     addShapes(shapes);
