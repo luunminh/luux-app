@@ -11,20 +11,20 @@ type Props = {
   onChange: (key: string, value: any) => void;
 };
 
-const DEFAULT_FONT = 'Open Sans';
+const DEFAULT_FONTS = ['Montserrat', 'Open Sans'];
 
 const FontSelection = ({ onChange, selectedShape }: Props) => {
-  const [value, setValue] = useState<string>(selectedShape.attrs?.fontFamily || DEFAULT_FONT);
+  const [value, setValue] = useState<string>(selectedShape.attrs?.fontFamily || DEFAULT_FONTS[0]);
   // TODO: implement lazy search
   const { fontOptions, isFetching: isFetchingFonts, fetchNextPage, hasNext } = useGetFontLazy();
 
   const { fonts = [], isFetching: isLoadingSelectedFont, setParams } = useGetFonts();
 
-  const font = fonts[0];
-  const formattedFont = { label: font?.name, value: font?.name, font: font };
+  const font = fonts.find((font) => font.name === value);
+  const formattedFonts = fonts?.map((font) => ({ label: font.name, value: font.name }));
 
   useEffect(() => {
-    setParams({ names: [value] });
+    setParams({ names: [value, ...DEFAULT_FONTS] });
   }, [value, setParams]);
 
   const currentFontType = selectedShape.attrs?.fontStyle || '500';
@@ -83,7 +83,7 @@ const FontSelection = ({ onChange, selectedShape }: Props) => {
         hasNextPage={hasNext}
         onFetchNextPage={fetchNextPage}
         isLoading={isFetchingFonts}
-        options={[formattedFont, ...fontOptions]}
+        options={[...formattedFonts, ...fontOptions]}
         keepOptionOnChange
         onChange={handleChangeFont}
         customOptionComponent={FontSelection.Option}

@@ -3,6 +3,7 @@ import { useShape } from '@design/hooks';
 import { IShape, ShapeTypeEnum } from '@design/types';
 import { Button, Card, Grid, Loader, Stack, Text, TextInput, Title, Tooltip } from '@mantine/core';
 import { useGetElementsLazy } from '@modules/design/queries';
+import { useDesignStore } from '@modules/design/view/DesignForm/store';
 import { isEmpty } from 'lodash';
 import { ChangeEvent, ReactElement, useEffect } from 'react';
 import { ItemWrapper } from '..';
@@ -22,12 +23,13 @@ const DEFAULT_TEXTS: { label: ReactElement; metadata: IShape['attrs'] }[] = [
     ),
     metadata: {
       shapeType: ShapeTypeEnum.TEXT,
-      y: 300,
-      x: 300,
+      y: 100,
+      x: 100,
       width: 600,
       fontSize: 90,
-      fontFamily: 'Open Sans',
-      scale: { x: 1, y: 1 },
+      fontFamily: 'Montserrat',
+      scaleX: 1,
+      scaleY: 1,
       text: 'Add a heading',
     },
   },
@@ -39,12 +41,13 @@ const DEFAULT_TEXTS: { label: ReactElement; metadata: IShape['attrs'] }[] = [
     ),
     metadata: {
       shapeType: ShapeTypeEnum.TEXT,
-      y: 300,
-      x: 300,
+      y: 100,
+      x: 100,
       width: 400,
       fontSize: 50,
-      fontFamily: 'Open Sans',
-      scale: { x: 1, y: 1 },
+      fontFamily: 'Montserrat',
+      scaleX: 1,
+      scaleY: 1,
       text: 'Add a subheading',
     },
   },
@@ -56,13 +59,14 @@ const DEFAULT_TEXTS: { label: ReactElement; metadata: IShape['attrs'] }[] = [
     ),
     metadata: {
       shapeType: ShapeTypeEnum.TEXT,
-      y: 300,
-      x: 300,
+      y: 100,
+      x: 100,
       width: 360,
       fontSize: 30,
-      fontFamily: 'Akatab',
+      fontFamily: 'Montserrat',
       fontStyle: 'normal',
-      scale: { x: 1, y: 1 },
+      scaleX: 1,
+      scaleY: 1,
       text: 'Add a little bit of body text',
     },
   },
@@ -70,6 +74,7 @@ const DEFAULT_TEXTS: { label: ReactElement; metadata: IShape['attrs'] }[] = [
 
 const ElementSection = ({ categoryId, type }: Props) => {
   const { addShape } = useShape();
+  const { scale } = useDesignStore();
 
   const { elements, isFetching, setParams, inputSearch, setInputSearch, hasNext, fetchNextPage } =
     useGetElementsLazy();
@@ -88,7 +93,11 @@ const ElementSection = ({ categoryId, type }: Props) => {
   const handleAddElement = (element: IShape['attrs']) => {
     addShape({
       id: getRandomId(),
-      attrs: element,
+      attrs: {
+        ...element,
+        scaleX: 1 / scale,
+        scaleY: 1 / scale,
+      },
     } as IShape);
   };
 
