@@ -3,21 +3,20 @@ version: 0.1
 env:
   secrets-manager:
     # Global
-    SLACK_WEBHOOKS: $AWS_SECRET_ARN:SLACK_WEBHOOKS
-    CROSS_ACCOUNT_ROLE: $AWS_SECRET_ARN:CROSS_ACCOUNT_ROLE
-    SLACK_IDS: $AWS_SECRET_ARN:SLACK_IDS
+    SLACK_WEBHOOKS: luux-fe:SLACK_WEBHOOKS
+    CROSS_ACCOUNT_ROLE: luux-fe:CROSS_ACCOUNT_ROLE
+    SLACK_IDS: luux-fe:SLACK_IDS
 
     # App Url
-    VITE_API_URL: $AWS_SECRET_ARN:ENV_API_URL
-    VITE_ASSETS_URL: $AWS_SECRET_ARN:ENV_ASSETS_URL
+    VITE_API_URL: luux-fe:API_URL
 
-    VITE_WEB_URLS: $AWS_SECRET_ARN:ENV_WEB_URLS
+    VITE_WEB_URLS: luux-fe:ENV_WEB_URLS
 
     # AWS
-    AWS_ACCESS_KEY_ID: $AWS_SECRET_ARN:AWS_ACCESS_KEY_ID_DEPLOYMENT_FE
-    AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ARN:AWS_SECRET_ACCESS_KEY_DEPLOYMENT_FE
-    AWS_S3_WEB_URL: $AWS_SECRET_ARN:AWS_S3_WEB_APP_PORTAL_URL
-    AWS_WEB_CLOUDFRONT_DISTRIBUTION_ID: $AWS_SECRET_ARN:AWS_APP_PORTAL_CLOUDFRONT_DISTRIBUTION_ID
+    AWS_ACCESS_KEY_ID: luux-fe:AWS_ACCESS_KEY_ID_DEPLOYMENT_FE
+    AWS_SECRET_ACCESS_KEY: luux-fe:AWS_SECRET_ACCESS_KEY_DEPLOYMENT_FE
+    AWS_S3_WEB_URL: luux-fe:AWS_S3_WEB_APP_PORTAL_URL
+    AWS_WEB_CLOUDFRONT_DISTRIBUTION_ID: luux-fe:AWS_APP_PORTAL_CLOUDFRONT_DISTRIBUTION_ID
 
 phases:
   install:
@@ -45,8 +44,8 @@ phases:
       # - pnpm audit
 
       - pnpm build
-      - aws s3 sync dist/app "${AWS_S3_WEB_URL}/app" --delete
-      - aws cloudfront create-invalidation --distribution-id $AWS_WEB_CLOUDFRONT_DISTRIBUTION_ID --paths '/app/*' '/index.html'
+      - aws s3 sync dist/app "s3://luux-bucket/app" --delete
+      - aws cloudfront create-invalidation --distribution-id $AWS_WEB_CLOUDFRONT_DISTRIBUTION_ID --paths '/app/*'
   post_build:
     commands:
       - cd $CODEBUILD_SRC_DIR
