@@ -6,6 +6,7 @@ env:
     SLACK_WEBHOOKS: luux-fe:SLACK_WEBHOOKS
     CROSS_ACCOUNT_ROLE: luux-fe:CROSS_ACCOUNT_ROLE
     SLACK_IDS: luux-fe:SLACK_IDS
+    VITE_MODE: luux-fe:VITE_MODE
 
     # App Url
     VITE_API_URL: luux-fe:API_URL
@@ -26,6 +27,7 @@ phases:
       # App URL
       - echo VITE_API_URL=$VITE_API_URL >> .env
       - echo VITE_WEB_URLS=$VITE_WEB_URLS >> .env
+      - echo VITE_MODE=$VITE_MODE >> .env
 
       # AWS
       - export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
@@ -44,7 +46,7 @@ phases:
       # - pnpm audit
 
       - pnpm build
-      - aws s3 sync dist/app "s3://luux-bucket/app" --delete
+      - aws s3 sync dist/app "${AWS_S3_WEB_URL}/app" --delete
       - aws cloudfront create-invalidation --distribution-id $AWS_WEB_CLOUDFRONT_DISTRIBUTION_ID --paths '/app/*'
   post_build:
     commands:
